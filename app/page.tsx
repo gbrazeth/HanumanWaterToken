@@ -89,7 +89,7 @@ export default function LandingPage() {
               height={40}
               className="rounded-full"
             />
-            <span className="text-xl font-bold text-primary">HWT</span>
+            <span className="text-xl font-bold text-primary">HANUMANuhul</span>
           </div>
           <nav className="hidden md:flex gap-6">
             <Link
