@@ -1,0 +1,573 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ethers } from "ethers"
+import { ArrowLeft, AlertCircle, Check } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
+// Importar ABIs dos contratos (em produção, estes seriam importados de arquivos JSON)
+const HWT_ABI = [
+  "function mintPresaleTokens(address to, uint256 amount) external",
+  "function balanceOf(address account) external view returns (uint256)",
+  "function symbol() external view returns (string)",
+  "function decimals() external view returns (uint8)",
+]
+
+const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWithUSDT(uint256 usdtAmount) external"]
+
+const USDT_ABI = [
+  "function approve(address spender, uint256 amount) external returns (bool)",
+  "function allowance(address owner, address spender) external view returns (uint256)",
+  "function balanceOf(address account) external view returns (uint256)",
+]
+
+// Endereços dos contratos (seriam substituídos pelos endereços reais em produção)
+const HWT_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
+const PRESALE_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
+const USDT_ADDRESS = "0xdAC17F958D2ee523a2206206994597C13D831ec7" // Endereço real do USDT na Ethereum mainnet
+
+export default function CheckoutPage() {
+  const [tokenAmount, setTokenAmount] = useState<string>("1000")
+  const [usdAmount, setUsdAmount] = useState<string>("2000")
+  const [waterAmount, setWaterAmount] = useState<string>("1000")
+  const [paymentMethod, setPaymentMethod] = useState<string>("eth")
+  const [isConnected, setIsConnected] = useState<boolean>(false)
+  const [walletAddress, setWalletAddress] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [success, setSuccess] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
+  const [ethBalance, setEthBalance] = useState<string>("0")
+  const [usdtBalance, setUsdtBalance] = useState<string>("0")
+  const [pixCode, setPixCode] = useState<string>("")
+
+  // Dados do cartão de crédito
+  const [cardNumber, setCardNumber] = useState<string>("")
+  const [cardName, setCardName] = useState<string>("")
+  const [cardExpiry, setCardExpiry] = useState<string>("")
+  const [cardCVC, setCardCVC] = useState<string>("")
+
+  // Efeito para verificar se o Metamask está conectado
+  useEffect(() => {
+    checkIfWalletIsConnected()
+  }, [])
+
+  // Função para verificar se o Metamask está conectado
+  const checkIfWalletIsConnected = async () => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" })
+
+        if (accounts.length > 0) {
+          setIsConnected(true)
+          setWalletAddress(accounts[0])
+
+          // Obter saldos
+          await getBalances(accounts[0])
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao verificar conexão com a carteira:", error)
+    }
+  }
+
+  // Função para obter saldos de ETH e USDT
+  const getBalances = async (address: string) => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.BrowserProvider(window.ethereum)
+
+        // Obter saldo de ETH
+        const ethBalance = await provider.getBalance(address)
+        setEthBalance(ethers.formatEther(ethBalance))
+
+        // Obter saldo de USDT
+        const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider)
+        const usdtBalance = await usdtContract.balanceOf(address)
+        setUsdtBalance(ethers.formatUnits(usdtBalance, 6)) // USDT tem 6 casas decimais
+      }
+    } catch (error) {
+      console.error("Erro ao obter saldos:", error)
+    }
+  }
+
+  // Função para conectar ao Metamask
+  const connectWallet = async () => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        setIsLoading(true)
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+
+        if (accounts.length > 0) {
+          setIsConnected(true)
+          setWalletAddress(accounts[0])
+
+          // Obter saldos
+          await getBalances(accounts[0])
+        }
+      } else {
+        setError("Por favor, instale a extensão Metamask para conectar sua carteira.")
+      }
+    } catch (error) {
+      console.error("Erro ao conectar com a carteira:", error)
+      setError("Erro ao conectar com a carteira. Por favor, tente novamente.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Função para atualizar o valor em USD e água quando o número de tokens mudar
+  const handleTokenAmountChange = (value: string) => {
+    setTokenAmount(value)
+
+    // Calcular valor em USD (1 HWT = $2)
+    const usdValue = Number.parseFloat(value) * 2
+    setUsdAmount(usdValue.toString())
+
+    // Calcular quantidade de água (1 HWT = 1 litro)
+    setWaterAmount(value)
+  }
+
+  // Função para comprar tokens com ETH
+  const buyWithETH = async () => {
+    try {
+      if (!isConnected) {
+        await connectWallet()
+        return
+      }
+
+      setIsLoading(true)
+      setError(null)
+
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+
+      // Calcular valor em ETH
+      const usdValue = Number.parseFloat(usdAmount)
+      const ethPrice = 3000 // Preço do ETH em USD (em produção, seria obtido de uma API)
+      const ethValue = usdValue / ethPrice
+
+      // Criar contrato
+      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+
+      // Executar transação
+      const tx = await presaleContract.buyWithETH({
+        value: ethers.parseEther(ethValue.toString()),
+      })
+
+      // Aguardar confirmação
+      await tx.wait()
+
+      setSuccess(true)
+    } catch (error) {
+      console.error("Erro ao comprar tokens com ETH:", error)
+      setError("Erro ao processar a compra. Por favor, tente novamente.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Função para comprar tokens com USDT
+  const buyWithUSDT = async () => {
+    try {
+      if (!isConnected) {
+        await connectWallet()
+        return
+      }
+
+      setIsLoading(true)
+      setError(null)
+
+      const provider = new ethers.BrowserProvider(window.ethereum)
+      const signer = await provider.getSigner()
+
+      // Calcular valor em USDT (1:1 com USD)
+      const usdtValue = Number.parseFloat(usdAmount)
+
+      // Criar contratos
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
+      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+
+      // Verificar allowance
+      const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
+      const usdtAmount = ethers.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
+
+      // Aprovar gasto de USDT se necessário
+      if (allowance < usdtAmount) {
+        const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
+        await approveTx.wait()
+      }
+
+      // Executar transação de compra
+      const tx = await presaleContract.buyWithUSDT(usdtAmount)
+
+      // Aguardar confirmação
+      await tx.wait()
+
+      setSuccess(true)
+    } catch (error) {
+      console.error("Erro ao comprar tokens com USDT:", error)
+      setError("Erro ao processar a compra. Por favor, tente novamente.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Função para processar pagamento com PIX
+  const processPixPayment = () => {
+    // Em produção, isso geraria um código PIX real
+    setPixCode(
+      "00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426655440000520400005303986540510.005802BR5913Hanuman Water6008Sao Paulo62070503***63041234",
+    )
+
+    // Simular processamento
+    setIsLoading(true)
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+  }
+
+  // Função para processar pagamento com cartão de crédito
+  const processCreditCardPayment = () => {
+    // Validar dados do cartão
+    if (!cardNumber || !cardName || !cardExpiry || !cardCVC) {
+      setError("Por favor, preencha todos os campos do cartão.")
+      return
+    }
+
+    // Em produção, isso processaria o pagamento com cartão
+    setIsLoading(true)
+
+    // Simular processamento
+    setTimeout(() => {
+      setIsLoading(false)
+      setSuccess(true)
+    }, 2000)
+  }
+
+  // Função para processar o pagamento com base no método selecionado
+  const processPayment = () => {
+    setError(null)
+
+    switch (paymentMethod) {
+      case "eth":
+        buyWithETH()
+        break
+      case "usdt":
+        buyWithUSDT()
+        break
+      case "pix":
+        processPixPayment()
+        break
+      case "credit_card":
+        processCreditCardPayment()
+        break
+      default:
+        setError("Método de pagamento inválido.")
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Image
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+              alt="Logo do Hanuman Water Token"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+            <span className="text-xl font-bold text-primary">HWT</span>
+          </div>
+          <Link href="/" className="flex items-center text-sm font-medium hover:text-primary">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar para a página inicial
+          </Link>
+        </div>
+      </header>
+
+      <main className="flex-1 py-12">
+        <div className="container px-4">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">Comprar HWT</h1>
+            <p className="mt-2 text-muted-foreground">
+              Adquira tokens HWT e faça parte da revolução na gestão de recursos hídricos.
+            </p>
+          </div>
+
+          {success ? (
+            <Card className="max-w-2xl mx-auto">
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <div className="mb-4 rounded-full bg-green-100 p-3">
+                    <Check className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-primary mb-2">Compra Realizada com Sucesso!</h2>
+                  <p className="text-muted-foreground mb-6">
+                    Sua compra de {tokenAmount} HWT foi processada com sucesso. Os tokens serão enviados para sua
+                    carteira em breve.
+                  </p>
+                  <div className="flex gap-4">
+                    <Button asChild>
+                      <Link href="/">Voltar para a página inicial</Link>
+                    </Button>
+                    <Button variant="outline" onClick={() => setSuccess(false)}>
+                      Fazer outra compra
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2">
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Detalhes da Compra</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="token-amount">Quantidade de Tokens (HWT)</Label>
+                        <Input
+                          id="token-amount"
+                          type="number"
+                          min="1"
+                          value={tokenAmount}
+                          onChange={(e) => handleTokenAmountChange(e.target.value)}
+                          className="text-lg"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Valor em USD</Label>
+                          <div className="p-2 border rounded-md bg-muted">
+                            <span className="text-lg font-medium">${usdAmount}</span>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Água Equivalente</Label>
+                          <div className="p-2 border rounded-md bg-muted">
+                            <span className="text-lg font-medium">{waterAmount} litros</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-4">
+                        <div className="rounded-md bg-muted p-4">
+                          <div className="flex">
+                            <AlertCircle className="h-5 w-5 text-primary mr-3" />
+                            <div>
+                              <p className="text-sm text-muted-foreground">
+                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 1.000 tokens HWT
+                                (equivalente a 1 metro cúbico de água).
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Método de Pagamento</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Tabs defaultValue="crypto" className="w-full">
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="crypto">Criptomoedas</TabsTrigger>
+                        <TabsTrigger value="fiat">Moeda Fiduciária</TabsTrigger>
+                      </TabsList>
+
+                      <TabsContent value="crypto" className="space-y-4 mt-4">
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="eth" id="eth" />
+                            <Label htmlFor="eth" className="flex-1 cursor-pointer">
+                              <div className="flex justify-between items-center">
+                                <span>Ethereum (ETH)</span>
+                                {isConnected && (
+                                  <span className="text-sm text-muted-foreground">
+                                    Saldo: {Number.parseFloat(ethBalance).toFixed(4)} ETH
+                                  </span>
+                                )}
+                              </div>
+                            </Label>
+                          </div>
+
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="usdt" id="usdt" />
+                            <Label htmlFor="usdt" className="flex-1 cursor-pointer">
+                              <div className="flex justify-between items-center">
+                                <span>USDT</span>
+                                {isConnected && (
+                                  <span className="text-sm text-muted-foreground">
+                                    Saldo: {Number.parseFloat(usdtBalance).toFixed(2)} USDT
+                                  </span>
+                                )}
+                              </div>
+                            </Label>
+                          </div>
+                        </RadioGroup>
+
+                        {!isConnected ? (
+                          <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
+                            {isLoading ? "Conectando..." : "Conectar Carteira"}
+                          </Button>
+                        ) : (
+                          <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
+                            {isLoading ? "Processando..." : "Comprar Tokens"}
+                          </Button>
+                        )}
+                      </TabsContent>
+
+                      <TabsContent value="fiat" className="space-y-4 mt-4">
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="pix" id="pix" />
+                            <Label htmlFor="pix" className="flex-1 cursor-pointer">
+                              PIX
+                            </Label>
+                          </div>
+
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="credit_card" id="credit_card" />
+                            <Label htmlFor="credit_card" className="flex-1 cursor-pointer">
+                              Cartão de Crédito
+                            </Label>
+                          </div>
+                        </RadioGroup>
+
+                        {paymentMethod === "pix" && (
+                          <div className="space-y-4">
+                            {pixCode ? (
+                              <div className="flex flex-col items-center p-4 border rounded-md">
+                                <div className="mb-4 bg-white p-4 rounded-md">
+                                  <Image
+                                    src="/placeholder.svg?height=200&width=200"
+                                    alt="Código QR PIX"
+                                    width={200}
+                                    height={200}
+                                    className="mx-auto"
+                                  />
+                                </div>
+                                <p className="text-sm text-center text-muted-foreground mb-2">
+                                  Escaneie o código QR com seu aplicativo bancário ou copie o código PIX abaixo:
+                                </p>
+                                <div className="w-full p-2 bg-muted rounded-md text-xs overflow-auto">
+                                  <code>{pixCode}</code>
+                                </div>
+                              </div>
+                            ) : (
+                              <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
+                                {isLoading ? "Gerando código..." : "Gerar Código PIX"}
+                              </Button>
+                            )}
+                          </div>
+                        )}
+
+                        {paymentMethod === "credit_card" && (
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="card-number">Número do Cartão</Label>
+                              <Input
+                                id="card-number"
+                                placeholder="0000 0000 0000 0000"
+                                value={cardNumber}
+                                onChange={(e) => setCardNumber(e.target.value)}
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label htmlFor="card-name">Nome no Cartão</Label>
+                              <Input
+                                id="card-name"
+                                placeholder="Nome completo"
+                                value={cardName}
+                                onChange={(e) => setCardName(e.target.value)}
+                              />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="card-expiry">Data de Validade</Label>
+                                <Input
+                                  id="card-expiry"
+                                  placeholder="MM/AA"
+                                  value={cardExpiry}
+                                  onChange={(e) => setCardExpiry(e.target.value)}
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor="card-cvc">CVC</Label>
+                                <Input
+                                  id="card-cvc"
+                                  placeholder="123"
+                                  value={cardCVC}
+                                  onChange={(e) => setCardCVC(e.target.value)}
+                                />
+                              </div>
+                            </div>
+
+                            <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
+                              {isLoading ? "Processando..." : "Pagar com Cartão"}
+                            </Button>
+                          </div>
+                        )}
+                      </TabsContent>
+                    </Tabs>
+
+                    {error && (
+                      <Alert variant="destructive" className="mt-4">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Erro</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                      </Alert>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+
+      <footer className="border-t border-primary/20 bg-background">
+        <div className="container px-4 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <Image
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+                alt="Logo do Hanuman Water Token"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+              <span className="text-lg font-bold text-primary">HWT</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} HanumanWater Token. Todos os direitos reservados.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
