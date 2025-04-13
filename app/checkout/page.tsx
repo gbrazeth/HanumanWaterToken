@@ -156,7 +156,6 @@ export default function CheckoutPage() {
 
       // Criar contrato
       const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
-
       // Executar transação
       const tx = await presaleContract.buyWithETH({
         value: ethers.parseEther(ethValue.toString()),
