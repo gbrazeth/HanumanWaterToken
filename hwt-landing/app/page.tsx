@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { TOKEN_ABI, TOKEN_CONTRACT_ADDRESS, RPC_URL } from "@/config/contract"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -32,8 +33,39 @@ const scrollToSection = (elementId: string, offset = 80) => {
 export default function LandingPage() {
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [tokenBalance, setTokenBalance] = useState("0")
 
   // Verificar se o usuário já está logado ao carregar a página
+  const fetchTokenBalance = async (identifier: string) => {
+    try {
+      // Importar ethers dinamicamente apenas no cliente
+      const { ethers } = await import('ethers')
+
+      // Se o identificador for um endereço Ethereum válido
+      if (ethers.utils.isAddress(identifier)) {
+        const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
+        const contract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, provider)
+
+        // Buscar o saldo e os decimais do token
+        const [balance, decimals] = await Promise.all([
+          contract.balanceOf(identifier),
+          contract.decimals()
+        ])
+
+        // Formatar o saldo considerando os decimais
+        const formattedBalance = ethers.utils.formatUnits(balance, decimals)
+        return formattedBalance
+      } else {
+        // Se não for um endereço (ex: email), retorna 0
+        // TODO: Implementar mapeamento de email para endereço se necessário
+        return "0"
+      }
+    } catch (error) {
+      console.error("Erro ao buscar saldo de tokens:", error)
+      return "0"
+    }
+  }
+
   useEffect(() => {
     const authToken = localStorage.getItem("hwt-auth-token")
     if (authToken) {
@@ -54,8 +86,22 @@ export default function LandingPage() {
     }
   }, [])
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async () => {
     setIsLoggedIn(true)
+    // Buscar o saldo de tokens quando o usuário fizer login
+    const authToken = localStorage.getItem("hwt-auth-token")
+    if (authToken) {
+      try {
+        const tokenData = JSON.parse(authToken)
+        // Se for uma carteira Metamask, usa o endereço da carteira
+        // Se for login por email/Google, usa o email como identificador
+        const identifier = tokenData.address || tokenData.email
+        const balance = await fetchTokenBalance(identifier)
+        setTokenBalance(balance)
+      } catch (error) {
+        console.error("Erro ao buscar saldo inicial:", error)
+      }
+    }
   }
 
   // Agora, vamos adicionar a função handleLogout logo após a função handleLoginSuccess
@@ -146,7 +192,7 @@ export default function LandingPage() {
               <DropdownMenuTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  Conta Conectada
+                  Conta Conectada ({tokenBalance} HWT)
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

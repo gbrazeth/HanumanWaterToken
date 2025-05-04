@@ -1,7 +1,7 @@
 // Configurações para interação com contratos Ethereum
 
 // Endereços dos contratos (seriam substituídos pelos endereços reais em produção)
-export const HWT_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
+export const HWT_ADDRESS = "0xE03CBA5b5818Ae164D098f349809DA0567F31038" // Endereço do HWT na Sepolia
 export const PRESALE_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
 export const USDT_ADDRESS = "0xdAC17F958D2ee523a2206206994597C13D831ec7" // Endereço real do USDT na Ethereum mainnet
 

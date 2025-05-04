@@ -8,7 +8,10 @@ const verificationCodes: Record<string, { code: string; expires: number }> = {}
 export async function POST(request: Request) {
   try {
     // Verificar se a API key está definida
+    console.log("=== VERIFICANDO API KEY ===")
+    console.log("Todas as variáveis de ambiente:", process.env)
     const apiKey = process.env.RESEND_API_KEY
+    console.log("API Key encontrada:", apiKey)
 
     if (!apiKey) {
       console.error("RESEND_API_KEY não está definida nas variáveis de ambiente")
@@ -36,12 +39,14 @@ export async function POST(request: Request) {
     }
 
     try {
+      console.log("=== INÍCIO DO PROCESSO DE ENVIO ===")
+      console.log("API Key configurada:", apiKey ? "Sim" : "Não")
       console.log("Tentando enviar email para:", email)
 
       // Enviar o email com o código usando seu domínio verificado
       // Substitua "noreply@seudominio.com" pelo seu endereço de email real
       const { data, error } = await resend.emails.send({
-        from: "Hanuman Water Token <noreply@hanumanwater.com>", // Substitua pelo seu domínio
+        from: "Hanuman Water Token <onboarding@resend.dev>",
         to: email,
         subject: "Seu código de verificação HWT",
         html: `
@@ -85,7 +90,9 @@ export async function POST(request: Request) {
       })
 
       if (error) {
+        console.error("=== ERRO NO ENVIO DO EMAIL ===")
         console.error("Erro detalhado do Resend:", JSON.stringify(error))
+        console.error("Dados da tentativa:", { from: "onboarding@resend.dev", to: email })
         // Fallback para modo de desenvolvimento se houver erro no envio
         return NextResponse.json({
           success: true,

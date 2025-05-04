@@ -53,17 +53,13 @@ contract HWTPresale is Ownable {
      */
     function buyWithETH() external payable {
         require(msg.value > 0, "ETH amount must be greater than zero");
-        
-        // Calculate token amount based on ETH value and price
-        // ethAmount * ethPriceUSD / tokenPriceUSD = tokenAmount
-        uint256 tokenAmount = (msg.value * ethPriceUSD) / TOKEN_PRICE_USD;
-        
-        // Convert to token decimals (18)
-        tokenAmount = tokenAmount * 10**18;
-        
-        // Mint tokens to buyer
+        // Corrigir cálculo: msg.value (wei), ethPriceUSD (8 casas decimais)
+        // 1. Calcule valor em USD (8 casas decimais)
+        uint256 usdValue = (msg.value * ethPriceUSD) / 1e18;
+        // 2. Calcule quantos tokens HWT podem ser comprados (2 USD/token)
+        uint256 tokenAmount = (usdValue * 1e18) / (TOKEN_PRICE_USD * 1e8);
+        // Mint tokens ao comprador
         hwtToken.mintPresaleTokens(msg.sender, tokenAmount);
-        
         emit TokensPurchasedWithETH(msg.sender, msg.value, tokenAmount);
     }
     
@@ -77,14 +73,14 @@ contract HWTPresale is Ownable {
         // Transfer USDT from buyer to this contract
         require(usdtToken.transferFrom(msg.sender, address(this), usdtAmount), "USDT transfer failed");
         
-        // Calculate token amount based on USDT value
-        // USDT has 6 decimals, HWT has 18 decimals
-        // usdtAmount / 10^6 / tokenPriceUSD * 10^18 = tokenAmount
-        uint256 tokenAmount = (usdtAmount * 10**12) / TOKEN_PRICE_USD;
-        
-        // Mint tokens to buyer
+        // Calcule quantos tokens HWT podem ser comprados com USDT
+        // usdtAmount (6 decimais), TOKEN_PRICE_USD (2 USD/token)
+        // 1. Converter USDT para 18 decimais
+        uint256 usdtAmount18 = usdtAmount * 1e12;
+        // 2. Calcular tokens: usdtAmount18 / (TOKEN_PRICE_USD * 1e18)
+        uint256 tokenAmount = usdtAmount18 / (TOKEN_PRICE_USD * 1e18 / 1e18);
+        // Mint tokens ao comprador
         hwtToken.mintPresaleTokens(msg.sender, tokenAmount);
-        
         emit TokensPurchasedWithUSDT(msg.sender, usdtAmount, tokenAmount);
     }
     

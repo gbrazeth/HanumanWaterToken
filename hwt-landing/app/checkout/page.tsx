@@ -10,8 +10,19 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
-import { ArrowLeft, AlertCircle, Check } from "lucide-react"
+import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "../../config/contract";
+// Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
+
+// Config Sepolia para uso no switchEthereumChain
+const NETWORK_CONFIG = {
+  chainId: '0xaa36a7', // 11155111 em hexadecimal
+  chainName: 'Sepolia Testnet',
+  nativeCurrency: { name: 'SepoliaETH', symbol: 'ETH', decimals: 18 },
+  rpcUrls: ['https://sepolia.infura.io/v3/127537b6f2bd41629ed69cc64efef98f'],
+  blockExplorerUrls: ['https://sepolia.etherscan.io']
+};
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { ArrowLeft, AlertCircle, Check } from "lucide-react"
 
 // Importar ABIs dos contratos (em produção, estes seriam importados de arquivos JSON)
 const HWT_ABI = [
@@ -24,17 +35,34 @@ const HWT_ABI = [
 const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWithUSDT(uint256 usdtAmount) external"]
 
 const USDT_ABI = [
-  "function approve(address spender, uint256 amount) external returns (bool)",
-  "function allowance(address owner, address spender) external view returns (uint256)",
-  "function balanceOf(address account) external view returns (uint256)",
+  {
+    "constant": true,
+    "inputs": [{"name": "owner", "type": "address"}],
+    "name": "balanceOf",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {"name": "_spender", "type": "address"},
+      {"name": "_value", "type": "uint256"}
+    ],
+    "name": "approve",
+    "outputs": [{"name": "", "type": "bool"}],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ]
 
-// Endereços dos contratos (seriam substituídos pelos endereços reais em produção)
-const HWT_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
-const PRESALE_ADDRESS = "0x0000000000000000000000000000000000000000" // Placeholder
-const USDT_ADDRESS = "0xdAC17F958D2ee523a2206206994597C13D831ec7" // Endereço real do USDT na Ethereum mainnet
+// Usando os endereços importados do arquivo de configuração
 
 export default function CheckoutPage() {
+  // DEBUG: Exibir o valor importado do endereço do contrato
+  console.log("[DEBUG] TOKEN_CONTRACT_ADDRESS:", TOKEN_CONTRACT_ADDRESS);
   const [tokenAmount, setTokenAmount] = useState<string>("1000")
   const [usdAmount, setUsdAmount] = useState<string>("2000")
   const [waterAmount, setWaterAmount] = useState<string>("1000")
@@ -59,10 +87,52 @@ export default function CheckoutPage() {
     checkIfWalletIsConnected()
   }, [])
 
+  // Função para verificar e trocar para a rede correta
+  const checkAndSwitchNetwork = async () => {
+    try {
+      if (typeof window.ethereum === "undefined") {
+        throw new Error("MetaMask não está instalado")
+      }
+
+      // Tentar trocar para a rede Sepolia
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: NETWORK_CONFIG.chainId }],
+        })
+      } catch (switchError: any) {
+        // Se a rede não existe, adicionar
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [NETWORK_CONFIG],
+          })
+        } else {
+          throw switchError
+        }
+      }
+
+      return true
+    } catch (error) {
+      console.error("Erro ao trocar de rede:", error)
+      // Erro 4001 significa que o usuário rejeitou a solicitação
+      if ((error as any).code === 4001) {
+        setError("Você precisa aceitar a troca de rede para Sepolia no MetaMask")
+      } else {
+        setError("Por favor, conecte-se à rede Sepolia (Ethereum Testnet)")
+      }
+      return false
+    }
+  }
+
   // Função para verificar se o Metamask está conectado
   const checkIfWalletIsConnected = async () => {
     try {
       if (typeof window.ethereum !== "undefined") {
+        // Primeiro verificar e trocar para a rede correta
+        const networkOk = await checkAndSwitchNetwork()
+        if (!networkOk) return
+
         const accounts = await window.ethereum.request({ method: "eth_accounts" })
 
         if (accounts.length > 0) {
@@ -78,23 +148,34 @@ export default function CheckoutPage() {
     }
   }
 
-  // Função para obter saldos de ETH e USDT
+  // Função para obter saldos
   const getBalances = async (address: string) => {
     try {
-      if (typeof window.ethereum !== "undefined") {
-        const provider = new ethers.BrowserProvider(window.ethereum)
+      if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
 
-        // Obter saldo de ETH
-        const ethBalance = await provider.getBalance(address)
-        setEthBalance(ethers.formatEther(ethBalance))
+      // Primeiro verificar e trocar para a rede correta
+      const networkOk = await checkAndSwitchNetwork()
+      if (!networkOk) return
 
+      // Obter saldo de ETH
+      const ethBalance = await provider.getBalance(address)
+      setEthBalance(ethers.utils.formatEther(ethBalance))
+
+      try {
         // Obter saldo de USDT
         const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider)
         const usdtBalance = await usdtContract.balanceOf(address)
-        setUsdtBalance(ethers.formatUnits(usdtBalance, 6)) // USDT tem 6 casas decimais
+        setUsdtBalance(ethers.utils.formatUnits(usdtBalance, 6)) // USDT tem 6 casas decimais
+      } catch (usdtError) {
+        console.error("Erro ao obter saldo de USDT:", usdtError)
+        // Não mostrar erro para o usuário, apenas definir saldo como zero
+        // já que é normal não ter USDT
+        setUsdtBalance("0")
       }
     } catch (error) {
       console.error("Erro ao obter saldos:", error)
+      setError("Erro ao obter saldos. Por favor, verifique se está conectado à rede Sepolia.")
     }
   }
 
@@ -102,9 +183,14 @@ export default function CheckoutPage() {
   const connectWallet = async () => {
     try {
       if (typeof window.ethereum !== "undefined") {
-        setIsLoading(true)
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" })
+        // Primeiro verificar e trocar para a rede correta
+        const networkOk = await checkAndSwitchNetwork()
+        if (!networkOk) return
 
+        setIsLoading(true)
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        })
         if (accounts.length > 0) {
           setIsConnected(true)
           setWalletAddress(accounts[0])
@@ -135,37 +221,58 @@ export default function CheckoutPage() {
     setWaterAmount(value)
   }
 
+  // Função para verificar se os contratos estão configurados
+  function checkContractAddresses() {
+    // Só exige o contrato HWT para funcionar; presale pode ser opcional
+    if (!TOKEN_CONTRACT_ADDRESS || TOKEN_CONTRACT_ADDRESS.toLowerCase() === "0x0000000000000000000000000000000000000000") {
+      setError("O endereço do contrato HWT ainda não foi configurado")
+      return false
+    }
+    return true
+  }
+
   // Função para comprar tokens com ETH
   const buyWithETH = async () => {
     try {
-      if (!isConnected) {
-        await connectWallet()
-        return
+      if (typeof window.ethereum !== "undefined") {
+        setIsLoading(true)
+        setError(null)
+
+        // Verificar se os contratos estão configurados
+        if (!checkContractAddresses()) {
+          setIsLoading(false)
+          return
+        }
+
+        // Verificar e trocar para a rede correta
+        const networkOk = await checkAndSwitchNetwork()
+        if (!networkOk) {
+          setIsLoading(false)
+          return
+        }
+
+        if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+        const signer = provider.getSigner()
+
+        // Calcular valor em ETH
+        const usdValue = Number.parseFloat(usdAmount)
+        const ethPrice = 3000 // Preço do ETH em USD (em produção, seria obtido de uma API)
+        const ethValue = usdValue / ethPrice
+
+        // Criar contrato
+        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+
+        // Executar transação
+        const tx = await presaleContract.buyWithETH({
+          value: ethers.utils.parseEther(ethValue.toString()),
+        })
+
+        // Aguardar confirmação
+        await tx.wait()
+
+        setSuccess(true)
       }
-
-      setIsLoading(true)
-      setError(null)
-
-      const provider = new ethers.BrowserProvider(window.ethereum)
-      const signer = await provider.getSigner()
-
-      // Calcular valor em ETH
-      const usdValue = Number.parseFloat(usdAmount)
-      const ethPrice = 3000 // Preço do ETH em USD (em produção, seria obtido de uma API)
-      const ethValue = usdValue / ethPrice
-
-      // Criar contrato
-      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
-
-      // Executar transação
-      const tx = await presaleContract.buyWithETH({
-        value: ethers.parseEther(ethValue.toString()),
-      })
-
-      // Aguardar confirmação
-      await tx.wait()
-
-      setSuccess(true)
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
       setError("Erro ao processar a compra. Por favor, tente novamente.")
@@ -177,41 +284,50 @@ export default function CheckoutPage() {
   // Função para comprar tokens com USDT
   const buyWithUSDT = async () => {
     try {
-      if (!isConnected) {
-        await connectWallet()
-        return
+      if (typeof window.ethereum !== "undefined") {
+        setIsLoading(true)
+        setError(null)
+
+        // Verificar se os contratos estão configurados
+        if (!checkContractAddresses()) {
+          setIsLoading(false)
+          return
+        }
+
+        // Verificar e trocar para a rede correta
+        const networkOk = await checkAndSwitchNetwork()
+        if (!networkOk) {
+          setIsLoading(false)
+          return
+        }
+
+        if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+        const signer = provider.getSigner()
+
+        // Calcular valor em USDT (1:1 com USD)
+        const usdtValue = Number.parseFloat(usdAmount)
+
+        // Criar contratos
+        const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
+        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+
+        // Verificar allowance
+        const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
+        const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
+
+        // Se necessário, aprovar o contrato para gastar USDT
+        if (allowance.lt(usdtAmount)) {
+          const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
+          await approveTx.wait()
+        }
+
+        // Executar a compra
+        const tx = await presaleContract.buyWithUSDT(usdtAmount)
+        await tx.wait()
+
+        setSuccess(true)
       }
-
-      setIsLoading(true)
-      setError(null)
-
-      const provider = new ethers.BrowserProvider(window.ethereum)
-      const signer = await provider.getSigner()
-
-      // Calcular valor em USDT (1:1 com USD)
-      const usdtValue = Number.parseFloat(usdAmount)
-
-      // Criar contratos
-      const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
-      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
-
-      // Verificar allowance
-      const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
-      const usdtAmount = ethers.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
-
-      // Aprovar gasto de USDT se necessário
-      if (allowance < usdtAmount) {
-        const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
-        await approveTx.wait()
-      }
-
-      // Executar transação de compra
-      const tx = await presaleContract.buyWithUSDT(usdtAmount)
-
-      // Aguardar confirmação
-      await tx.wait()
-
-      setSuccess(true)
     } catch (error) {
       console.error("Erro ao comprar tokens com USDT:", error)
       setError("Erro ao processar a compra. Por favor, tente novamente.")
