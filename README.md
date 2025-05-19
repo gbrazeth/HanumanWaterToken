@@ -8,8 +8,7 @@ Compra de tokens HWT via criptomoedas (ETH, USDT) e moeda fiduciária.
 Autenticação por e-mail e carteira, com painel para consulta de saldo.
 Smart Contract ERC-20 para emissão e gestão dos tokens.
 Design responsivo e identidade visual alinhada à marca Hanuman.
-📸 Demonstração
-Demo
+
 
 🛠️ Tecnologias Utilizadas
 Next.js
@@ -49,6 +48,7 @@ Acesse:
 http://localhost:3000
 
 💡 Funcionalidades
+
 Interface intuitiva para compra de tokens HWT
 Integração com MetaMask e autenticação por e-mail
 Visualização de saldo de tokens
