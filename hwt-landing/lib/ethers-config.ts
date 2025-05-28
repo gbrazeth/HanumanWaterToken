@@ -25,5 +25,5 @@ export const USDT_ABI = [
 ]
 
 // Preço do ETH em USD (em produção, seria obtido de uma API)
-export const ETH_PRICE_USD = 3000
+export const ETH_PRICE_USD = 2000
 

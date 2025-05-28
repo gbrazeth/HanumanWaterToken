@@ -271,7 +271,8 @@ export default function CheckoutPage() {
         // Aguardar confirmação
         await tx.wait()
 
-        setSuccess(true)
+        setSuccess(true);
+window.dispatchEvent(new Event('hwt-balance-updated'))
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
@@ -326,7 +327,8 @@ export default function CheckoutPage() {
         const tx = await presaleContract.buyWithUSDT(usdtAmount)
         await tx.wait()
 
-        setSuccess(true)
+        setSuccess(true);
+window.dispatchEvent(new Event('hwt-balance-updated'))
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com USDT:", error)
@@ -364,7 +366,8 @@ export default function CheckoutPage() {
     // Simular processamento
     setTimeout(() => {
       setIsLoading(false)
-      setSuccess(true)
+      setSuccess(true);
+window.dispatchEvent(new Event('hwt-balance-updated'))
     }, 2000)
   }
 
@@ -391,9 +394,9 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-logoBg">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-logoBg/95 backdrop-blur supports-[backdrop-filter]:bg-logoBg/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
@@ -433,6 +436,33 @@ export default function CheckoutPage() {
                     Sua compra de {tokenAmount} HWT foi processada com sucesso. Os tokens serão enviados para sua
                     carteira em breve.
                   </p>
+                  <Button
+                    className="mb-6"
+                    variant="secondary"
+                    onClick={async () => {
+                      if (window.ethereum) {
+                        try {
+                          await window.ethereum.request({
+                            method: 'wallet_watchAsset',
+                            params: {
+                              type: 'ERC20',
+                              options: {
+                                address: TOKEN_CONTRACT_ADDRESS,
+                                symbol: 'HWT',
+                                decimals: 18,
+                              },
+                            },
+                          } as any);
+                        } catch (err) {
+                          alert('Erro ao adicionar token na Metamask.');
+                        }
+                      } else {
+                        alert('MetaMask não encontrada.');
+                      }
+                    }}
+                  >
+                    Adicionar HWT à MetaMask
+                  </Button>
                   <div className="flex gap-4">
                     <Button asChild>
                       <Link href="/">Voltar para a página inicial</Link>
@@ -664,7 +694,7 @@ export default function CheckoutPage() {
         </div>
       </main>
 
-      <footer className="border-t border-primary/20 bg-background">
+      <footer className="border-t border-primary/20 bg-logoBg">
         <div className="container px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">

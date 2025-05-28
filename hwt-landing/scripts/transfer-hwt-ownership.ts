@@ -1,8 +1,8 @@
 import hre from "hardhat";
 
 async function main() {
-  const NEW_OWNER = "0x466a830492AE1deeF25309BaC52519b6a73A9CCe"; // Novo HWTPresale com HWT correto
-  const HWT_ADDRESS = "0x8F2bdA913a6Ac0ad865900C262e1BFc03843Dff1";
+  const NEW_OWNER = "0xD490cc38AE9eE28281825c7F4ceAB70B557F3a3C"; // Novo HWTPresale
+  const HWT_ADDRESS = "0x123a55BFDda355C10a9fb1EdF7f3c80152D5e91c";
 
   const hwt = await hre.ethers.getContractAt("HanumanWaterToken", HWT_ADDRESS);
   const tx = await hwt.transferOwnership(NEW_OWNER);

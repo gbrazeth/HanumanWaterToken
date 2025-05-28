@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { TOKEN_ABI, TOKEN_CONTRACT_ADDRESS, RPC_URL } from "@/config/contract"
+import { TOKEN_ABI, TOKEN_CONTRACT_ADDRESS } from "@/config/contract";
+import { NETWORK_CONFIG } from "@/config/contract";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -43,7 +44,12 @@ export default function LandingPage() {
 
       // Se o identificador for um endereço Ethereum válido
       if (ethers.utils.isAddress(identifier)) {
-        const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
+        let provider;
+        if (typeof window !== 'undefined' && (window as any).ethereum) {
+          provider = new ethers.providers.Web3Provider((window as any).ethereum);
+        } else {
+          provider = new ethers.providers.JsonRpcProvider(NETWORK_CONFIG.rpcUrls[0]);
+        }
         const contract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, provider)
 
         // Buscar o saldo e os decimais do token
@@ -84,6 +90,51 @@ export default function LandingPage() {
         localStorage.removeItem("hwt-auth-token")
       }
     }
+
+    // Função para obter o endereço conectado na MetaMask
+    const getConnectedAddress = async (): Promise<string | null> => {
+      if (typeof window !== 'undefined' && (window as any).ethereum) {
+        try {
+          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
+          if (accounts && accounts.length > 0) {
+            return accounts[0];
+          }
+        } catch (e) {
+          // Silenciar
+        }
+      }
+      return null;
+    };
+
+    // Atualiza saldo ao receber evento de compra ou ao carregar
+    const updateBalance = async () => {
+      let address = await getConnectedAddress();
+      if (address) {
+        const balance = await fetchTokenBalance(address);
+        setTokenBalance(balance);
+      } else {
+        // fallback: método antigo (email ou auth-token)
+        const authToken = localStorage.getItem("hwt-auth-token");
+        if (authToken) {
+          try {
+            const tokenData = JSON.parse(authToken);
+            const identifier = tokenData.address || tokenData.email;
+            const balance = await fetchTokenBalance(identifier);
+            setTokenBalance(balance);
+          } catch (error) {
+            console.error("Erro ao atualizar saldo após compra:", error);
+          }
+        }
+      }
+    };
+
+    // Atualizar saldo ao carregar a página
+    updateBalance();
+    // Atualizar saldo ao receber evento customizado
+    window.addEventListener('hwt-balance-updated', updateBalance);
+    return () => {
+      window.removeEventListener('hwt-balance-updated', updateBalance);
+    };
   }, [])
 
   const handleLoginSuccess = async () => {
@@ -123,9 +174,9 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-logoBg">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-logoBg/95 backdrop-blur supports-[backdrop-filter]:bg-logoBg/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
@@ -169,12 +220,20 @@ export default function LandingPage() {
               Roadmap
             </Link>
             <a
-              href="https://polygonscan.com"
+              href="https://sepolia.etherscan.io/address/0x123a55BFDda355C10a9fb1EdF7f3c80152D5e91c"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
             >
-              Contrato
+              Contrato HWT
+            </a>
+            <a
+              href="https://sepolia.etherscan.io/address/0xD490cc38AE9eE28281825c7F4ceAB70B557F3a3C"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium hover:text-primary"
+            >
+              Contrato Presale
             </a>
             <Link
               href="#faq"
@@ -192,7 +251,7 @@ export default function LandingPage() {
               <DropdownMenuTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  Conta Conectada ({tokenBalance} HWT)
+                  Conta Conectada ({Number(tokenBalance) % 1 === 0 ? Number(tokenBalance) : Number(tokenBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} HWT)
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -300,7 +359,7 @@ export default function LandingPage() {
                   tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam
                   ativamente da preservação e distribuição responsável da água.
                 </p>
-                <div className="mt-8 p-6 bg-background rounded-lg space-y-4">
+                <div className="mt-8 p-6 bg-logoBg rounded-lg space-y-4">
                   <h3 className="text-xl font-bold text-primary">
                     Hanuman Water Token (HWT) – Investindo no Futuro da Água Termal
                   </h3>
@@ -321,7 +380,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="container px-4 py-16 md:py-24" id="about">
+        <section className="container px-4 py-16 md:py-24 bg-logoBg" id="about">
           <div className="grid gap-8 md:grid-cols-3">
             <Card className="relative overflow-hidden">
               <div className="absolute inset-0">
@@ -381,7 +440,7 @@ export default function LandingPage() {
         </section>
 
         {/* Tokenomics Section */}
-        <section className="bg-muted py-16 md:py-24" id="tokenomics">
+        <section className="bg-white py-16 md:py-24" id="tokenomics">
           <div className="container px-4 pt-16">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
               Tokenomics
@@ -550,7 +609,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="bg-muted py-16 md:py-24" id="faq">
+        <section className="bg-[#f8f9fa] py-16 md:py-24" id="faq">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
               Perguntas Frequentes
@@ -619,7 +678,7 @@ export default function LandingPage() {
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-white font-bold">Fonte Primária</h3>
+                  <h3 className="text-primary font-bold">Fonte Primária</h3>
                 </div>
               </div>
               <div className="relative group overflow-hidden rounded-lg">
@@ -631,7 +690,7 @@ export default function LandingPage() {
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-white font-bold">Instalação de Processamento</h3>
+                  <h3 className="text-primary font-bold">Instalação de Processamento</h3>
                 </div>
               </div>
               <div className="relative group overflow-hidden rounded-lg">
@@ -643,7 +702,7 @@ export default function LandingPage() {
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-white font-bold">Rede de Distribuição</h3>
+                  <h3 className="text-primary font-bold">Rede de Distribuição</h3>
                 </div>
               </div>
             </div>
@@ -651,7 +710,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t border-primary/20 bg-background">
+      <footer className="border-t border-primary/20 bg-logoBg">
         <div className="container px-4 py-8 md:py-12">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
