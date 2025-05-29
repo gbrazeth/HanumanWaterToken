@@ -25,15 +25,11 @@ Resend (e-mail)
 ⚙️ Instalação e Uso
 
 Clone o repositório:
-bash
-CopyInsert
 git clone https://github.com/seu-usuario/HanumanWaterToken.git
 cd HanumanWaterToken/hwt-landing
 
 Instale as dependências:
 
-bash
-CopyInsert
 npm install
 # ou
 yarn install
@@ -44,8 +40,6 @@ Crie um arquivo .env.local com as chaves necessárias (exemplo disponível em .e
 
 Inicie o projeto:
 
-bash
-CopyInsert
 npm run dev
 # ou
 yarn dev
@@ -66,7 +60,6 @@ Contrato inteligente seguro e auditável
 
 O contrato ERC-20 do HWT está localizado em:
 
-CopyInsert
 /contracts/HanumanWaterToken.sol
 
 🤝 Contribuição
