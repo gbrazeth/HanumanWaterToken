@@ -516,7 +516,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             <AlertCircle className="h-5 w-5 text-primary mr-3" />
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 1.000 tokens HWT
+                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 100 tokens HWT
                                 (equivalente a 1 metro cúbico de água).
                               </p>
                             </div>

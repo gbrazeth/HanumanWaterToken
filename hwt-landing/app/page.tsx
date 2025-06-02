@@ -663,7 +663,7 @@ export default function LandingPage() {
         </section>
 
         {/* New Water Gallery Section */}
-        <section className="py-16 md:py-24 bg-muted">
+        <section className="py-16 md:py-24 bg-white">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter text-primary text-center mb-12">
               Nossas Fontes de Água
@@ -671,39 +671,33 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="relative group overflow-hidden rounded-lg">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.39.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source,%20prominently%20displaying%20the%20HWT%20token%20branding.%20The%20structure%20is%20-xyhrFL0mgi0EGbO4awnEkE5wOnOeHP.webp"
-                  alt="Instalação de Processamento Primário HWT"
+                  src="/images/jazida/DJI_0878.JPG"
+                  alt="Riacho na jazida Hanuman"
                   width={400}
                   height={300}
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-primary font-bold">Fonte Primária</h3>
-                </div>
+                
               </div>
               <div className="relative group overflow-hidden rounded-lg">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.38.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source.%20The%20structure%20is%20modern%20and%20high-tech,%20featuring%20sleek%20metallic%20-Qqy58ihqbKhBBwsqgnzhQAtuWhnMzu.webp"
-                  alt="Sistema de Filtração Avançado HWT"
+                  src="/images/jazida/DJI_0864.JPG"
+                  alt="Casa de bomba na jazida Hanuman"
                   width={400}
                   height={300}
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-primary font-bold">Instalação de Processamento</h3>
-                </div>
+                
               </div>
               <div className="relative group overflow-hidden rounded-lg">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.32.37%20-%20A%20futuristic%20water%20reservoir%20with%20a%20modern%20architectural%20design.%20The%20structure%20is%20sleek%20and%20metallic,%20incorporating%20glass%20domes%20and%20advanced%20filtratio-I9vHkUZqLwLvqeVpHpisMlXxRKHVZw.webp"
-                  alt="Gestão Sustentável de Água HWT"
+                  src="/images/jazida/DJI_0859.JPG"
+                  alt="Vista aérea da jazida Hanuman"
                   width={400}
                   height={300}
                   className="object-cover w-full h-[300px] transition-transform group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                  <h3 className="text-primary font-bold">Rede de Distribuição</h3>
-                </div>
+                
               </div>
             </div>
           </div>
