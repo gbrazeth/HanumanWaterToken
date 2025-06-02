@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Droplet, Shield, Users, ChevronRight, ArrowRight } from "lucide-react"
+import { Droplet, Shield, Users, ChevronRight, ArrowRight, Star, Percent, CalendarDays, Gift, Leaf } from "lucide-react"
 import { AuthDialog } from "@/components/auth-dialog"
 // Primeiro, vamos adicionar o import para o DropdownMenu
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -32,6 +32,7 @@ const scrollToSection = (elementId: string, offset = 80) => {
 }
 
 export default function LandingPage() {
+  const [showMoreFaqs, setShowMoreFaqs] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [tokenBalance, setTokenBalance] = useState("0")
@@ -200,6 +201,16 @@ export default function LandingPage() {
               Sobre
             </Link>
             <Link
+              href="#benefits"
+              className="text-sm font-medium hover:text-primary"
+              onClick={(e) => {
+                e.preventDefault()
+                scrollToSection("benefits")
+              }}
+            >
+              Benefícios
+            </Link>
+            <Link
               href="#tokenomics"
               className="text-sm font-medium hover:text-primary"
               onClick={(e) => {
@@ -337,8 +348,8 @@ export default function LandingPage() {
             <div className="grid gap-8 md:grid-cols-2 items-center">
               <div>
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.38.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source.%20The%20structure%20is%20modern%20and%20high-tech,%20featuring%20sleek%20metallic%20-Qqy58ihqbKhBBwsqgnzhQAtuWhnMzu.webp"
-                  alt="Instalação de Processamento de Água HWT"
+                  src="/images/jazida/DJI_0848.JPG"
+                  alt="Fonte de água Hanuman com casa de bombas e névoa"
                   width={600}
                   height={400}
                   className="rounded-lg shadow-xl"
@@ -365,11 +376,11 @@ export default function LandingPage() {
                   </h3>
                   <div className="space-y-2">
                     <p className="text-muted-foreground">
-                      O Token Hanuman Water (HWT) tem um preço mínimo de US$ 2.000 por m³.
+                      O Token Hanuman Water (HWT) tem um preço mínimo de US$ 2 por litro.
                     </p>
                     <div className="space-y-1">
-                      <p className="font-medium">Testes Finais e Lançamento da Pré-Venda</p>
-                      <p className="text-muted-foreground">Período: 10/04 a 10/05/2025</p>
+                      <p className="font-medium">Lançamento da Pré-Venda</p>
+                      <p className="text-muted-foreground">Período: 11/06/2025</p>
                       <p className="text-muted-foreground">Meta: Venda mínima de 100.000 m³ em 12 meses.</p>
                     </div>
                   </div>
@@ -439,6 +450,71 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Token Benefits Section */}
+        <section className="py-16 md:py-24 bg-muted/40" id="benefits">
+          <div className="container px-4">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
+              Benefícios Exclusivos do HWT
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Star className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Acesso VIP a Lotes Especiais</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Tenha prioridade em lotes de água com características únicas e embalagens comemorativas.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Percent className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Descontos Exclusivos</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Economize na compra de água Hanuman e outros produtos ou serviços do nosso ecossistema.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <CalendarDays className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Eventos e Experiências</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Participe de degustações, visitas à Fonte Hanuman e encontros exclusivos da comunidade.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Comunidade Premium</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Junte-se a um grupo seleto de investidores e entusiastas da água mineral e blockchain.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Gift className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Recompensas por Engajamento</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Seja incentivado por sua participação ativa e contribuições para o crescimento do HWT.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Leaf className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Apoio à Sustentabilidade</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Invista em um projeto comprometido com a exploração responsável de recursos naturais.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* Tokenomics Section */}
         <section className="bg-white py-16 md:py-24" id="tokenomics">
           <div className="container px-4 pt-16">
@@ -456,54 +532,42 @@ export default function LandingPage() {
                       <span>Distribuição Pública</span>
                       <span>80%</span>
                     </div>
-                    <Progress value={80} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "80%" }} />
-                    </Progress>
+                    <Progress value={80} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
                       <span>Equipe de Desenvolvimento</span>
                       <span>6%</span>
                     </div>
-                    <Progress value={6} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "6%" }} />
-                    </Progress>
+                    <Progress value={6} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
                       <span>Fundo de Liquidez e Reservas</span>
                       <span>5%</span>
                     </div>
-                    <Progress value={5} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "5%" }} />
-                    </Progress>
+                    <Progress value={5} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
                       <span>Parcerias Estratégicas</span>
                       <span>3%</span>
                     </div>
-                    <Progress value={3} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "3%" }} />
-                    </Progress>
+                    <Progress value={3} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
                       <span>Recompensas à Comunidade</span>
                       <span>3%</span>
                     </div>
-                    <Progress value={3} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "3%" }} />
-                    </Progress>
+                    <Progress value={3} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
                       <span>Consultores e Vendas</span>
                       <span>3%</span>
                     </div>
-                    <Progress value={3} className="h-2">
-                      <div className="h-full bg-primary" style={{ width: "3%" }} />
-                    </Progress>
+                    <Progress value={3} className="h-2" />
                   </div>
                 </div>
               </div>
@@ -621,7 +685,7 @@ export default function LandingPage() {
                   HWT (HanumanWater Token) é um token utilitário que representa a propriedade de recursos hídricos
                   minerais, construído na tecnologia blockchain para garantir transparência e gestão eficiente de
                   recursos. Cada token está diretamente vinculado a um volume específico de água mineral da Fonte
-                  Hanuman que poderá ser extraído pelo investidores até o final de 2026.
+                  Hanuman que poderá ser extraído pelo investidores a partir do final de 2026.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
@@ -643,6 +707,59 @@ export default function LandingPage() {
                   hídrica.
                 </AccordionContent>
               </AccordionItem>
+              <AccordionItem value="item-4">
+                <AccordionTrigger>Qual a utilidade do HWT?</AccordionTrigger>
+                <AccordionContent>
+                  O HWT é um token utilitário que representa um direito a um volume real de água mineral da Fonte Hanuman. No futuro (previsto a partir do final de 2026), os detentores poderão optar por resgatar a água física correspondente aos seus tokens ou continuar a negociá-los. Além disso, o HWT pode futuramente conceder acesso a benefícios ou governança dentro do ecossistema Hanuman.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-5">
+                <AccordionTrigger>Como a tecnologia blockchain garante a segurança e transparência do HWT?</AccordionTrigger>
+                <AccordionContent>
+                  Todas as transações e a propriedade dos tokens HWT são registradas de forma imutável na blockchain Ethereum (sendo um token ERC-20). Isso significa que os registros são públicos, verificáveis por qualquer pessoa, e não podem ser alterados fraudulentamente, garantindo total transparência e segurança sobre quem possui os tokens.
+                </AccordionContent>
+              </AccordionItem>
+
+              <div className="text-center my-4">
+                <Button onClick={() => setShowMoreFaqs(!showMoreFaqs)} variant="outline" className="text-primary border-primary hover:bg-primary/10 hover:text-primary">
+                  {showMoreFaqs ? "Ver menos" : "Ver mais"}
+                </Button>
+              </div>
+
+              {showMoreFaqs && (
+                <>
+                  <AccordionItem value="item-6">
+                    <AccordionTrigger>Quais são os principais riscos ao investir em HWT?</AccordionTrigger>
+                    <AccordionContent>
+                      Como todo investimento, especialmente em criptoativos e projetos em desenvolvimento, existem riscos. Estes podem incluir a volatilidade do mercado de criptomoedas, riscos regulatórios que podem afetar o setor, e riscos operacionais relacionados à extração e distribuição da água. É importante que você faça sua própria pesquisa (DYOR - Do Your Own Research) e invista de forma consciente.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-7">
+                    <AccordionTrigger>Quando e como poderei resgatar a água física correspondente aos meus tokens HWT?</AccordionTrigger>
+                    <AccordionContent>
+                      A previsão para o início da possibilidade de resgate da água física é a partir do final de 2026. Os detalhes exatos sobre o processo de resgate, logística, custos de envio (se aplicável) e os locais ou métodos de coleta serão comunicados oficialmente à medida que o projeto avançar para essa fase.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-8">
+                    <AccordionTrigger>Qual a quantidade mínima de HWT que posso comprar?</AccordionTrigger>
+                    <AccordionContent>
+                      Durante a fase de pré-venda, a quantidade mínima de compra é de 1 token por transacao. Porém apenas com 100 tokens HWT que voce conseguira receber a agua . Para mais detalhes sobre como comprar, visite nossa seção de checkout ou entre em contato com nosso suporte.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-9">
+                    <AccordionTrigger>O projeto tem planos para listagem do HWT em outras exchanges após a pré-venda?</AccordionTrigger>
+                    <AccordionContent>
+                      Sim, após a conclusão da pré-venda e o lançamento oficial do token, temos planos de buscar listagens em exchanges de criptomoedas relevantes para aumentar a liquidez e o acesso ao HWT. Anúncios sobre listagens serão feitos através dos nossos canais oficiais.
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-10">
+                    <AccordionTrigger>Como o projeto HanumanWaterToken lida com a sustentabilidade da Fonte Hanuman?</AccordionTrigger>
+                    <AccordionContent>
+                      A sustentabilidade da Fonte Hanuman é uma prioridade. Realizamos estudos e implementamos práticas para garantir que a exploração da água seja feita de forma responsável, respeitando os ciclos naturais de reposição da fonte e o meio ambiente local. Parte dos recursos do projeto pode ser destinada à preservação e manutenção da área da fonte.
+                    </AccordionContent>
+                  </AccordionItem>
+                </>
+              )}
             </Accordion>
           </div>
         </section>
