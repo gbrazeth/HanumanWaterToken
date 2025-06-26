@@ -63,9 +63,9 @@ const USDT_ABI = [
 export default function CheckoutPage() {
   // DEBUG: Exibir o valor importado do endereço do contrato
   console.log("[DEBUG] TOKEN_CONTRACT_ADDRESS:", TOKEN_CONTRACT_ADDRESS);
-  const [tokenAmount, setTokenAmount] = useState<string>("1000")
-  const [usdAmount, setUsdAmount] = useState<string>("2000")
-  const [waterAmount, setWaterAmount] = useState<string>("1000")
+  const [tokenAmount, setTokenAmount] = useState<string>("10")
+  const [usdAmount, setUsdAmount] = useState<string>("20")
+  const [waterAmount, setWaterAmount] = useState<string>("10")
   const [paymentMethod, setPaymentMethod] = useState<string>("eth")
   const [isConnected, setIsConnected] = useState<boolean>(false)
   const [walletAddress, setWalletAddress] = useState<string>("")

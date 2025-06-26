@@ -861,19 +861,19 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-4 text-primary">Recursos</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     Whitepaper
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     Documentação
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://sepolia.etherscan.io/address/0x5244adeB890F905dDa286Dc510afb1a8d63DE5AD" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     Contrato Inteligente
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -881,17 +881,17 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-4 text-primary">Legal</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="/legal/privacy" className="text-sm text-muted-foreground hover:text-primary">
                     Política de Privacidade
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="/legal/terms" className="text-sm text-muted-foreground hover:text-primary">
                     Termos de Serviço
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="/legal/disclaimer" className="text-sm text-muted-foreground hover:text-primary">
                     Aviso Legal
                   </Link>
                 </li>
