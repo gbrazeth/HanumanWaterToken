@@ -60,7 +60,7 @@ Contrato inteligente seguro e auditável
 
 O contrato ERC-20 do HWT está localizado em:
 
-/contracts/HanumanWaterToken.sol
+/contracts/HanumanWaterTokenV2.sol
 
 🤝 Contribuição
 

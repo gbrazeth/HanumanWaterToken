@@ -2,7 +2,7 @@
 
 **Água Mineral Multimilenar Hipertermal Multivalente - Sem Trítio**
 
-![Logo HanumanWaterToken](https://placeholder-for-hwt-logo.com)
+![Logo HanumanWaterToken](hwt-logo.png)
 
 *Versão 1.0 - Junho 2025*
 
@@ -28,7 +28,7 @@
 
 O HanumanWaterToken (HWT) representa uma inovação pioneira na interseção entre recursos naturais, tecnologia blockchain e sustentabilidade. Este token utilitário ERC-20 na blockchain Ethereum é lastreado em um recurso natural de valor inestimável: a água mineral da Fonte Hanuman, uma reserva de água com mais de 9.000 anos de idade, hipertermal (42°C), com propriedades minerais únicas e cientificamente validadas.
 
-Cada token HWT representa o direito a 1 litro de água mineral hipertermal da Fonte Hanuman, criando um vínculo direto entre o mundo digital e um ativo físico tangível. Com um fornecimento total de 500 milhões de tokens, o HWT democratiza o acesso a este recurso natural exclusivo, permitindo propriedade fracionada e transferência simplificada de direitos de acesso à água da Jazida Hanuman.
+Cada token HWT representa o direito a 1 litro de água mineral hipertermal da Fonte Hanuman, criando um vínculo direto entre o mundo digital e um ativo físico tangível. Com um fornecimento total de 100 milhões de tokens, o HWT democratiza o acesso a este recurso natural exclusivo, permitindo propriedade fracionada e transferência simplificada de direitos de acesso à água da Jazida Hanuman.
 
 Além de seu valor intrínseco como representação digital de água mineral hipertermal, o HWT incorpora princípios ESG (Ambiental, Social e Governança) em seu núcleo. O projeto financia o Sistema de Compensação Hídrica Hanuman (SCCHH), apoiando reflorestamento, recuperação de nascentes e desenvolvimento social na região da Chapada dos Veadeiros, um Patrimônio Natural da Humanidade reconhecido pela UNESCO.
 
@@ -78,7 +78,7 @@ O token foi projetado com foco em utilidade, segurança e sustentabilidade a lon
 
 #### 3.2.1 Direito Conferido pelo HWT
 
-O Hanuman Water Token (HWT) é um token utilitário que confere ao seu titular o direito de resgatar água mineral da Fonte Hanuman I, localizada na Jazida Hanuman (Processo ANM 860.360/2017), dentro dos limites de volume autorizado e conforme regulamentação vigente.
+O Hanuman Water Token (HWT) é um token utilitário que confere ao seu titular o direito de acesso mediante resgate de água mineral hipertermal, distribuída ou envasada do Poço/Fonte Hanuman I ou de qualquer outro poço/fonte da Jazida Hanuman (Processo ANM 860.360/2017), dentro dos limites de volume autorizado e conforme regulamentações vigentes.
 
 **Natureza do Direito:**
 - **Não é um título de investimento** (sem dividendos, juros ou expectativa de valorização).
@@ -87,17 +87,16 @@ O Hanuman Water Token (HWT) é um token utilitário que confere ao seu titular o
 #### 3.2.2 Validações Científicas
 A água da Fonte Hanuman possui comprovação técnica independente:
 
-1. **Análises Hidroquímicas Fonte Hanuman I:**
-   - **Composição Mineral (LAMIN/CPRM):**
-     - Cálcio (26,74 mg/L), Magnésio (13,065 mg/L), Potássio (1,25 mg/L), Sódio (7,40 mg/L), Sílica (12,050 mg/L), pH (8,16), Bicarbonato (158,4 mg/L), Fluoreto (0,20 mg/L), Nitrato (0,01 mg/L), entre outros oligoelementos; pH 7,54-8,16 (LAMIN/CPRM).
-   - **Idade e Trítio:**
-     - Mais de 9.270 anos (Carbono 14); ausência de trítio (não contaminada por era moderna).
-   - [Relatório LAMIN/CPRM](https://www.cprm.gov.br/publique/media/relatorioanalisehanuman.pdf)
+- **Análises Hidroquímicas Fonte Hanuman I:**
+  - **Composição mineral (LAMIN/CPRM):** Cálcio (26,740 Mg/L), Magnésio (13,008 mg/L), Potássio (3,318 mg/L), Sódio (4,703 mg/L), Silício (12,669 mg/L), Bário (0,395 mg/L), Lítio (0,008 mg/L), Estrôncio (0,053 mg/L), Zinco (0,031 mg/L), Fluoreto (0,11 mg/L), Cloreto (0,84 mg/L), Sulfato (4,24 mg/L), Bicarbonato (156,84 mg/L), Brometo (0,02 mg/L), Nitrato (0,11 mg/L) + 21 oligoelementos - pH 7.54–8.12 (LAMIN/CPRM)
+  - Relatórios do LAMIN/CPRM: [LAMIN/CPRM PDF](https://www.dropbox.com/scl/fi/apuchus1wxa9jf5em0bdm/LAMIN-CONJUNTO.pdf?rlkey=dpu5icvypqkqu2lgc27i9t3ug&st=89s76fy6&dl=0)
 
-2. **Estudos Acadêmicos:**
-   - Gestão e Reserva Permanente e Reserva Explotável da Jazida
-     - [Publicação na Elsevier (2022)](https://www.sciencedirect.com/science/article/pii/S2352801X22005182)
-     - [Relatório de Reservas Hídricas IG-UnB, prévio 2025](https://repositorio.unb.br/bitstream/10482/46307/1/2022_RelatorioReservasHidricasJazidaHanuman.pdf)
+- **Estudos Acadêmicos:**
+  - **Idade e Trítio (contaminação da era moderna):** Datação de 9.270 (Carbono14), teste de trítio negativo, origem e grupos de águas termais da Falha Geológica São Joaquim (IG-UnB)
+  - **Gestão e Reserva Permanente e Reserva Explotável Anual da Jazida**
+    - [Publicação na Elsevier (2022)](https://www.sciencedirect.com/science/article/abs/pii/S2352801X22000017)
+    - Relatório de reservas hídricas (IG-UnB, prelo 2025): Estimativa das Reservas do Aquífero Termal. [PDF](https://www.dropbox.com/scl/fi/a794xy4c6dwfwkrxlb26l/ilovepdf_merged-17.pdf?rlkey=q5elj8sjxk3fuz5ea7qpkony4&st=mgmbexjt&dl=0)
+
 
 #### 3.2.3 Autorizações Regulatórias
 
@@ -129,11 +128,39 @@ A água da Fonte Hanuman possui comprovação técnica independente:
 
 #### 3.2.4 Capacidade de Fornecimento e Pré-Venda
 
-| Parâmetro                                         | Volume Total      | Pré-Venda HWT (1º Ano) 100 milhões HWT (20,6%) | Disponibilidade         |
-|---------------------------------------------------|-------------------|-----------------------------------------------|------------------------|
-| Produção Anual (Fonte Hanuman I)                  | 485.450 m³        | 100.000 m³ (20,6%)                            | Testada pela ANM       |
-| Reserva Explotável Anual - Jazida Hanuman         | 3,77 milhões m³   | 2,65%                                        | Estudo IG-UnB 2022     |
-| Reserva Total Permanente - Jazida Hanuman         | 75,4 milhões m³   | 0,13%                                        | Estudo IG-UnB 2025     |
+<table>
+  <thead>
+    <tr>
+      <th style="border:1px solid #888;padding:4px;text-align:left;background:#f8f8f8;">Parâmetro</th>
+      <th style="border:1px solid #888;padding:4px;text-align:center;background:#f8f8f8;">Volume Total</th>
+      <th style="border:1px solid #888;padding:4px;text-align:center;background:#f8f8f8;">Pré-Venda HWT<br>(1º Ano) 100 milhões HWT (20,6%)</th>
+      <th style="border:1px solid #888;padding:4px;text-align:center;background:#f8f8f8;">Disponibilidade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border:1px solid #888;padding:4px;">Produção Anual (Fonte Hanuman I)</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">485.450 m³</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">100.000 m³ (20,6%)</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">Testada pela ANM</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #888;padding:4px;">Reserva Explotável Anual - Jazida Hanuman</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">3,77 milhões m³</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">2,65%</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">Estudo IG-UnB 2022</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid #888;padding:4px;">Reserva Total Permanente - Jazida Hanuman</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">75,4 milhões m³</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">0,13%</td>
+      <td style="border:1px solid #888;padding:4px;text-align:center;">Estudo IG-UnB 2025</td>
+    </tr>
+  </tbody>
+</table>
+
+<sub>*A tabela acima apresenta volumes e percentuais relativos à capacidade de fornecimento da jazida e à pré-venda do HWT no primeiro ano, com moldura para facilitar a visualização em PDF e HTML.*</sub>
+
 
 Fonte: Publicações citadas.
 
@@ -149,7 +176,7 @@ Fonte: Publicações citadas.
 
 A água da Fonte Hanuman foi extensivamente estudada e validada por instituições científicas renomadas:
 
-- **Universidade de Brasília (UnB):** Conduziu estudos hidrogeológicos detalhados, confirmando a idade, pureza e composição mineral da água.
+- **Instituto de Geociências da Universidade de Brasília (IG-UnB):** Conduziu estudos hidrogeológicos detalhados, confirmando a idade, pureza e composição mineral da água e grupos de águas termais na linha da Falha Geológica São Joaquim, nos municípios de Niquelândia, Colinas do Sul e Alto Paraíso.
 
 - **Companhia de Pesquisa de Recursos Minerais (CPRM):** Validou a vazão e sustentabilidade da fonte, estabelecendo parâmetros seguros para extração.
 
@@ -197,8 +224,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract HanumanWaterToken is ERC20, ERC20Burnable, Ownable {
     uint256 public constant TOKEN_PRICE_USD = 2;
-    uint256 public constant MIN_REDEMPTION_AMOUNT = 1000;
-    uint256 public constant MAX_SUPPLY = 500_000_000 * 10**18;
+    uint256 public constant MIN_REDEMPTION_AMOUNT = 100;
+    uint256 public constant MAX_SUPPLY = 100_000_000 * 10**18;
     uint256 public presaleEndTime;
     address public developmentTeamWallet;
     address public liquidityReserveWallet;
@@ -274,7 +301,7 @@ O HanumanWaterToken (HWT) foi projetado com parâmetros cuidadosamente definidos
 - **Nome:** HanumanWaterToken
 - **Símbolo:** HWT
 - **Padrão:** ERC-20 (Ethereum)
-- **Fornecimento Total:** 500.000.000 (quinhentos milhões) de tokens
+- **Fornecimento Total:** 100.000.000 (cem milhões) de tokens
 - **Decimais:** 18 (padrão Ethereum)
 - **Preço Inicial:** 2 USD por token
 - **Equivalência:** 1 HWT = 1 litro de água mineral da Fonte Hanuman
@@ -286,7 +313,7 @@ O HWT foi concebido como um token utilitário com múltiplas funcionalidades:
 
 #### Direito de Resgate de Água Física:
 
-- Cada token representa o direito a 1 litro de água mineral premium da Fonte Hanuman.
+- Cada token representa o direito a 1 litro de água mineral da Fonte Hanuman.
 - Embora a previsão de início das operações de resgate para o final de 2028, o direito de resgate está condicionado à conclusão da infraestrutura de envase e manutenção das licenças da ANM/ANVISA. A Hanuman Minas Ltda comunicará eventuais atualizações
 - O resgate mínimo é de 100 tokens(equivalente a 100 litros de Água Hanuman)
 
@@ -333,11 +360,12 @@ A distribuição do HWT foi estruturada para equilibrar o acesso público, incen
   - Alocados para consultores e esforços de vendas e marketing
 ### 5.4 Alocação de Fundos da Primeira Pré-Venda
 
-Os recursos obtidos com a venda de tokens serão alocados estrategicamente para maximizar o desenvolvimento do projeto e seu impacto positivo:
+Os recursos obtidos com a venda de tokens serão alocados estrategicamente para maximizar o desenvolvimento do projeto e seu impacto positivo, com proposta inicial:
 
 1. **Desenvolvimento de Infraestrutura:** 70%
-   - Construção e manutenção da infraestrutura de extração, tratamento e distribuição de água
+   - Construção e manutenção da infraestrutura de acesso, extração, tratamento e distribuição de água
    - Implementação de sistemas de monitoramento e controle de qualidade
+  - Aquisições de direitos e bens para segurança, ampliação e edificações destinadas a recepção de empreendimentos, organizações e negócios do ecossistema Hanuman
 
 2. **Preservação Ambiental e Sustentabilidade:** 2%
    - Financiamento do Sistema de Compensação Hídrica Hanuman (SCCHH)
@@ -370,7 +398,7 @@ A pré-venda do HWT foi estruturada para permitir uma distribuição gradual e c
 - **Duração:** 5 anos a partir da implantação do contrato
 - **Preço:** 2 USD por token (fixo durante a pré-venda)
 - **Métodos de Pagamento:** Múltiplas opções, incluindo criptomoedas, PIX e cartão de crédito
-- **Resgate:** Disponível a partir do final de 2028
+- **Resgate:** Com previsão para o final de 2028
 - **Quantidade Mínima:** Não há quantidade mínima para compra, mas o resgate requer no mínimo 100 HWT
 
 ---
@@ -389,8 +417,8 @@ O HanumanWaterToken foi concebido dentro dos princípios da Nova Economia – di
 
 - **Garantias Técnicas e Legais:**
   - Monitoramento hidrogeológico e produções científicas conduzidos pela UnB e CPRM
-  - Taxa de extração sustentável limitada a 1.335 m³/dia (vazão natural testada de 649 m³/h)
-  - Certificações oficiais da ANM e proteção pela UNESCO
+  - Taxa de extração sustentável limitada às autorizações de produção da ANM.
+  - Certificações oficiais da ANM e órgãos reguladores.
 
 #### Pilar Social:
 
@@ -404,7 +432,7 @@ O HanumanWaterToken foi concebido dentro dos princípios da Nova Economia – di
 
 - **Parcerias Estratégicas:** Fortalecimento de parcerias com órgãos estaduais e atração de investidores comprometidos com projetos de impacto socioambiental.
 
-- **Diversificação Econômica:** Geração de empregos, melhoria da infraestrutura local e consolidação da Chapada dos Veadeiros como polo turístico regional.
+- **Diversificação Econômica:** Geração de empregos, melhoria da infraestrutura local e consolidação da Chapada dos Veadeiros como polo turístico de contato com a natureza e bem estar.
 
 - **Governança Transparente:** Sistema onde todas as iniciativas são auditáveis, certificadas e desenvolvidas em parceria com instituições reconhecidas.
 
@@ -489,7 +517,7 @@ O desenvolvimento do HanumanWaterToken segue um plano estratégico de longo praz
 
 ### Fase 5: Operacionalização do Ecossistema
 
-**Período:** A partir de Janeiro de 2027
+**Período:** A partir de Outubro de 2028
 
 **Principais Entregas:**
 - 🔜 Início do resgate de água pelos detentores de tokens
@@ -518,13 +546,13 @@ O desenvolvimento do HanumanWaterToken segue um plano estratégico de longo praz
 
 ### 8.1 Hanuman Minas Ltda
 
-A Hanuman Minas Ltda é uma empresa familiar brasileira fundada em 2020, detentora dos direitos minerários da Jazida Hanuman. Com profundo respeito pela natureza e pela comunidade local, a empresa se dedica à pesquisa, exploração responsável e gestão sustentável de recursos hídricos na Chapada dos Veadeiros.
+A Hanuman Minas Ltda é uma empresa familiar brasileira fundada em 2020, detentora dos direitos minerários da Jazida Hanuman. Com profundo respeito pela natureza e pela comunidade local, a empresa se dedica à pesquisa, exploração responsável e gestão sustentável de recursos hídricos termais na Chapada dos Veadeiros.
 
 ### 8.2 Equipe
 
 **Uarian Ferreira**  
 *Fundador*  
-Autodidata, advogado formado pela UFG-1984, fundador do Escritório Uarian Ferreira Adv. Associados (1989), pós-graduado em gestão de empresa (SENAI-2001), editor e autor de vários livros e artigos, idealizador e fundador: Editora Coleção dos Manuais (1996), Documentos e Objetos Antigos (2001), Anevel - Associação das Vítimas da Crise de Energia/ONG www.amarbrasil.org.br (2002), Cia. Cavalgadas do Brasil (2004), Projeto Termais Chapada dos Veadeiros (2012), OSCIP Projeto Pulsar Vida (2014), Hanuman Minas Ltda (2020), Pós-Graduação-Extensão: “Programação de Contratos Inteligentes em Blockchain para o Direito “ (PUC-RJ - 2021), idealizador e criador do Projeto HWT-Hanuman Water Token/www.hanumanwater.com (2025).
+Autodidata, advogado formado pela UFG-1984, fundador do Escritório Uarian Ferreira Adv. Associados (1989), pós-graduado em gestão de empresa (SENAI-2001), editor e autor de vários livros e artigos, idealizador e fundador: Editora Coleção dos Manuais (1996), Documentos e Objetos Antigos (2001), Anevel - Associação das Vítimas da Crise de Energia Elétrica/ONG www.amarbrasil.org.br (2002), Cia. Cavalgadas do Brasil (2004), Projeto Termais Chapada dos Veadeiros (2012), OSCIP Projeto Pulsar Vida (2014), Hanuman Minas Ltda (2020), Pós-Graduação-Extensão: “Programação de Contratos Inteligentes em Blockchain para o Direito “ (PUC-RJ - 2021), idealizador e criador do Projeto HWT-Hanuman Water Token/www.hanumanwater.com (2025).
 
 **Célio Abrão Júnior**  
 *Advogado*  
@@ -589,8 +617,6 @@ Construção de posicionamentos consistentes, guiados por propósito e diferenci
 
 ### 8.4 Reconhecimentos e Validações
 
-- **Prêmio por Inovação Socioambiental (2023):** Concedido pela Secretaria de Meio Ambiente de Goiás.
-
 - **Publicação Internacional:** Artigo científico publicado pela editora Elsevier (Jan/2022) no "Groundwater Sustainable And Development".
 
 - **Certificações ANM:** Pareceres Técnicos n° 134/2023 e 78/2025/DIFIS, validando a qualidade e adequação da água para consumo humano.
@@ -599,15 +625,20 @@ Construção de posicionamentos consistentes, guiados por propósito e diferenci
 
 ## 9. Análise de Mercado
 
-### 9.1 Mercado Global de Água Premium
+### 9.1 Mercado Global para o HWT
 
-O mercado global de água engarrafada premium está em constante crescimento, impulsionado por uma maior conscientização sobre saúde e bem-estar, preocupações com a qualidade da água da torneira e demanda por produtos premium com benefícios funcionais.
+As qualidades minerais únicas, a idade milenar e a multivalência de aplicações da Água Hanuman posicionam o HWT em um mercado global mínimo estimado em US$ 321 bilhões até 2030. Este mercado abrange águas minerais premium, sucos e bebidas funcionais, cosmecêuticos, florais, medicina termalista, terapias integrativas e wellness termal.
 
-- **Tamanho do Mercado:** O mercado global de água engarrafada premium foi avaliado em aproximadamente USD 29,6 bilhões em 2023, com projeção de crescimento anual de 7,4% até 2030.
+O Brasil representa aproximadamente 2% do mercado global de wellness (US$ 1,5 trilhão), com destaque crescente para terapias naturais e medicina integrativa, conforme dados do Global Wellness Institute (2023).
 
-- **Tendências de Consumo:** Aumento na demanda por águas minerais naturais com propriedades específicas (alcalinas, ricas em minerais, etc.) e crescente interesse em produtos com credenciais de sustentabilidade.
+**Segmentos de Aplicação do HWT:**
 
-- **Mercado Brasileiro:** O Brasil é um dos maiores consumidores de água mineral da América Latina, com crescimento constante no segmento premium, especialmente em centros urbanos.
+- Águas minerais premium, cervejas artesanais, sucos naturais e bebidas funcionais
+- Cosmecêuticos e produtos de beleza
+- Florais e essências terapêuticas
+- Medicina termalista e balneoterapia
+- Terapias integrativas e medicina complementar
+- Wellness termal e turismo de saúde
 
 ### 9.2 Mercado de Ativos Tokenizados
 
@@ -640,12 +671,11 @@ O HanumanWaterToken apresenta vantagens competitivas únicas que o posicionam fa
 ### 10.1 Fundamentação Legal do Projeto
 
 #### 10.1.1 Titularidade dos Direitos Minerários
-A Hanuman Minas Ltda. detém titularidade integral dos direitos minerários sobre a Jazida Hanuman, conforme Processo ANM nº 860.360/2017, outorgado pela Agência Nacional de Mineração. Esta concessão governamental confere direito exclusivo de exploração do recurso hídrico mineral em área delimitada de 48,96 hectares, localizada no município de Niquelândia, Estado de Goiás.
-O processo de obtenção destes direitos iniciou-se em 2012, quando o idealizador do projeto, Uarian Ferreira, protocolizou os primeiros requerimentos de pesquisa mineral após identificação de surgências termais na região da Falha Geológica São Joaquim. A formalização dos pedidos ocorreu entre 2012 e 2013, aproveitando a desistência de requerimentos anteriores de terceiros. A partir de setembro de 2016, a ANM passou a emitir os alvarás de pesquisa, culminando na atual outorga de direitos minerários.
+A Hanuman Minas Ltda. detém titularidade integral dos direitos minerários sobre a Jazida Hanuman, conforme Processo ANM nº 860.360/2017, outorgado pela Agência Nacional de Mineração. Esta concessão governamental confere direito exclusivo pesquisa e exploração do recurso hídrico mineral na área delimitada de 48,96 hectares, localizada no município de Niquelândia, Estado de Goiás. O processo de obtenção destes direitos iniciou-se em 2012, quando o idealizador do projeto, Uarian Ferreira, protocolizou os primeiros requerimentos de pesquisa mineral após identificação de surgências termais na região da Falha Geológica São Joaquim. A formalização do primeiro pedido para a área especifica da Jazida Hanuman em nome do sócio proprietário Uarian Ferreira, ocorreu em 2013, refeito em 2017, com obtenção da outorga de direitos minerários, e em 2020 transferidos, por cessão total de direitos para a Hanuman Minas Ltda.
 
 #### 10.1.2 Controle Superficiário e Proteção Territorial
 Complementando a segurança jurídica do empreendimento, os sócios da Hanuman Minas Ltda. são proprietários da área de superfície correspondente à jazida e seu entorno imediato, totalizando 105 hectares. Este controle unificado entre subsolo e superfície elimina potenciais conflitos fundiários e garante autonomia operacional para instalação da infraestrutura necessária, incluindo poços de captação, planta de envase e demais facilidades.
-Adicionalmente, o requerimento minerário complementar ANM 860.317/2019, também sob controle dos sócios, amplia a área de influência e proteção do projeto, criando uma zona de segurança que preserva a integridade do recurso hídrico e previne interferências externas.
+Adicionalmente, o requerimento minerário complementar ANM 860.317/2019 com área de 460,09 hectares, também sob controle dos sócios, amplia a área de influência e proteção do projeto, criando uma zona de segurança que preserva a integridade do recurso hídrico e previne interferências externas.
 
 #### 10.1.3 Validação Técnica e Classificação Regulatória
 A qualidade e adequação da água para consumo humano foram rigorosamente atestadas por análises oficiais conduzidas pelo Laboratório de Análises Minerárias (LAMIN/CPRM/SGB). Com base nestas análises técnicas, a ANM emitiu o Parecer nº 134/2023, classificando oficialmente a água como "Água Mineral Fluoretada Hipertermal na Fonte", conferindo respaldo técnico e regulatório para envase e comercialização.
@@ -939,6 +969,6 @@ A água que atravessou milênios para chegar até nós agora se prepara para atr
 
 ---
 
-*Este whitepaper é um documento informativo e não constitui oferta de venda de valores mobiliários. O HanumanWaterToken (HWT) é um token utilitário que representa direitos sobre água mineral da Fonte Hanuman e não deve ser considerado um investimento especulativo. Os detentores de HWT estão sujeitos aos termos e condições estabelecidos pela Hanuman Minas Ltda.*
+*Este whitepaper é um documento informativo e não constitui oferta de venda de valores mobiliários. O HanumanWaterToken (HWT) é um token utilitário que representa direitos de acesso à água mineral da Fonte Hanuman e não deve ser considerado um investimento especulativo. Os detentores de HWT estão sujeitos aos termos e condições estabelecidos pela Hanuman Minas Ltda.*
 
 *© 2025 Hanuman Minas Ltda. Todos os direitos reservados.*

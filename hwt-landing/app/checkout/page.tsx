@@ -400,7 +400,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+              src="/hwt-logo.png"
               alt="Logo do Hanuman Water Token"
               width={40}
               height={40}
@@ -604,7 +604,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                               <div className="flex flex-col items-center p-4 border rounded-md">
                                 <div className="mb-4 bg-white p-4 rounded-md">
                                   <Image
-                                    src="/placeholder.svg?height=200&width=200"
+                                    src="/hwt-logo.png"
                                     alt="Código QR PIX"
                                     width={200}
                                     height={200}
@@ -698,7 +698,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+                src="/hwt-logo.png"
                 alt="Logo do Hanuman Water Token"
                 width={30}
                 height={30}
