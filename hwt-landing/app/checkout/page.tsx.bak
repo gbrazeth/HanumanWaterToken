@@ -10,55 +10,18 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
-import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "../../config/contract";
-// Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
-
-// Config Sepolia para uso no switchEthereumChain
-const NETWORK_CONFIG = {
-  chainId: '0xaa36a7', // 11155111 em hexadecimal
-  chainName: 'Sepolia Testnet',
-  nativeCurrency: { name: 'SepoliaETH', symbol: 'ETH', decimals: 18 },
-  rpcUrls: ['https://sepolia.infura.io/v3/127537b6f2bd41629ed69cc64efef98f'],
-  blockExplorerUrls: ['https://sepolia.etherscan.io']
-};
+import { 
+  TOKEN_CONTRACT_ADDRESS, 
+  PRESALE_ADDRESS, 
+  USDT_ADDRESS, 
+  TOKEN_ABI, 
+  PRESALE_ABI, 
+  USDT_ABI,
+  NETWORK_CONFIG 
+} from "../../config/contract";
+// Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço do HanumanWaterTokenV2 na Sepolia
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, AlertCircle, Check } from "lucide-react"
-
-// Importar ABIs dos contratos (em produção, estes seriam importados de arquivos JSON)
-const HWT_ABI = [
-  "function mintPresaleTokens(address to, uint256 amount) external",
-  "function balanceOf(address account) external view returns (uint256)",
-  "function symbol() external view returns (string)",
-  "function decimals() external view returns (uint8)",
-]
-
-const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWithUSDT(uint256 usdtAmount) external"]
-
-const USDT_ABI = [
-  {
-    "constant": true,
-    "inputs": [{"name": "owner", "type": "address"}],
-    "name": "balanceOf",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {"name": "_spender", "type": "address"},
-      {"name": "_value", "type": "uint256"}
-    ],
-    "name": "approve",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
-]
-
-// Usando os endereços importados do arquivo de configuração
 
 export default function CheckoutPage() {
   // DEBUG: Exibir o valor importado do endereço do contrato
@@ -74,6 +37,11 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null)
   const [ethBalance, setEthBalance] = useState<string>("0")
   const [usdtBalance, setUsdtBalance] = useState<string>("0")
+  const [isKycApproved, setIsKycApproved] = useState<boolean>(false)
+  const [isContractPaused, setIsContractPaused] = useState<boolean>(false)
+  const [isPresalePaused, setIsPresalePaused] = useState<boolean>(false)
+  const [tokensSold, setTokensSold] = useState<string>("0")
+  const [tokenPrice, setTokenPrice] = useState<string>("2")
   const [pixCode, setPixCode] = useState<string>("")
 
   // Dados do cartão de crédito
@@ -90,37 +58,52 @@ export default function CheckoutPage() {
   // Função para verificar e trocar para a rede correta
   const checkAndSwitchNetwork = async () => {
     try {
-      if (typeof window.ethereum === "undefined") {
-        throw new Error("MetaMask não está instalado")
-      }
+      if (!window.ethereum) throw new Error("MetaMask não encontrado")
 
-      // Tentar trocar para a rede Sepolia
-      try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: NETWORK_CONFIG.chainId }],
-        })
-      } catch (switchError: any) {
-        // Se a rede não existe, adicionar
-        if (switchError.code === 4902) {
+      // Verificar se está na rede Sepolia
+      const chainId = await window.ethereum.request({ method: "eth_chainId" })
+      const sepoliaChainId = NETWORK_CONFIG.chainId // Usando o chainId da configuração
+
+      if (chainId !== sepoliaChainId) {
+        try {
+          // Solicitar troca para Sepolia
           await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [NETWORK_CONFIG],
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: sepoliaChainId }],
           })
-        } else {
-          throw switchError
+          return true
+        } catch (switchError: any) {
+          // Se a rede não estiver disponível, adicionar
+          if (switchError.code === 4902) {
+            try {
+              await window.ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [
+                  {
+                    chainId: sepoliaChainId,
+                    chainName: NETWORK_CONFIG.chainName,
+                    nativeCurrency: NETWORK_CONFIG.nativeCurrency,
+                    rpcUrls: NETWORK_CONFIG.rpcUrls,
+                    blockExplorerUrls: NETWORK_CONFIG.blockExplorerUrls,
+                  },
+                ],
+              })
+              return true
+            } catch (addError) {
+              console.error("Erro ao adicionar a rede Sepolia:", addError)
+              setError("Não foi possível adicionar a rede Sepolia. Por favor, adicione manualmente.")
+              return false
+            }
+          }
+          console.error("Erro ao trocar para a rede Sepolia:", switchError)
+          setError("Por favor, troque para a rede Sepolia para continuar.")
+          return false
         }
       }
-
       return true
     } catch (error) {
-      console.error("Erro ao trocar de rede:", error)
-      // Erro 4001 significa que o usuário rejeitou a solicitação
-      if ((error as any).code === 4001) {
-        setError("Você precisa aceitar a troca de rede para Sepolia no MetaMask")
-      } else {
-        setError("Por favor, conecte-se à rede Sepolia (Ethereum Testnet)")
-      }
+      console.error("Erro ao verificar/trocar rede:", error)
+      setError("Erro ao verificar/trocar rede. Por favor, verifique se o MetaMask está instalado e conectado.")
       return false
     }
   }
@@ -148,6 +131,102 @@ export default function CheckoutPage() {
     }
   }
 
+  // Função para verificar se os contratos estão pausados
+  const checkContractStatus = async () => {
+    try {
+      if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+      
+      try {
+        // Verificar status do token
+        const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, provider)
+        const paused = await tokenContract.paused()
+        setIsContractPaused(paused)
+        console.log(`Status do contrato HanumanWaterTokenV2: ${paused ? 'Pausado' : 'Ativo'}`)
+        
+        // Verificar status da pré-venda
+        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, provider)
+        const presalePaused = await presaleContract.paused()
+        setIsPresalePaused(presalePaused)
+        console.log(`Status do contrato HanumanWaterTokenPresale: ${presalePaused ? 'Pausado' : 'Ativo'}`)
+        
+        // Obter o preço do token
+        const tokenPriceUsd = await tokenContract.TOKEN_PRICE_USD()
+        setTokenPrice(ethers.utils.formatUnits(tokenPriceUsd, 0))
+        console.log(`Preço do token: $${ethers.utils.formatUnits(tokenPriceUsd, 0)}`)
+        
+        // Obter quantidade de tokens vendidos
+        const sold = await presaleContract.totalTokensSold()
+        setTokensSold(ethers.utils.formatUnits(sold, 18))
+        console.log(`Total de tokens vendidos: ${ethers.utils.formatUnits(sold, 18)} HWT`)
+      } catch (error) {
+        console.error("Erro ao verificar status dos contratos:", error)
+      }
+    } catch (error) {
+      console.error("Erro ao verificar status dos contratos:", error)
+    }
+  }
+  
+  // Função para solicitar aprovação KYC
+  const requestKycApproval = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      
+      if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      if (!walletAddress) throw new Error("Conecte sua carteira primeiro")
+      
+      // Verificar e trocar para a rede correta
+      const networkOk = await checkAndSwitchNetwork()
+      if (!networkOk) {
+        setIsLoading(false)
+        return
+      }
+      
+      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+      const signer = provider.getSigner()
+      
+      // Criar uma instância do contrato com o signer para poder enviar transações
+      const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, signer)
+      
+      // Verificar se já tem aprovação KYC
+      const kycStatus = await tokenContract.kycApproved(walletAddress)
+      if (kycStatus) {
+        setError("Sua carteira já possui aprovação KYC.")
+        setIsLoading(false)
+        return
+      }
+      
+      // Enviar solicitação de KYC (isso depende de como o contrato implementa essa funcionalidade)
+      // Aqui estamos assumindo que existe um método requestKycApproval no contrato
+      // Se não existir, essa parte precisa ser adaptada para o fluxo real de KYC do projeto
+      try {
+        // Verificar se o contrato tem um método requestKycApproval
+        if (typeof tokenContract.requestKycApproval === 'function') {
+          // Se existir, chamar o método
+          const tx = await tokenContract.requestKycApproval()
+          await tx.wait()
+          
+          setSuccess(true)
+          setError(null)
+          alert("Solicitação de KYC enviada com sucesso! Aguarde a aprovação pela equipe.")
+        } else {
+          // Se não existir, informar o usuário sobre o processo manual
+          alert("Para solicitar aprovação KYC, entre em contato com a equipe do projeto pelo e-mail suporte@hanumanwater.com")
+        }
+      } catch (error: any) {
+        console.error("Erro ao solicitar KYC:", error)
+        setError(`Erro ao solicitar KYC: ${error.message || "Erro desconhecido"}. Entre em contato com a equipe do projeto.`)
+      }
+      
+      setIsLoading(false)
+    } catch (error: any) {
+      console.error("Erro ao solicitar KYC:", error)
+      setError(`Erro: ${error.message || "Erro desconhecido"}`)
+      setIsLoading(false)
+    }
+  }
+  
   // Função para obter saldos
   const getBalances = async (address: string) => {
     try {
@@ -172,6 +251,24 @@ export default function CheckoutPage() {
         // Não mostrar erro para o usuário, apenas definir saldo como zero
         // já que é normal não ter USDT
         setUsdtBalance("0")
+      }
+      
+      try {
+        // Obter saldo de HWT
+        const tokenContract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, provider)
+        const tokenBalance = await tokenContract.balanceOf(address)
+        console.log(`Saldo HWT: ${ethers.utils.formatUnits(tokenBalance, 18)} HWT`)
+        
+        // Verificar se o usuário tem aprovação KYC
+        const kycStatus = await tokenContract.kycApproved(address)
+        console.log(`Status KYC: ${kycStatus ? 'Aprovado' : 'Não aprovado'}`)
+        setIsKycApproved(kycStatus)
+        
+        // Verificar status dos contratos
+        await checkContractStatus()
+      } catch (tokenError) {
+        console.error("Erro ao obter informações do token HWT:", tokenError)
+        setIsKycApproved(false)
       }
     } catch (error) {
       console.error("Erro ao obter saldos:", error)
@@ -222,12 +319,15 @@ export default function CheckoutPage() {
   }
 
   // Função para verificar se os contratos estão configurados
-  function checkContractAddresses() {
-    // Só exige o contrato HWT para funcionar; presale pode ser opcional
-    if (!TOKEN_CONTRACT_ADDRESS || TOKEN_CONTRACT_ADDRESS.toLowerCase() === "0x0000000000000000000000000000000000000000") {
-      setError("O endereço do contrato HWT ainda não foi configurado")
+  const checkContractAddresses = () => {
+    if (!TOKEN_CONTRACT_ADDRESS || !PRESALE_ADDRESS || !USDT_ADDRESS) {
+      setError("Endereços dos contratos não configurados corretamente")
       return false
     }
+    console.log("Usando contratos:")
+    console.log(`- HanumanWaterTokenV2: ${TOKEN_CONTRACT_ADDRESS}`)
+    console.log(`- HanumanWaterTokenPresale: ${PRESALE_ADDRESS}`)
+    console.log(`- USDT: ${USDT_ADDRESS}`)
     return true
   }
 
@@ -243,6 +343,13 @@ export default function CheckoutPage() {
           setIsLoading(false)
           return
         }
+        
+        // Verificar se os contratos estão pausados
+        if (isContractPaused || isPresalePaused) {
+          setError("As operações de compra estão temporariamente pausadas. Por favor, tente novamente mais tarde.")
+          setIsLoading(false)
+          return
+        }
 
         // Verificar e trocar para a rede correta
         const networkOk = await checkAndSwitchNetwork()
@@ -254,25 +361,59 @@ export default function CheckoutPage() {
         if (!window.ethereum) throw new Error("MetaMask não encontrado")
         const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
-        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
-          ...PRESALE_ABI,
-          "function getEthAmountForTokens(uint256 tokenAmount) public view returns (uint256)"
-        ], signer)
 
-        // Calcular o valor exato de ETH a partir do contrato
-        const tokenAmount18 = ethers.utils.parseUnits(tokenAmount, 18)
-        const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
+        // Criar contrato de pré-venda
+        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+        
+        // Obter o preço ETH/USD diretamente do contrato usando o oráculo Chainlink
+        try {
+          // Calcular o valor em ETH usando a função do contrato
+          const usdValue = Number.parseFloat(usdAmount)
+          const tokensAmount = ethers.utils.parseUnits(tokenAmount, 18) // HWT tem 18 casas decimais
+          
+          // Obter o preço atual do ETH em USD do oráculo Chainlink
+          const ethUsdPrice = await presaleContract.getEthUsdPrice()
+          console.log(`Preço ETH/USD atual: $${ethers.utils.formatUnits(ethUsdPrice, 8)}`)
+          
+          // Calcular o valor em ETH necessário para comprar os tokens
+          const tokenPriceUsd = 2 // $2 por token
+          const totalUsdNeeded = Number(tokenAmount) * tokenPriceUsd
+          const ethNeeded = totalUsdNeeded / Number(ethers.utils.formatUnits(ethUsdPrice, 8))
+          const ethAmount = ethers.utils.parseEther(ethNeeded.toFixed(18))
+          
+          console.log(`Comprando ${tokenAmount} HWT por aproximadamente ${ethers.utils.formatEther(ethAmount)} ETH`)
+          
+          // Executar transação com o valor calculado
+          const tx = await presaleContract.buyWithETH({
+            value: ethAmount,
+          })
 
-        // Executar transação
-        const tx = await presaleContract.buyWithETH({
-          value: ethAmount,
-        })
+          // Aguardar confirmação
+          await tx.wait()
 
-        // Aguardar confirmação
-        await tx.wait()
+          setSuccess(true);
+          window.dispatchEvent(new Event('hwt-balance-updated'))
+        } catch (priceError) {
+          console.error("Erro ao calcular preço ETH/USD:", priceError)
+          
+          // Fallback para cálculo manual se o oráculo falhar
+          const usdValue = Number.parseFloat(usdAmount)
+          const ethPrice = 3000 // Preço estimado do ETH em USD como fallback
+          const ethValue = usdValue / ethPrice
+          
+          console.log(`Usando cálculo manual: ${usdValue}$ = ${ethValue} ETH (preço estimado: $${ethPrice}/ETH)`)
+          
+          // Executar transação com o valor calculado manualmente
+          const tx = await presaleContract.buyWithETH({
+            value: ethers.utils.parseEther(ethValue.toString()),
+          })
 
-        setSuccess(true);
-        window.dispatchEvent(new Event('hwt-balance-updated'))
+          // Aguardar confirmação
+          await tx.wait()
+
+          setSuccess(true);
+          window.dispatchEvent(new Event('hwt-balance-updated'))
+        }
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
@@ -294,6 +435,13 @@ export default function CheckoutPage() {
           setIsLoading(false)
           return
         }
+        
+        // Verificar se os contratos estão pausados
+        if (isContractPaused || isPresalePaused) {
+          setError("As operações de compra estão temporariamente pausadas. Por favor, tente novamente mais tarde.")
+          setIsLoading(false)
+          return
+        }
 
         // Verificar e trocar para a rede correta
         const networkOk = await checkAndSwitchNetwork()
@@ -303,32 +451,64 @@ export default function CheckoutPage() {
         }
 
         if (!window.ethereum) throw new Error("MetaMask não encontrado")
-      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+        const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
-
-        // Calcular valor em USDT (1:1 com USD)
-        const usdtValue = Number.parseFloat(usdAmount)
 
         // Criar contratos
         const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
         const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
 
-        // Verificar allowance
-        const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
-        const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
+        // Calcular valor em tokens usando a função do contrato
+        const tokensAmount = ethers.utils.parseUnits(tokenAmount, 18) // HWT tem 18 casas decimais
+        
+        try {
+          // Calcular o valor em USDT necessário (1:1 com USD)
+          const tokenPriceUsd = 2 // $2 por token
+          const totalUsdNeeded = Number(tokenAmount) * tokenPriceUsd
+          const usdtNeeded = ethers.utils.parseUnits(totalUsdNeeded.toString(), 6) // USDT tem 6 casas decimais
+          console.log(`Comprando ${tokenAmount} HWT por ${ethers.utils.formatUnits(usdtNeeded, 6)} USDT`)
+          
+          // Verificar allowance
+          const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
+          
+          // Se necessário, aprovar o contrato para gastar USDT
+          if (allowance.lt(usdtNeeded)) {
+            console.log(`Aprovando gasto de ${ethers.utils.formatUnits(usdtNeeded, 6)} USDT`)
+            const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtNeeded)
+            await approveTx.wait()
+          }
 
-        // Se necessário, aprovar o contrato para gastar USDT
-        if (allowance.lt(usdtAmount)) {
-          const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
-          await approveTx.wait()
+          // Executar a compra usando a quantidade calculada
+          const tx = await presaleContract.buyWithUSDT(usdtNeeded)
+          await tx.wait()
+
+          setSuccess(true);
+          window.dispatchEvent(new Event('hwt-balance-updated'))
+        } catch (calculationError) {
+          console.error("Erro ao calcular USDT necessário:", calculationError)
+          
+          // Fallback para cálculo manual se a função do contrato falhar
+          const usdtValue = Number.parseFloat(usdAmount)
+          const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
+          
+          console.log(`Usando cálculo manual: ${tokenAmount} HWT = $${usdtValue} = ${ethers.utils.formatUnits(usdtAmount, 6)} USDT`)
+          
+          // Verificar allowance
+          const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
+          
+          // Se necessário, aprovar o contrato para gastar USDT
+          if (allowance.lt(usdtAmount)) {
+            const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
+            await approveTx.wait()
+          }
+
+          // Executar a compra
+          const tx = await presaleContract.buyWithUSDT(usdtAmount)
+          await tx.wait()
+
+          setSuccess(true);
+          window.dispatchEvent(new Event('hwt-balance-updated'))
         }
-
-        // Executar a compra
-        const tx = await presaleContract.buyWithUSDT(usdtAmount)
-        await tx.wait()
-
-        setSuccess(true);
-window.dispatchEvent(new Event('hwt-balance-updated'))
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com USDT:", error)
@@ -367,7 +547,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
     setTimeout(() => {
       setIsLoading(false)
       setSuccess(true);
-window.dispatchEvent(new Event('hwt-balance-updated'))
+      window.dispatchEvent(new Event('hwt-balance-updated'))
     }, 2000)
   }
 
@@ -502,10 +682,20 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             <span className="text-lg font-medium">${usdAmount}</span>
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label>Água Equivalente</Label>
-                          <div className="p-2 border rounded-md bg-muted">
-                            <span className="text-lg font-medium">{waterAmount} litros</span>
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-500">Saldo ETH:</span>
+                            <span className="text-sm font-medium">{Number(ethBalance).toFixed(4)} ETH</span>
+                          </div>
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-500">Preço do Token:</span>
+                            <span className="text-sm font-medium">${tokenPrice} USD</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-500">Tokens Vendidos:</span>
+                            <span className="text-sm font-medium">{Number(tokensSold).toLocaleString()} HWT</span>
                           </div>
                         </div>
                       </div>
@@ -516,7 +706,8 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             <AlertCircle className="h-5 w-5 text-primary mr-3" />
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 100 tokens HWT (equivalente a 100 litros de água).
+                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 100 tokens HWT
+                                (equivalente a 1 metro cúbico de água).
                               </p>
                             </div>
                           </div>

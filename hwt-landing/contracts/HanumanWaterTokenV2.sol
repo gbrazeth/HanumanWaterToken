@@ -42,12 +42,41 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
     uint256 public constant MAX_COMMUNITY_ALLOCATION = (MAX_SUPPLY * 3) / 100; // 3%
     uint256 public constant MAX_CONSULTANTS_ALLOCATION = (MAX_SUPPLY * 3) / 100; // 3%
     
+    // Limites da pré-venda
+    uint256 public constant MAX_PRESALE_DURATION = 365 days; // Duração máxima da pré-venda: 1 ano
+    uint256 public constant TOTAL_PRESALE_TOKENS = 100000000 * 10**18; // 100 milhões de tokens para pré-venda
+    
     // Mapeamento para controle KYC
     mapping(address => bool) public kycApproved;
     
+    // Estrutura para rastrear resgates de água
+    struct WaterRedemption {
+        address redeemer;
+        uint256 amount;
+        uint256 requestTime;
+        uint256 expiryTime;
+        bool delivered;
+        bool cancelled;
+        bool refunded;
+        string deliveryDetails;
+    }
+    
+    // Contador e mapeamento para resgates
+    uint256 public nextRedemptionId = 1;
+    mapping(uint256 => WaterRedemption) public waterRedemptions;
+    
+    // Período de tempo para confirmação de entrega (30 dias por padrão)
+    uint256 public redemptionExpiryPeriod = 30 days;
+    
+    // Endereço do operador de entrega (pode confirmar entregas)
+    address public deliveryOperator;
+    
     // Eventos
     event TokensPurchased(address indexed buyer, uint256 amount, string paymentMethod);
-    event WaterRedeemed(address indexed redeemer, uint256 tokenAmount, uint256 waterAmount);
+    event WaterRedeemed(address indexed redeemer, uint256 tokenAmount, uint256 waterAmount, uint256 redemptionId);
+    event WaterRedemptionConfirmed(uint256 indexed redemptionId, address indexed redeemer, uint256 amount);
+    event WaterRedemptionCancelled(uint256 indexed redemptionId, address indexed redeemer, uint256 amount, string reason);
+    event WaterRedemptionRefunded(uint256 indexed redemptionId, address indexed redeemer, uint256 amount);
     event WalletsUpdated(address newDevelopmentTeamWallet, address newLiquidityReserveWallet, address newStrategicPartnershipsWallet);
     event PresaleExtended(uint256 oldEndTime, uint256 newEndTime);
     event PresaleContractUpdated(address oldPresaleContract, address newPresaleContract);
@@ -58,22 +87,26 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
      * @param _developmentTeamWallet Carteira da equipe de desenvolvimento
      * @param _liquidityReserveWallet Carteira de reserva de liquidez
      * @param _strategicPartnershipsWallet Carteira de parcerias estratégicas
+     * @param _deliveryOperator Operador responsável por confirmar entregas
      */
     constructor(
         address _developmentTeamWallet,
         address _liquidityReserveWallet,
-        address _strategicPartnershipsWallet
+        address _strategicPartnershipsWallet,
+        address _deliveryOperator
     ) ERC20("Hanuman Water Token", "HWT") Ownable(msg.sender) {
         require(_developmentTeamWallet != address(0), "Development team wallet cannot be zero address");
         require(_liquidityReserveWallet != address(0), "Liquidity reserve wallet cannot be zero address");
         require(_strategicPartnershipsWallet != address(0), "Strategic partnerships wallet cannot be zero address");
+        require(_deliveryOperator != address(0), "Delivery operator cannot be zero address");
         
         developmentTeamWallet = _developmentTeamWallet;
         liquidityReserveWallet = _liquidityReserveWallet;
         strategicPartnershipsWallet = _strategicPartnershipsWallet;
+        deliveryOperator = _deliveryOperator;
         
-        // Definir o fim da pré-venda para 5 anos a partir da implantação
-        presaleEndTime = block.timestamp + 5 * 365 days;
+        // Definir o fim da pré-venda para 1 ano a partir da implantação
+        presaleEndTime = block.timestamp + MAX_PRESALE_DURATION;
     }
     
     /**
@@ -130,16 +163,24 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
      * @param _status Novo status KYC
      */
     function updateKycStatus(address _address, bool _status) external onlyOwner {
+        require(_address != address(0), "Address cannot be zero");
         kycApproved[_address] = _status;
         emit KycStatusUpdated(_address, _status);
     }
     
+    // Limite máximo de endereços por lote para evitar ataques de negação de serviço
+    uint256 public constant MAX_BATCH_SIZE = 100;
+    
     /**
      * @dev Atualiza o status KYC de múltiplos endereços
-     * @param _addresses Lista de endereços
+     * @param _addresses Lista de endereços (limitado a MAX_BATCH_SIZE)
      * @param _status Status KYC a ser aplicado
      */
     function batchUpdateKycStatus(address[] calldata _addresses, bool _status) external onlyOwner {
+        // Verificar se o tamanho do array não excede o limite
+        require(_addresses.length <= MAX_BATCH_SIZE, "Batch size exceeds limit");
+        
+        // Processar cada endereço no lote
         for (uint256 i = 0; i < _addresses.length; i++) {
             kycApproved[_addresses[i]] = _status;
             emit KycStatusUpdated(_addresses[i], _status);
@@ -253,23 +294,186 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
     }
 
     /**
-     * @dev Permite que um usuário resgate água queimando tokens
-     * @param amount Quantidade de tokens a serem queimados
+     * @dev Modificador para verificar se o chamador é o operador de entrega
      */
-    function redeemWater(uint256 amount) 
+    modifier onlyDeliveryOperator() {
+        require(msg.sender == deliveryOperator, "Caller is not the delivery operator");
+        _;
+    }
+    
+    /**
+     * @dev Atualiza o endereço do operador de entrega
+     * @param _newDeliveryOperator Novo endereço do operador de entrega
+     */
+    function updateDeliveryOperator(address _newDeliveryOperator) external onlyOwner {
+        require(_newDeliveryOperator != address(0), "Delivery operator cannot be zero address");
+        deliveryOperator = _newDeliveryOperator;
+    }
+    
+    /**
+     * @dev Atualiza o período de expiração para resgates
+     * @param _newPeriod Novo período em segundos
+     */
+    function updateRedemptionExpiryPeriod(uint256 _newPeriod) external onlyOwner {
+        require(_newPeriod >= 7 days, "Period must be at least 7 days");
+        redemptionExpiryPeriod = _newPeriod;
+    }
+    
+    /**
+     * @dev Permite que um usuário solicite o resgate de água
+     * @param amount Quantidade de tokens a serem reservados para resgate
+     * @param deliveryDetails Detalhes para entrega (endereço, contato, etc.)
+     * @notice Requer aprovação KYC para resgate físico
+     * @return redemptionId ID único do resgate solicitado
+     */
+    function requestWaterRedemption(uint256 amount, string calldata deliveryDetails) 
         external 
         whenNotPaused 
         nonReentrant 
         onlyKycApproved(msg.sender) 
+        returns (uint256 redemptionId)
     {
         require(amount >= MIN_REDEMPTION_AMOUNT, "Amount below minimum redemption");
         require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        require(bytes(deliveryDetails).length > 0, "Delivery details required");
+        
+        // Reservar o ID do resgate
+        redemptionId = nextRedemptionId;
+        nextRedemptionId++;
         
         // Queimar os tokens
         _burn(msg.sender, amount);
         
+        // Registrar o resgate
+        waterRedemptions[redemptionId] = WaterRedemption({
+            redeemer: msg.sender,
+            amount: amount,
+            requestTime: block.timestamp,
+            expiryTime: block.timestamp + redemptionExpiryPeriod,
+            delivered: false,
+            cancelled: false,
+            refunded: false,
+            deliveryDetails: deliveryDetails
+        });
+        
         // Emitir evento de resgate
-        emit WaterRedeemed(msg.sender, amount, amount);
+        emit WaterRedeemed(msg.sender, amount, amount, redemptionId);
+        
+        return redemptionId;
+    }
+    
+    /**
+     * @dev Permite que o operador confirme a entrega de água
+     * @param redemptionId ID do resgate a ser confirmado
+     */
+    function confirmWaterDelivery(uint256 redemptionId) 
+        external 
+        whenNotPaused 
+        nonReentrant 
+        onlyDeliveryOperator 
+    {
+        WaterRedemption storage redemption = waterRedemptions[redemptionId];
+        
+        require(redemption.redeemer != address(0), "Redemption does not exist");
+        require(!redemption.delivered, "Redemption already confirmed");
+        require(!redemption.cancelled, "Redemption was cancelled");
+        require(!redemption.refunded, "Redemption was refunded");
+        require(block.timestamp <= redemption.expiryTime, "Redemption expired");
+        
+        // Marcar como entregue
+        redemption.delivered = true;
+        
+        // Emitir evento de confirmação
+        emit WaterRedemptionConfirmed(redemptionId, redemption.redeemer, redemption.amount);
+    }
+    
+    /**
+     * @dev Permite que o operador cancele um resgate (por exemplo, se a entrega for impossível)
+     * @param redemptionId ID do resgate a ser cancelado
+     * @param reason Motivo do cancelamento
+     */
+    function cancelWaterRedemption(uint256 redemptionId, string calldata reason) 
+        external 
+        whenNotPaused 
+        nonReentrant 
+        onlyDeliveryOperator 
+    {
+        WaterRedemption storage redemption = waterRedemptions[redemptionId];
+        
+        require(redemption.redeemer != address(0), "Redemption does not exist");
+        require(!redemption.delivered, "Redemption already confirmed");
+        require(!redemption.cancelled, "Redemption already cancelled");
+        require(!redemption.refunded, "Redemption already refunded");
+        
+        // Marcar como cancelado
+        redemption.cancelled = true;
+        
+        // Emitir evento de cancelamento
+        emit WaterRedemptionCancelled(redemptionId, redemption.redeemer, redemption.amount, reason);
+    }
+    
+    /**
+     * @dev Permite que o usuário solicite reembolso de um resgate cancelado ou expirado
+     * @param redemptionId ID do resgate a ser reembolsado
+     */
+    function refundWaterRedemption(uint256 redemptionId) 
+        external 
+        whenNotPaused 
+        nonReentrant 
+    {
+        WaterRedemption storage redemption = waterRedemptions[redemptionId];
+        
+        require(redemption.redeemer == msg.sender, "Not the redeemer");
+        require(!redemption.delivered, "Redemption already confirmed");
+        require(!redemption.refunded, "Already refunded");
+        require(redemption.cancelled || block.timestamp > redemption.expiryTime, "Can only refund cancelled or expired redemptions");
+        
+        // Marcar como reembolsado
+        redemption.refunded = true;
+        
+        // Reemitir os tokens para o usuário
+        _mint(redemption.redeemer, redemption.amount);
+        
+        // Emitir evento de reembolso
+        emit WaterRedemptionRefunded(redemptionId, redemption.redeemer, redemption.amount);
+    }
+    
+    /**
+     * @dev Permite que um usuário verifique o status de um resgate
+     * @param redemptionId ID do resgate a ser verificado
+     * @return redeemer Endereço do solicitante
+     * @return amount Quantidade de tokens
+     * @return requestTime Timestamp da solicitação
+     * @return expiryTime Timestamp de expiração
+     * @return delivered Status de entrega
+     * @return cancelled Status de cancelamento
+     * @return refunded Status de reembolso
+     */
+    function getWaterRedemptionStatus(uint256 redemptionId) 
+        external 
+        view 
+        returns (
+            address redeemer,
+            uint256 amount,
+            uint256 requestTime,
+            uint256 expiryTime,
+            bool delivered,
+            bool cancelled,
+            bool refunded
+        ) 
+    {
+        WaterRedemption storage redemption = waterRedemptions[redemptionId];
+        require(redemption.redeemer != address(0), "Redemption does not exist");
+        
+        return (
+            redemption.redeemer,
+            redemption.amount,
+            redemption.requestTime,
+            redemption.expiryTime,
+            redemption.delivered,
+            redemption.cancelled,
+            redemption.refunded
+        );
     }
 
     /**
@@ -295,11 +499,20 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
     }
 
     /**
-     * @dev Estende o período de pré-venda
+     * @dev Estende o período de pré-venda, limitado a 1 ano a partir da implantação
      * @param _newEndTime Novo timestamp de fim da pré-venda
      */
     function extendPresale(uint256 _newEndTime) external onlyOwner {
         require(_newEndTime > presaleEndTime, "New end time must be later than current");
+        
+        // Calcular o limite máximo permitido para a extensão
+        uint256 maxAllowedEndTime = block.timestamp + MAX_PRESALE_DURATION;
+        
+        // Verificar se a nova data está dentro do limite máximo
+        require(_newEndTime <= maxAllowedEndTime, "Cannot extend beyond maximum presale duration");
+        
+        // Verificar se ainda há tokens disponíveis para venda
+        require(totalPublicAllocation < TOTAL_PRESALE_TOKENS, "All presale tokens have been sold");
         
         uint256 oldEndTime = presaleEndTime;
         presaleEndTime = _newEndTime;

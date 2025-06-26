@@ -181,7 +181,7 @@ export default function LandingPage() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+              src="/hwt-logo.png"
               alt="Logo do Hanuman Water Token"
               width={40}
               height={40}
@@ -231,7 +231,7 @@ export default function LandingPage() {
               Roadmap
             </Link>
             <a
-              href="https://sepolia.etherscan.io/address/0x123a55BFDda355C10a9fb1EdF7f3c80152D5e91c"
+              href="https://sepolia.etherscan.io/address/0x5244adeB890F905dDa286Dc510afb1a8d63DE5AD"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
@@ -239,7 +239,7 @@ export default function LandingPage() {
               Contrato HWT
             </a>
             <a
-              href="https://sepolia.etherscan.io/address/0xD490cc38AE9eE28281825c7F4ceAB70B557F3a3C"
+              href="https://sepolia.etherscan.io/address/0x16949Ae5d2C06393246353883522642A2D999C4b"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
@@ -299,7 +299,7 @@ export default function LandingPage() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="mb-6">
                   <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+                    src="/hwt-logo.png"
                     alt="Logo do Hanuman Water Token"
                     width={120}
                     height={120}
@@ -307,11 +307,10 @@ export default function LandingPage() {
                   />
                 </div>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
-                  Unindo Natureza e Tecnologia
+                  Unindo Hidrogeologia e Tecnologia
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  O HanumanWater Token (HWT) está transformando a gestão de recursos hídricos através da tecnologia
-                  blockchain, garantindo transparência e eficiência na distribuição de água.
+                  O Hanuman Water Token (HWT) está transformando a gestão de recursos hídricos através da tecnologia blockchain, garantindo transparência e eficiência na distribuição de água.
                 </p>
                 <div className="flex gap-4">
                   <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
@@ -370,7 +369,8 @@ export default function LandingPage() {
                   tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam
                   ativamente da preservação e distribuição responsável da água.
                 </p>
-                <div className="mt-8 p-6 bg-logoBg rounded-lg space-y-4">
+                <div className="mt-8 p-6 max-w-2xl mx-auto" style={{ backgroundColor: '#f4f8fb' }}>
+
                   <h3 className="text-xl font-bold text-primary">
                     Hanuman Water Token (HWT) – Investindo no Futuro da Água Termal
                   </h3>
@@ -578,7 +578,7 @@ export default function LandingPage() {
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Fornecimento Total</span>
-                        <span className="font-medium">500 Milhões HWT</span>
+                        <span className="font-medium">100 Milhões HWT</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Rede</span>
@@ -773,7 +773,7 @@ export default function LandingPage() {
             <p className="text-muted-foreground md:text-xl max-w-[600px] mx-auto">
               Faça parte da revolução na gestão sustentável de recursos hídricos com o HWT
             </p>
-            <Button size="lg" className="mt-6 bg-secondary text-secondary-foreground hover:bg-secondary/90" asChild>
+            <Button size="lg" className="mt-6" style={{ backgroundColor: '#3F5767', color: '#fff' }} asChild>
               <Link href="/checkout">Compre HWT Agora</Link>
             </Button>
           </div>
@@ -827,7 +827,7 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WhatsApp%20Image%202025-02-11%20at%2012.29.35-daDbj654dksYpGWva5AmTu4AfzMKUq.jpeg"
+                  src="/hwt-logo.png"
                   alt="Logo do Hanuman Water Token"
                   width={40}
                   height={40}

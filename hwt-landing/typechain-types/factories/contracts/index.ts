@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as hanumanWaterTokenPresaleSol from "./HanumanWaterTokenPresale.sol";
+export * as legacy from "./legacy";
 export * as mocks from "./mocks";
 export { HWTPresale__factory } from "./HWTPresale__factory";
 export { HanumanWaterToken__factory } from "./HanumanWaterToken__factory";

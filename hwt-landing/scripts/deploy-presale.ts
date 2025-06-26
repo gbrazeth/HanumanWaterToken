@@ -14,14 +14,16 @@ async function main() {
   const DEV_TEAM_WALLET = deployer.address; // Wallet da equipe de desenvolvimento
   const LIQUIDITY_RESERVE_WALLET = deployer.address; // Wallet de reserva de liquidez
   const STRATEGIC_PARTNERSHIPS_WALLET = deployer.address; // Wallet de parcerias estratégicas
-  
+  const DELIVERY_OPERATOR_WALLET = deployer.address; // Para teste, use o deployer como operador de entrega
+
   // Deploy HanumanWaterTokenV2
   console.log("Implantando HanumanWaterTokenV2...");
   const HanumanWaterTokenV2 = await ethers.getContractFactory("HanumanWaterTokenV2");
   const hwtToken = await HanumanWaterTokenV2.deploy(
     DEV_TEAM_WALLET,
     LIQUIDITY_RESERVE_WALLET,
-    STRATEGIC_PARTNERSHIPS_WALLET
+    STRATEGIC_PARTNERSHIPS_WALLET,
+    DELIVERY_OPERATOR_WALLET
   );
   
   await hwtToken.deployed();

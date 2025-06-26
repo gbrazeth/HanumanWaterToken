@@ -26,25 +26,32 @@ import type {
 export interface HanumanWaterTokenV2Interface extends Interface {
   getFunction(
     nameOrSignature:
+      | "MAX_BATCH_SIZE"
       | "MAX_COMMUNITY_ALLOCATION"
       | "MAX_CONSULTANTS_ALLOCATION"
       | "MAX_LIQUIDITY_ALLOCATION"
       | "MAX_PARTNERSHIPS_ALLOCATION"
+      | "MAX_PRESALE_DURATION"
       | "MAX_PUBLIC_ALLOCATION"
       | "MAX_SUPPLY"
       | "MAX_TEAM_ALLOCATION"
       | "MIN_REDEMPTION_AMOUNT"
       | "PUBLIC_ALLOCATION_PERCENTAGE"
       | "TOKEN_PRICE_USD"
+      | "TOTAL_PRESALE_TOKENS"
       | "allowance"
       | "approve"
       | "balanceOf"
       | "batchUpdateKycStatus"
       | "burn"
       | "burnFrom"
+      | "cancelWaterRedemption"
+      | "confirmWaterDelivery"
       | "decimals"
+      | "deliveryOperator"
       | "developmentTeamWallet"
       | "extendPresale"
+      | "getWaterRedemptionStatus"
       | "kycApproved"
       | "liquidityReserveWallet"
       | "mintCommunityTokens"
@@ -54,14 +61,17 @@ export interface HanumanWaterTokenV2Interface extends Interface {
       | "mintPresaleTokens"
       | "mintTeamTokens"
       | "name"
+      | "nextRedemptionId"
       | "owner"
       | "pause"
       | "paused"
       | "presaleContractAddress"
       | "presaleEndTime"
       | "recordPurchase"
-      | "redeemWater"
+      | "redemptionExpiryPeriod"
+      | "refundWaterRedemption"
       | "renounceOwnership"
+      | "requestWaterRedemption"
       | "strategicPartnershipsWallet"
       | "symbol"
       | "totalCommunityAllocation"
@@ -75,9 +85,12 @@ export interface HanumanWaterTokenV2Interface extends Interface {
       | "transferFrom"
       | "transferOwnership"
       | "unpause"
+      | "updateDeliveryOperator"
       | "updateKycStatus"
       | "updatePresaleContract"
+      | "updateRedemptionExpiryPeriod"
       | "updateWallets"
+      | "waterRedemptions"
   ): FunctionFragment;
 
   getEvent(
@@ -93,8 +106,15 @@ export interface HanumanWaterTokenV2Interface extends Interface {
       | "Unpaused"
       | "WalletsUpdated"
       | "WaterRedeemed"
+      | "WaterRedemptionCancelled"
+      | "WaterRedemptionConfirmed"
+      | "WaterRedemptionRefunded"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "MAX_BATCH_SIZE",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "MAX_COMMUNITY_ALLOCATION",
     values?: undefined
@@ -109,6 +129,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "MAX_PARTNERSHIPS_ALLOCATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_PRESALE_DURATION",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -136,6 +160,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "TOTAL_PRESALE_TOKENS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "allowance",
     values: [AddressLike, AddressLike]
   ): string;
@@ -156,13 +184,29 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     functionFragment: "burnFrom",
     values: [AddressLike, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "cancelWaterRedemption",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "confirmWaterDelivery",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "deliveryOperator",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "developmentTeamWallet",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "extendPresale",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getWaterRedemptionStatus",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -198,6 +242,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nextRedemptionId",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
@@ -214,12 +262,20 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     values: [AddressLike, BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "redeemWater",
+    functionFragment: "redemptionExpiryPeriod",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "refundWaterRedemption",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "requestWaterRedemption",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "strategicPartnershipsWallet",
@@ -268,6 +324,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "updateDeliveryOperator",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateKycStatus",
     values: [AddressLike, boolean]
   ): string;
@@ -276,10 +336,22 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "updateRedemptionExpiryPeriod",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateWallets",
     values: [AddressLike, AddressLike, AddressLike]
   ): string;
+  encodeFunctionData(
+    functionFragment: "waterRedemptions",
+    values: [BigNumberish]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "MAX_BATCH_SIZE",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "MAX_COMMUNITY_ALLOCATION",
     data: BytesLike
@@ -294,6 +366,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "MAX_PARTNERSHIPS_ALLOCATION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_PRESALE_DURATION",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -317,6 +393,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     functionFragment: "TOKEN_PRICE_USD",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "TOTAL_PRESALE_TOKENS",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -326,13 +406,29 @@ export interface HanumanWaterTokenV2Interface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "cancelWaterRedemption",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "confirmWaterDelivery",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "deliveryOperator",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "developmentTeamWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "extendPresale",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getWaterRedemptionStatus",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -368,6 +464,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "nextRedemptionId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
@@ -384,11 +484,19 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "redeemWater",
+    functionFragment: "redemptionExpiryPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "refundWaterRedemption",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "requestWaterRedemption",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -435,6 +543,10 @@ export interface HanumanWaterTokenV2Interface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "updateDeliveryOperator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updateKycStatus",
     data: BytesLike
   ): Result;
@@ -443,7 +555,15 @@ export interface HanumanWaterTokenV2Interface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "updateRedemptionExpiryPeriod",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updateWallets",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "waterRedemptions",
     data: BytesLike
   ): Result;
 }
@@ -614,17 +734,89 @@ export namespace WaterRedeemedEvent {
   export type InputTuple = [
     redeemer: AddressLike,
     tokenAmount: BigNumberish,
-    waterAmount: BigNumberish
+    waterAmount: BigNumberish,
+    redemptionId: BigNumberish
   ];
   export type OutputTuple = [
     redeemer: string,
     tokenAmount: bigint,
-    waterAmount: bigint
+    waterAmount: bigint,
+    redemptionId: bigint
   ];
   export interface OutputObject {
     redeemer: string;
     tokenAmount: bigint;
     waterAmount: bigint;
+    redemptionId: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace WaterRedemptionCancelledEvent {
+  export type InputTuple = [
+    redemptionId: BigNumberish,
+    redeemer: AddressLike,
+    amount: BigNumberish,
+    reason: string
+  ];
+  export type OutputTuple = [
+    redemptionId: bigint,
+    redeemer: string,
+    amount: bigint,
+    reason: string
+  ];
+  export interface OutputObject {
+    redemptionId: bigint;
+    redeemer: string;
+    amount: bigint;
+    reason: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace WaterRedemptionConfirmedEvent {
+  export type InputTuple = [
+    redemptionId: BigNumberish,
+    redeemer: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [
+    redemptionId: bigint,
+    redeemer: string,
+    amount: bigint
+  ];
+  export interface OutputObject {
+    redemptionId: bigint;
+    redeemer: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace WaterRedemptionRefundedEvent {
+  export type InputTuple = [
+    redemptionId: BigNumberish,
+    redeemer: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [
+    redemptionId: bigint,
+    redeemer: string,
+    amount: bigint
+  ];
+  export interface OutputObject {
+    redemptionId: bigint;
+    redeemer: string;
+    amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -675,6 +867,8 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  MAX_BATCH_SIZE: TypedContractMethod<[], [bigint], "view">;
+
   MAX_COMMUNITY_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
   MAX_CONSULTANTS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
@@ -682,6 +876,8 @@ export interface HanumanWaterTokenV2 extends BaseContract {
   MAX_LIQUIDITY_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
   MAX_PARTNERSHIPS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+
+  MAX_PRESALE_DURATION: TypedContractMethod<[], [bigint], "view">;
 
   MAX_PUBLIC_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
@@ -694,6 +890,8 @@ export interface HanumanWaterTokenV2 extends BaseContract {
   PUBLIC_ALLOCATION_PERCENTAGE: TypedContractMethod<[], [bigint], "view">;
 
   TOKEN_PRICE_USD: TypedContractMethod<[], [bigint], "view">;
+
+  TOTAL_PRESALE_TOKENS: TypedContractMethod<[], [bigint], "view">;
 
   allowance: TypedContractMethod<
     [owner: AddressLike, spender: AddressLike],
@@ -723,7 +921,21 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
 
+  cancelWaterRedemption: TypedContractMethod<
+    [redemptionId: BigNumberish, reason: string],
+    [void],
+    "nonpayable"
+  >;
+
+  confirmWaterDelivery: TypedContractMethod<
+    [redemptionId: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
   decimals: TypedContractMethod<[], [bigint], "view">;
+
+  deliveryOperator: TypedContractMethod<[], [string], "view">;
 
   developmentTeamWallet: TypedContractMethod<[], [string], "view">;
 
@@ -731,6 +943,22 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     [_newEndTime: BigNumberish],
     [void],
     "nonpayable"
+  >;
+
+  getWaterRedemptionStatus: TypedContractMethod<
+    [redemptionId: BigNumberish],
+    [
+      [string, bigint, bigint, bigint, boolean, boolean, boolean] & {
+        redeemer: string;
+        amount: bigint;
+        requestTime: bigint;
+        expiryTime: bigint;
+        delivered: boolean;
+        cancelled: boolean;
+        refunded: boolean;
+      }
+    ],
+    "view"
   >;
 
   kycApproved: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
@@ -775,6 +1003,8 @@ export interface HanumanWaterTokenV2 extends BaseContract {
 
   name: TypedContractMethod<[], [string], "view">;
 
+  nextRedemptionId: TypedContractMethod<[], [bigint], "view">;
+
   owner: TypedContractMethod<[], [string], "view">;
 
   pause: TypedContractMethod<[], [void], "nonpayable">;
@@ -791,13 +1021,21 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
 
-  redeemWater: TypedContractMethod<
-    [amount: BigNumberish],
+  redemptionExpiryPeriod: TypedContractMethod<[], [bigint], "view">;
+
+  refundWaterRedemption: TypedContractMethod<
+    [redemptionId: BigNumberish],
     [void],
     "nonpayable"
   >;
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  requestWaterRedemption: TypedContractMethod<
+    [amount: BigNumberish, deliveryDetails: string],
+    [bigint],
+    "nonpayable"
+  >;
 
   strategicPartnershipsWallet: TypedContractMethod<[], [string], "view">;
 
@@ -837,6 +1075,12 @@ export interface HanumanWaterTokenV2 extends BaseContract {
 
   unpause: TypedContractMethod<[], [void], "nonpayable">;
 
+  updateDeliveryOperator: TypedContractMethod<
+    [_newDeliveryOperator: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   updateKycStatus: TypedContractMethod<
     [_address: AddressLike, _status: boolean],
     [void],
@@ -845,6 +1089,12 @@ export interface HanumanWaterTokenV2 extends BaseContract {
 
   updatePresaleContract: TypedContractMethod<
     [_presaleContractAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  updateRedemptionExpiryPeriod: TypedContractMethod<
+    [_newPeriod: BigNumberish],
     [void],
     "nonpayable"
   >;
@@ -859,10 +1109,30 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
 
+  waterRedemptions: TypedContractMethod<
+    [arg0: BigNumberish],
+    [
+      [string, bigint, bigint, bigint, boolean, boolean, boolean, string] & {
+        redeemer: string;
+        amount: bigint;
+        requestTime: bigint;
+        expiryTime: bigint;
+        delivered: boolean;
+        cancelled: boolean;
+        refunded: boolean;
+        deliveryDetails: string;
+      }
+    ],
+    "view"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "MAX_BATCH_SIZE"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "MAX_COMMUNITY_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -874,6 +1144,9 @@ export interface HanumanWaterTokenV2 extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "MAX_PARTNERSHIPS_ALLOCATION"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "MAX_PRESALE_DURATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "MAX_PUBLIC_ALLOCATION"
@@ -892,6 +1165,9 @@ export interface HanumanWaterTokenV2 extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "TOKEN_PRICE_USD"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "TOTAL_PRESALE_TOKENS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "allowance"
@@ -928,14 +1204,44 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "cancelWaterRedemption"
+  ): TypedContractMethod<
+    [redemptionId: BigNumberish, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "confirmWaterDelivery"
+  ): TypedContractMethod<[redemptionId: BigNumberish], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "deliveryOperator"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "developmentTeamWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "extendPresale"
   ): TypedContractMethod<[_newEndTime: BigNumberish], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "getWaterRedemptionStatus"
+  ): TypedContractMethod<
+    [redemptionId: BigNumberish],
+    [
+      [string, bigint, bigint, bigint, boolean, boolean, boolean] & {
+        redeemer: string;
+        amount: bigint;
+        requestTime: bigint;
+        expiryTime: bigint;
+        delivered: boolean;
+        cancelled: boolean;
+        refunded: boolean;
+      }
+    ],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "kycApproved"
   ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
@@ -976,6 +1282,9 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "nextRedemptionId"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -998,11 +1307,21 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "redeemWater"
-  ): TypedContractMethod<[amount: BigNumberish], [void], "nonpayable">;
+    nameOrSignature: "redemptionExpiryPeriod"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "refundWaterRedemption"
+  ): TypedContractMethod<[redemptionId: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "requestWaterRedemption"
+  ): TypedContractMethod<
+    [amount: BigNumberish, deliveryDetails: string],
+    [bigint],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "strategicPartnershipsWallet"
   ): TypedContractMethod<[], [string], "view">;
@@ -1051,6 +1370,13 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "updateDeliveryOperator"
+  ): TypedContractMethod<
+    [_newDeliveryOperator: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "updateKycStatus"
   ): TypedContractMethod<
     [_address: AddressLike, _status: boolean],
@@ -1065,6 +1391,9 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "updateRedemptionExpiryPeriod"
+  ): TypedContractMethod<[_newPeriod: BigNumberish], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "updateWallets"
   ): TypedContractMethod<
     [
@@ -1074,6 +1403,24 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     ],
     [void],
     "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "waterRedemptions"
+  ): TypedContractMethod<
+    [arg0: BigNumberish],
+    [
+      [string, bigint, bigint, bigint, boolean, boolean, boolean, string] & {
+        redeemer: string;
+        amount: bigint;
+        requestTime: bigint;
+        expiryTime: bigint;
+        delivered: boolean;
+        cancelled: boolean;
+        refunded: boolean;
+        deliveryDetails: string;
+      }
+    ],
+    "view"
   >;
 
   getEvent(
@@ -1152,6 +1499,27 @@ export interface HanumanWaterTokenV2 extends BaseContract {
     WaterRedeemedEvent.InputTuple,
     WaterRedeemedEvent.OutputTuple,
     WaterRedeemedEvent.OutputObject
+  >;
+  getEvent(
+    key: "WaterRedemptionCancelled"
+  ): TypedContractEvent<
+    WaterRedemptionCancelledEvent.InputTuple,
+    WaterRedemptionCancelledEvent.OutputTuple,
+    WaterRedemptionCancelledEvent.OutputObject
+  >;
+  getEvent(
+    key: "WaterRedemptionConfirmed"
+  ): TypedContractEvent<
+    WaterRedemptionConfirmedEvent.InputTuple,
+    WaterRedemptionConfirmedEvent.OutputTuple,
+    WaterRedemptionConfirmedEvent.OutputObject
+  >;
+  getEvent(
+    key: "WaterRedemptionRefunded"
+  ): TypedContractEvent<
+    WaterRedemptionRefundedEvent.InputTuple,
+    WaterRedemptionRefundedEvent.OutputTuple,
+    WaterRedemptionRefundedEvent.OutputObject
   >;
 
   filters: {
@@ -1265,7 +1633,7 @@ export interface HanumanWaterTokenV2 extends BaseContract {
       WalletsUpdatedEvent.OutputObject
     >;
 
-    "WaterRedeemed(address,uint256,uint256)": TypedContractEvent<
+    "WaterRedeemed(address,uint256,uint256,uint256)": TypedContractEvent<
       WaterRedeemedEvent.InputTuple,
       WaterRedeemedEvent.OutputTuple,
       WaterRedeemedEvent.OutputObject
@@ -1274,6 +1642,39 @@ export interface HanumanWaterTokenV2 extends BaseContract {
       WaterRedeemedEvent.InputTuple,
       WaterRedeemedEvent.OutputTuple,
       WaterRedeemedEvent.OutputObject
+    >;
+
+    "WaterRedemptionCancelled(uint256,address,uint256,string)": TypedContractEvent<
+      WaterRedemptionCancelledEvent.InputTuple,
+      WaterRedemptionCancelledEvent.OutputTuple,
+      WaterRedemptionCancelledEvent.OutputObject
+    >;
+    WaterRedemptionCancelled: TypedContractEvent<
+      WaterRedemptionCancelledEvent.InputTuple,
+      WaterRedemptionCancelledEvent.OutputTuple,
+      WaterRedemptionCancelledEvent.OutputObject
+    >;
+
+    "WaterRedemptionConfirmed(uint256,address,uint256)": TypedContractEvent<
+      WaterRedemptionConfirmedEvent.InputTuple,
+      WaterRedemptionConfirmedEvent.OutputTuple,
+      WaterRedemptionConfirmedEvent.OutputObject
+    >;
+    WaterRedemptionConfirmed: TypedContractEvent<
+      WaterRedemptionConfirmedEvent.InputTuple,
+      WaterRedemptionConfirmedEvent.OutputTuple,
+      WaterRedemptionConfirmedEvent.OutputObject
+    >;
+
+    "WaterRedemptionRefunded(uint256,address,uint256)": TypedContractEvent<
+      WaterRedemptionRefundedEvent.InputTuple,
+      WaterRedemptionRefundedEvent.OutputTuple,
+      WaterRedemptionRefundedEvent.OutputObject
+    >;
+    WaterRedemptionRefunded: TypedContractEvent<
+      WaterRedemptionRefundedEvent.InputTuple,
+      WaterRedemptionRefundedEvent.OutputTuple,
+      WaterRedemptionRefundedEvent.OutputObject
     >;
   };
 }

@@ -33,7 +33,7 @@
     --ring: 201 100% 38%;                /* #0086C9   - Water blue ring */
 
     --radius: 0.5rem;
-    --logo-bg: 40 33% 94%; /* #f4efe7 - Fundo bege da logo */
+    --logo-bg: #dad4d4; /* Cinza claro Pureza e Origem (HEX#DAD4D4, CMYK C13 M13 Y12 K0) */
   }
 
   .dark {

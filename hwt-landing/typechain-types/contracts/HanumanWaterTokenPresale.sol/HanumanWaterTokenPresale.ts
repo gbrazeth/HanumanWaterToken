@@ -26,33 +26,50 @@ import type {
 export interface HanumanWaterTokenPresaleInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "MAX_PRESALE_DURATION"
       | "MAX_PURCHASE_AMOUNT_USD"
       | "MIN_PURCHASE_AMOUNT_USD"
       | "TOKEN_PRICE_USD"
+      | "TOTAL_PRESALE_TOKENS"
       | "buyWithETH"
       | "buyWithUSDT"
       | "calculateTokensForEth"
       | "calculateTokensForUsdt"
+      | "calculateTwapPrice"
       | "ethUsdPriceFeed"
       | "extendPresale"
+      | "getEthAmountForTokens"
       | "getEthUsdPrice"
+      | "getPendingETHWithdrawals"
+      | "getTokensForEthAmount"
+      | "getTokensForUsdtAmount"
+      | "getUsdtAmountForTokens"
       | "hwtToken"
+      | "maxPriceAge"
+      | "maxPriceDeviation"
       | "owner"
       | "pause"
       | "paused"
+      | "pendingETHWithdrawals"
       | "presaleEndTime"
       | "renounceOwnership"
       | "totalTokensSold"
       | "transferOwnership"
       | "treasuryWallet"
+      | "twapWindow"
       | "unpause"
+      | "updateAndGetTwapPrice"
       | "updatePriceFeed"
+      | "updatePriceProtectionParams"
       | "updateTreasuryWallet"
       | "usdtToken"
+      | "withdrawETH"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
+      | "ETHDeposited"
+      | "ETHWithdrawn"
       | "OwnershipTransferred"
       | "Paused"
       | "PresaleExtended"
@@ -64,6 +81,10 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
   ): EventFragment;
 
   encodeFunctionData(
+    functionFragment: "MAX_PRESALE_DURATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "MAX_PURCHASE_AMOUNT_USD",
     values?: undefined
   ): string;
@@ -73,6 +94,10 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "TOKEN_PRICE_USD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "TOTAL_PRESALE_TOKENS",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -92,6 +117,10 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "calculateTwapPrice",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "ethUsdPriceFeed",
     values?: undefined
   ): string;
@@ -100,13 +129,45 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getEthAmountForTokens",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getEthUsdPrice",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "getPendingETHWithdrawals",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokensForEthAmount",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokensForUsdtAmount",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUsdtAmountForTokens",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "hwtToken", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "maxPriceAge",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "maxPriceDeviation",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "pendingETHWithdrawals",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "presaleEndTime",
     values?: undefined
@@ -127,17 +188,37 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     functionFragment: "treasuryWallet",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "twapWindow",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "updateAndGetTwapPrice",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "updatePriceFeed",
     values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updatePriceProtectionParams",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "updateTreasuryWallet",
     values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "usdtToken", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdrawETH",
+    values?: undefined
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "MAX_PRESALE_DURATION",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "MAX_PURCHASE_AMOUNT_USD",
     data: BytesLike
@@ -148,6 +229,10 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "TOKEN_PRICE_USD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "TOTAL_PRESALE_TOKENS",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "buyWithETH", data: BytesLike): Result;
@@ -164,6 +249,10 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "calculateTwapPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "ethUsdPriceFeed",
     data: BytesLike
   ): Result;
@@ -172,13 +261,45 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getEthAmountForTokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getEthUsdPrice",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPendingETHWithdrawals",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokensForEthAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokensForUsdtAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUsdtAmountForTokens",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "hwtToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "maxPriceAge",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "maxPriceDeviation",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "pendingETHWithdrawals",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "presaleEndTime",
     data: BytesLike
@@ -199,9 +320,18 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     functionFragment: "treasuryWallet",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "twapWindow", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "updateAndGetTwapPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updatePriceFeed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updatePriceProtectionParams",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -209,6 +339,35 @@ export interface HanumanWaterTokenPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "usdtToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawETH",
+    data: BytesLike
+  ): Result;
+}
+
+export namespace ETHDepositedEvent {
+  export type InputTuple = [amount: BigNumberish];
+  export type OutputTuple = [amount: bigint];
+  export interface OutputObject {
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace ETHWithdrawnEvent {
+  export type InputTuple = [to: AddressLike, amount: BigNumberish];
+  export type OutputTuple = [to: string, amount: bigint];
+  export interface OutputObject {
+    to: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace OwnershipTransferredEvent {
@@ -380,11 +539,15 @@ export interface HanumanWaterTokenPresale extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  MAX_PRESALE_DURATION: TypedContractMethod<[], [bigint], "view">;
+
   MAX_PURCHASE_AMOUNT_USD: TypedContractMethod<[], [bigint], "view">;
 
   MIN_PURCHASE_AMOUNT_USD: TypedContractMethod<[], [bigint], "view">;
 
   TOKEN_PRICE_USD: TypedContractMethod<[], [bigint], "view">;
+
+  TOTAL_PRESALE_TOKENS: TypedContractMethod<[], [bigint], "view">;
 
   buyWithETH: TypedContractMethod<[], [void], "payable">;
 
@@ -406,6 +569,8 @@ export interface HanumanWaterTokenPresale extends BaseContract {
     "view"
   >;
 
+  calculateTwapPrice: TypedContractMethod<[], [bigint], "view">;
+
   ethUsdPriceFeed: TypedContractMethod<[], [string], "view">;
 
   extendPresale: TypedContractMethod<
@@ -414,15 +579,47 @@ export interface HanumanWaterTokenPresale extends BaseContract {
     "nonpayable"
   >;
 
+  getEthAmountForTokens: TypedContractMethod<
+    [tokenAmount: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
   getEthUsdPrice: TypedContractMethod<[], [bigint], "view">;
 
+  getPendingETHWithdrawals: TypedContractMethod<[], [bigint], "view">;
+
+  getTokensForEthAmount: TypedContractMethod<
+    [ethAmount: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
+  getTokensForUsdtAmount: TypedContractMethod<
+    [usdtAmount: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
+  getUsdtAmountForTokens: TypedContractMethod<
+    [tokenAmount: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
   hwtToken: TypedContractMethod<[], [string], "view">;
+
+  maxPriceAge: TypedContractMethod<[], [bigint], "view">;
+
+  maxPriceDeviation: TypedContractMethod<[], [bigint], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
   pause: TypedContractMethod<[], [void], "nonpayable">;
 
   paused: TypedContractMethod<[], [boolean], "view">;
+
+  pendingETHWithdrawals: TypedContractMethod<[], [bigint], "view">;
 
   presaleEndTime: TypedContractMethod<[], [bigint], "view">;
 
@@ -438,10 +635,24 @@ export interface HanumanWaterTokenPresale extends BaseContract {
 
   treasuryWallet: TypedContractMethod<[], [string], "view">;
 
+  twapWindow: TypedContractMethod<[], [bigint], "view">;
+
   unpause: TypedContractMethod<[], [void], "nonpayable">;
+
+  updateAndGetTwapPrice: TypedContractMethod<[], [bigint], "nonpayable">;
 
   updatePriceFeed: TypedContractMethod<
     [_newPriceFeed: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  updatePriceProtectionParams: TypedContractMethod<
+    [
+      _maxPriceAge: BigNumberish,
+      _maxPriceDeviation: BigNumberish,
+      _twapWindow: BigNumberish
+    ],
     [void],
     "nonpayable"
   >;
@@ -454,10 +665,15 @@ export interface HanumanWaterTokenPresale extends BaseContract {
 
   usdtToken: TypedContractMethod<[], [string], "view">;
 
+  withdrawETH: TypedContractMethod<[], [void], "nonpayable">;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "MAX_PRESALE_DURATION"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "MAX_PURCHASE_AMOUNT_USD"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -466,6 +682,9 @@ export interface HanumanWaterTokenPresale extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "TOKEN_PRICE_USD"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "TOTAL_PRESALE_TOKENS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "buyWithETH"
@@ -480,17 +699,41 @@ export interface HanumanWaterTokenPresale extends BaseContract {
     nameOrSignature: "calculateTokensForUsdt"
   ): TypedContractMethod<[usdtAmount: BigNumberish], [bigint], "view">;
   getFunction(
+    nameOrSignature: "calculateTwapPrice"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "ethUsdPriceFeed"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "extendPresale"
   ): TypedContractMethod<[_newEndTime: BigNumberish], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "getEthAmountForTokens"
+  ): TypedContractMethod<[tokenAmount: BigNumberish], [bigint], "view">;
+  getFunction(
     nameOrSignature: "getEthUsdPrice"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "getPendingETHWithdrawals"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getTokensForEthAmount"
+  ): TypedContractMethod<[ethAmount: BigNumberish], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getTokensForUsdtAmount"
+  ): TypedContractMethod<[usdtAmount: BigNumberish], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getUsdtAmountForTokens"
+  ): TypedContractMethod<[tokenAmount: BigNumberish], [bigint], "view">;
+  getFunction(
     nameOrSignature: "hwtToken"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "maxPriceAge"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "maxPriceDeviation"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
@@ -500,6 +743,9 @@ export interface HanumanWaterTokenPresale extends BaseContract {
   getFunction(
     nameOrSignature: "paused"
   ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "pendingETHWithdrawals"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "presaleEndTime"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -516,11 +762,28 @@ export interface HanumanWaterTokenPresale extends BaseContract {
     nameOrSignature: "treasuryWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "twapWindow"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "updateAndGetTwapPrice"
+  ): TypedContractMethod<[], [bigint], "nonpayable">;
+  getFunction(
     nameOrSignature: "updatePriceFeed"
   ): TypedContractMethod<[_newPriceFeed: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "updatePriceProtectionParams"
+  ): TypedContractMethod<
+    [
+      _maxPriceAge: BigNumberish,
+      _maxPriceDeviation: BigNumberish,
+      _twapWindow: BigNumberish
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "updateTreasuryWallet"
   ): TypedContractMethod<
@@ -531,7 +794,24 @@ export interface HanumanWaterTokenPresale extends BaseContract {
   getFunction(
     nameOrSignature: "usdtToken"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "withdrawETH"
+  ): TypedContractMethod<[], [void], "nonpayable">;
 
+  getEvent(
+    key: "ETHDeposited"
+  ): TypedContractEvent<
+    ETHDepositedEvent.InputTuple,
+    ETHDepositedEvent.OutputTuple,
+    ETHDepositedEvent.OutputObject
+  >;
+  getEvent(
+    key: "ETHWithdrawn"
+  ): TypedContractEvent<
+    ETHWithdrawnEvent.InputTuple,
+    ETHWithdrawnEvent.OutputTuple,
+    ETHWithdrawnEvent.OutputObject
+  >;
   getEvent(
     key: "OwnershipTransferred"
   ): TypedContractEvent<
@@ -590,6 +870,28 @@ export interface HanumanWaterTokenPresale extends BaseContract {
   >;
 
   filters: {
+    "ETHDeposited(uint256)": TypedContractEvent<
+      ETHDepositedEvent.InputTuple,
+      ETHDepositedEvent.OutputTuple,
+      ETHDepositedEvent.OutputObject
+    >;
+    ETHDeposited: TypedContractEvent<
+      ETHDepositedEvent.InputTuple,
+      ETHDepositedEvent.OutputTuple,
+      ETHDepositedEvent.OutputObject
+    >;
+
+    "ETHWithdrawn(address,uint256)": TypedContractEvent<
+      ETHWithdrawnEvent.InputTuple,
+      ETHWithdrawnEvent.OutputTuple,
+      ETHWithdrawnEvent.OutputObject
+    >;
+    ETHWithdrawn: TypedContractEvent<
+      ETHWithdrawnEvent.InputTuple,
+      ETHWithdrawnEvent.OutputTuple,
+      ETHWithdrawnEvent.OutputObject
+    >;
+
     "OwnershipTransferred(address,address)": TypedContractEvent<
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,

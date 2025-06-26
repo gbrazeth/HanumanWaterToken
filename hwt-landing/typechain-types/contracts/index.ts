@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type * as hanumanWaterTokenPresaleSol from "./HanumanWaterTokenPresale.sol";
 export type { hanumanWaterTokenPresaleSol };
+import type * as legacy from "./legacy";
+export type { legacy };
 import type * as mocks from "./mocks";
 export type { mocks };
 export type { HWTPresale } from "./HWTPresale";

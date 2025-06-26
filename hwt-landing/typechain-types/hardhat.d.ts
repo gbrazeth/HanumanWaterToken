@@ -78,6 +78,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.HWTPresale__factory>;
     getContractFactory(
+      name: "HanumanWaterToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.HanumanWaterToken__factory>;
+    getContractFactory(
+      name: "HWTPresale",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.HWTPresale__factory>;
+    getContractFactory(
       name: "MockERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockERC20__factory>;
@@ -167,6 +175,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.HWTPresale>;
     getContractAt(
+      name: "HanumanWaterToken",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.HanumanWaterToken>;
+    getContractAt(
+      name: "HWTPresale",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.HWTPresale>;
+    getContractAt(
       name: "MockERC20",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -237,6 +255,14 @@ declare module "hardhat/types/runtime" {
       name: "HanumanWaterTokenV2",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.HanumanWaterTokenV2>;
+    deployContract(
+      name: "HWTPresale",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HWTPresale>;
+    deployContract(
+      name: "HanumanWaterToken",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HanumanWaterToken>;
     deployContract(
       name: "HWTPresale",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -325,6 +351,16 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.HanumanWaterTokenV2>;
+    deployContract(
+      name: "HWTPresale",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HWTPresale>;
+    deployContract(
+      name: "HanumanWaterToken",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.HanumanWaterToken>;
     deployContract(
       name: "HWTPresale",
       args: any[],

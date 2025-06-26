@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  console.log("Iniciando implantação dos contratos HanumanWaterToken V2...");
+  console.log("Iniciando implantação dos contratos HanumanWaterToken V2 (Versão Atualizada)...");
 
   // Endereços das carteiras (usando a carteira do deployer para testes)
   const [deployer] = await ethers.getSigners();
@@ -12,14 +12,9 @@ async function main() {
   const consultantsWallet = deployer.address;
   const communityRewardsWallet = deployer.address;
 
-  // Endereços dos contratos externos (substitua pelos endereços reais da rede desejada)
-  // Mainnet Ethereum
-  const usdtAddress = "0xdAC17F958D2ee523a2206206994597C13D831ec7"; // USDT na Ethereum Mainnet
-  const ethUsdPriceFeedAddress = "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"; // ETH/USD Chainlink na Ethereum Mainnet
-  
-  // Sepolia Testnet (para testes)
-  // const usdtAddress = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"; // Mock USDT na Sepolia
-  // const ethUsdPriceFeedAddress = "0x694AA1769357215DE4FAC081bf1f309aDC325306"; // ETH/USD Chainlink na Sepolia
+  // Endereços dos contratos externos para Sepolia Testnet
+  const usdtAddress = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"; // Mock USDT na Sepolia
+  const ethUsdPriceFeedAddress = "0x694AA1769357215DE4FAC081bf1f309aDC325306"; // ETH/USD Chainlink na Sepolia
 
   console.log("Implantando o contrato HanumanWaterTokenV2...");
   const HanumanWaterTokenV2 = await ethers.getContractFactory("HanumanWaterTokenV2");
@@ -31,14 +26,14 @@ async function main() {
     consultantsWallet
   );
 
-  await hwtToken.waitForDeployment();
-  const hwtTokenAddress = await hwtToken.getAddress();
+  await hwtToken.deploymentTransaction().wait();
+  const hwtTokenAddress = hwtToken.target.toString();
   console.log(`HanumanWaterTokenV2 implantado em: ${hwtTokenAddress}`);
 
   console.log("Implantando o contrato HanumanWaterTokenPresale...");
   const HanumanWaterTokenPresale = await ethers.getContractFactory("HanumanWaterTokenPresale");
   
-  // Duração da pré-venda: 1 ano (365 dias) conforme melhorias de segurança
+  // A duração da pré-venda agora está limitada a 1 ano (365 dias) conforme as melhorias de segurança
   const presaleDurationDays = 365;
   
   const presaleContract = await HanumanWaterTokenPresale.deploy(
@@ -49,8 +44,8 @@ async function main() {
     presaleDurationDays
   );
 
-  await presaleContract.waitForDeployment();
-  const presaleContractAddress = await presaleContract.getAddress();
+  await presaleContract.deploymentTransaction().wait();
+  const presaleContractAddress = presaleContract.target.toString();
   console.log(`HanumanWaterTokenPresale implantado em: ${presaleContractAddress}`);
 
   // Configurar o contrato de token para reconhecer o contrato de pré-venda
@@ -58,6 +53,14 @@ async function main() {
   const updatePresaleTx = await hwtToken.updatePresaleContract(presaleContractAddress);
   await updatePresaleTx.wait();
   console.log("Contrato de pré-venda configurado com sucesso!");
+
+  // Aprovar o contrato de pré-venda para gastar tokens
+  console.log("Aprovando o contrato de pré-venda para gastar tokens...");
+  // 100 milhões de tokens (18 casas decimais)
+  const totalPresaleTokens = BigInt("100000000000000000000000000");
+  const approveTx = await hwtToken.approve(presaleContractAddress, totalPresaleTokens);
+  await approveTx.wait();
+  console.log(`Aprovação de 100.000.000 tokens para o contrato de pré-venda concluída!`);
 
   console.log("\nResumo da implantação:");
   console.log(`HanumanWaterTokenV2: ${hwtTokenAddress}`);
