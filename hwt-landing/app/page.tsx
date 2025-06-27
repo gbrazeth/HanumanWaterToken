@@ -310,7 +310,7 @@ export default function LandingPage() {
                   Unindo Hidrogeologia e Tecnologia
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  O Hanuman Water Token (HWT) está transformando a gestão de recursos hídricos através da tecnologia blockchain, garantindo transparência e eficiência na distribuição de água.
+                  O Hanuman Water Token (HWT) está transformando a gestão de recursos hídricos através da tecnologia blockchain, garantindo transparência e eficiência na distribuição da  Água Hanuman - Mineral Multimilenar Hipertermal Multifuncional - Sem Trítio
                 </p>
                 <div className="flex gap-4">
                   <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
@@ -357,17 +357,10 @@ export default function LandingPage() {
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter text-primary">Nossa Fonte de Água</h2>
                 <p className="text-muted-foreground">
-                  A Fonte de Água Hanuman é uma jazida natural preservada, fornecendo água mineral pura e rica em
-                  nutrientes essenciais. O Hanuman Water Token (HWT) transforma esse recurso em um ativo digital
-                  rastreável via blockchain, garantindo transparência e segurança. Cada 1.000 HWT representam 1 metro
-                  cúbico de água (1.000 litros), permitindo que esse bem natural seja gerenciado e negociado de forma
-                  eficiente.
+                  A Fonte de Água Hanuman é uma jazida natural de água mineral alcalina e rica em nutrientes, originária de chuvas que caíram há mais de 9.000 anos no solo do Parque Nacional da Chapada dos Veadeiros (UNESCO), no Estado de Goiás. O Hanuman Water Token (HWT) transforma esse recurso único em um ativo digital rastreável via Blockchain, garantindo transparência e segurança no seu resgate. Cada 1 HWT representa 1 litro de água (1.000 ml), permitindo que esse bem vital seja gerenciado, negociado e utilizado de forma eficiente e sustentável.
                 </p>
                 <p className="text-muted-foreground">
-                  Além de democratizar o acesso à água mineral, o HWT traz liquidez ao mercado e assegura a integridade
-                  da cadeia de suprimentos por meio da tecnologia blockchain. Esse ecossistema inovador une natureza e
-                  tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam
-                  ativamente da preservação e distribuição responsável da água.
+                  Além de democratizar o acesso a uma água totalmente isenta de contaminantes da era moderna, filtrada e isolada por milênios nas formações geológicas de 1,75 bilhão de anos da Chapada dos Veadeiros, o HWT traz liquidez ao mercado e assegura a integridade da cadeia de suprimentos por meio da tecnologia Blockchain. Esse ecossistema inovador une hidrogeologia e tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam da preservação e distribuição responsável de uma água com características únicas e exclusivas no planeta.
                 </p>
                 <div className="mt-8 p-6 max-w-2xl mx-auto" style={{ backgroundColor: '#f4f8fb' }}>
 
@@ -380,7 +373,7 @@ export default function LandingPage() {
                     </p>
                     <div className="space-y-1">
                       <p className="font-medium">Lançamento da Pré-Venda</p>
-                      <p className="text-muted-foreground">Período: 11/06/2025</p>
+                      <p className="text-muted-foreground">Período: 10/07/2025</p>
                       <p className="text-muted-foreground">Meta: Venda mínima de 100.000 m³ em 12 meses.</p>
                     </div>
                   </div>
@@ -406,8 +399,7 @@ export default function LandingPage() {
                 <Droplet className="h-12 w-12 mb-4 text-primary" />
                 <h3 className="text-xl font-bold mb-2 text-primary">Ativo do Mundo Real</h3>
                 <p className="text-muted-foreground">
-                  Cada HWT representa um volume específico de água mineral da Fonte Hanuman, garantindo um vínculo
-                  direto com um recurso tangível.
+                  Cada HWT representa um volume específico de água mineral hipertermal da Jazida e Fonte Hanuman, garantindo um vínculo direto com um recurso tangível, vital e multifuncional.
                 </p>
               </CardContent>
             </Card>
@@ -442,8 +434,7 @@ export default function LandingPage() {
                 <Users className="h-12 w-12 mb-4 text-primary" />
                 <h3 className="text-xl font-bold mb-2 text-primary">Governança Comunitária</h3>
                 <p className="text-muted-foreground">
-                  Os detentores de HWT participam ativamente nas decisões-chave do projeto, promovendo uma gestão
-                  descentralizada e democrática.
+                  Os detentores de HWT participam nas decisões-chave do projeto, promovendo uma gestão descentralizada e democrática.
                 </p>
               </CardContent>
             </Card>
@@ -460,18 +451,18 @@ export default function LandingPage() {
               <Card>
                 <CardContent className="p-6 text-center">
                   <Star className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Acesso VIP a Lotes Especiais</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Acesso VIP da 1ª Pré-Venda</h3>
                   <p className="text-muted-foreground text-sm">
-                    Tenha prioridade em lotes de água com características únicas e embalagens comemorativas.
+                    Tenha preferência e prioridade de acesso aos lotes de água da Fonte Hanuman e aos possíveis empreendimentos médicos terapêuticos do ecossistema hipertermal Jazida Hanuman - Chapada dos Veadeiros.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <Percent className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Descontos Exclusivos</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Benefícios e Descontos Exclusivos </h3>
                   <p className="text-muted-foreground text-sm">
-                    Economize na compra de água Hanuman e outros produtos ou serviços do nosso ecossistema.
+                    Economize na compra da Água Hanuman e possíveis serviços futuros do ecossistema. Compradores do HWT na 1ª Pré-Venda estão isentos dos custos de envase e embalagem para resgate na fábrica próxima à Fonte.
                   </p>
                 </CardContent>
               </Card>
@@ -480,7 +471,7 @@ export default function LandingPage() {
                   <CalendarDays className="h-12 w-12 mx-auto mb-4 text-primary" />
                   <h3 className="text-xl font-bold mb-2 text-primary">Eventos e Experiências</h3>
                   <p className="text-muted-foreground text-sm">
-                    Participe de degustações, visitas à Fonte Hanuman e encontros exclusivos da comunidade.
+                    Participe de degustações, visitas à região hidrogeológica da Jazida Hanuman e encontros exclusivos da comunidade.
                   </p>
                 </CardContent>
               </Card>
@@ -496,18 +487,18 @@ export default function LandingPage() {
               <Card>
                 <CardContent className="p-6 text-center">
                   <Gift className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Recompensas por Engajamento</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Benefícios por Engajamento</h3>
                   <p className="text-muted-foreground text-sm">
-                    Seja incentivado por sua participação ativa e contribuições para o crescimento do HWT.
+                    Obtenha benefícios especiais por pensar e contribuir para o desenvolvimento do sistema HWT.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <Leaf className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Apoio à Sustentabilidade</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Apoio à Economia Sustentável e Distributiva</h3>
                   <p className="text-muted-foreground text-sm">
-                    Invista em um projeto comprometido com a exploração responsável de recursos naturais.
+                    Ao comprar o HWT você está colaborando para a implantação de um modelo de economia sustentável e distributivo, com arranjos produtivos e negócios inclusivos para a região da Chapada dos Veadeiros.
                   </p>
                 </CardContent>
               </Card>
@@ -682,10 +673,10 @@ export default function LandingPage() {
               <AccordionItem value="item-1">
                 <AccordionTrigger>O que é HWT?</AccordionTrigger>
                 <AccordionContent>
-                  HWT (HanumanWater Token) é um token utilitário que representa a propriedade de recursos hídricos
-                  minerais, construído na tecnologia blockchain para garantir transparência e gestão eficiente de
-                  recursos. Cada token está diretamente vinculado a um volume específico de água mineral da Fonte
-                  Hanuman que poderá ser extraído pelo investidores a partir do final de 2026.
+                  O Hanuman Water Token (HWT) é um token utilitário que confere ao seu titular o direito de acesso mediante resgate de volume de água mineral hipertermal distribuída ou envasada do Poço/Fonte Hanuman I ou de qualquer outro poço/fonte dentro da poligonal da área de 48,69 hectares da Jazida Hanuman, no município de Niquelândia, Chapada dos Veadeiros, Estado de Goiás, Brasil, pesquisada no processo n. 860.360/2017, da  Agência Nacional de Mineração (ANM), dentro dos limites autorizados e conforme regulamentações vigentes.
+                  Natureza do Direito: 
+                  - Não é um título de investimento (não há dividendos, juros ou expectativa de valorização);
+                  - Vinculado estritamente ao uso utilitário da água para consumo humano, termalismo, terapêutico ou industrial, sujeito às licenças e autorizações regulamentares
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
@@ -700,17 +691,43 @@ export default function LandingPage() {
               <AccordionItem value="item-3">
                 <AccordionTrigger>O que torna o HWT único?</AccordionTrigger>
                 <AccordionContent>
-                  O HWT é respaldado por ativos hídricos do mundo real, fornecendo uma conexão tangível entre tokens
-                  digitais e recursos físicos. Ele também implementa governança comunitária e gestão sustentável de
-                  recursos. Além disso, o HWT utiliza tecnologia blockchain avançada para garantir total transparência e
-                  rastreabilidade na cadeia de suprimentos de água, promovendo confiança e eficiência no setor de gestão
-                  hídrica.
+<p>A Fonte Hanuman representa uma convergência extraordinária entre ciência, sustentabilidade e inovação tecnológica, oferecendo uma oportunidade única de acesso a um recurso vital e multifuncional. Localizada no coração do Cerrado brasileiro, essa fonte mineral combina preservação ambiental, responsabilidade social e inovação tecnológica.</p>
+
+<p><b>1. Fundamentos Científicos Comprovados</b><br/>
+Estudos Universitários: Pesquisas conduzidas pelo Instituto de Geociências da Universidade de Brasília (IG-UnB), publicadas na revista Elsevier "Groundwater Sustainable and Development" (2022)<br/>
+Reserva Explotável Anual (RExA): 3,77 milhões de m³/ano, estabelecendo limites conservadores para extração sustentável<br/>
+Reserva Total Permanente: 75,4 milhões de m³, garantindo disponibilidade para gerações futuras</p>
+
+<p><b>2. Exploração Ultra-Conservadora</b><br/>
+Pré-venda HWT: Apenas 100.000 m³ (0,13% da Reserva Total Permanente)<br/>
+Produção do Poço Hanuman I: 485.000 m³/ano (apenas 12,9% da capacidade renovável anual)<br/>
+Margem de Segurança: Utilização de apenas 2,65% da RExA na fase inicial</p>
+
+<p>2.1. A Hanuman Minas Ltda já obteve da Agência Nacional de Mineração (ANM) a classificação como “água mineral fluoretada hipertermal na fonte” e a declaração de “aptidão para ingestão humana e envase industrial”, bem como a autorização da Secretaria de Meio Ambiente e Desenvolvimento Sustentável do Estado de Goiás (SEMAD-GO), para a captação diária de 1.330 m³, 485.000 m³/ano, da Fonte Hanuman I.</p>
+
+<p><b>3. Governança Descentralizada e Transparente</b><br/>
+Contratos Inteligentes: Limitação automática da emissão de tokens pela RExA<br/>
+Monitoramento em Tempo Real: Sistema integrado à blockchain registra volumes extraídos e níveis piezométricos<br/>
+Revisões Periódicas: Dados transparentes embasam ajustes na RExA para manter equilíbrio hídrico</p>
+
+<p><b>4. Economia Circular e Impacto Socioambiental</b><br/>
+Nova Economia Distributiva: Integração com cadeias produtivas locais no Cerrado<br/>
+Parcerias Estratégicas: Colaboração com OSCIPs como a Pulsar Vida para desenvolvimento comunitário<br/>
+Arranjos Produtivos: Cosmecêuticos, bebidas naturais e medicina integrativa na Chapada dos Veadeiros</p>
+
+<p><b>5. Inovação Tecnológica Sustentável</b><br/>
+Pesquisas de Ponta: Estudos em neurociência quântica, tecnologias limpas e memória molecular<br/>
+Protocolos Científicos: Publicações em revistas indexadas garantem transparência<br/>
+Aplicações Futuras: Potencial uso em computação quântica e tecnologias emergentes</p>
+
+<p><b>6. Compromisso ESG</b><br/>
+O HWT representa um modelo pioneiro de tokenização de recursos naturais, alinhado aos critérios ESG (Environmental, Social, Governance), promovendo conservação do Patrimônio da Humanidade UNESCO e desenvolvimento sustentável regional.</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4">
                 <AccordionTrigger>Qual a utilidade do HWT?</AccordionTrigger>
                 <AccordionContent>
-                  O HWT é um token utilitário que representa um direito a um volume real de água mineral da Fonte Hanuman. No futuro (previsto a partir do final de 2026), os detentores poderão optar por resgatar a água física correspondente aos seus tokens ou continuar a negociá-los. Além disso, o HWT pode futuramente conceder acesso a benefícios ou governança dentro do ecossistema Hanuman.
+                  O HWT é um token utilitário que representa um direito a um volume real de água mineral da Jazida e Fonte Hanuman. No futuro (previsto a partir do final de 2028), os detentores poderão optar por resgatar a água física correspondente aos seus tokens ou continuar a negociá-los. Além disso, o HWT pode futuramente conceder acesso a VIP e benefícios aos empreendimentos e negócios do ecossistema Jazida Hanuman.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-5">
@@ -730,14 +747,67 @@ export default function LandingPage() {
                 <>
                   <AccordionItem value="item-6">
                     <AccordionTrigger>Quais são os principais riscos ao investir em HWT?</AccordionTrigger>
-                    <AccordionContent>
-                      Como todo investimento, especialmente em criptoativos e projetos em desenvolvimento, existem riscos. Estes podem incluir a volatilidade do mercado de criptomoedas, riscos regulatórios que podem afetar o setor, e riscos operacionais relacionados à extração e distribuição da água. É importante que você faça sua própria pesquisa (DYOR - Do Your Own Research) e invista de forma consciente.
-                    </AccordionContent>
+<AccordionContent>
+<p><b>1. Identificação e Fatores de Risco</b></p>
+
+<p><b>1.1 Riscos Regulatórios e de Conformidade</b><br/>
+O ambiente regulatório para ativos virtuais encontra-se em constante evolução, tanto no Brasil quanto em jurisdições internacionais relevantes. Existe risco substancial de que autoridades regulatórias, incluindo a CVM, o BACEN ou órgãos internacionais, venham a classificar o HWT de forma diversa da pretendida pela emissora, potencialmente como valor mobiliário sujeito a regime regulatório mais restritivo.<br/>
+Mudanças na legislação aplicável a criptoativos, proteção de dados pessoais, direito do consumidor ou gestão de recursos hídricos podem impactar negativamente a viabilidade operacional do projeto ou impor custos adicionais significativos de conformidade. Adicionalmente, existe possibilidade de surgimento de disputas legais relacionadas à propriedade intelectual, interpretação de termos contratuais, direitos dos detentores de tokens ou responsabilidade ambiental.</p>
+
+<p><b>1.2 Riscos Operacionais e do Ativo Subjacente</b><br/>
+Embora os estudos técnicos indiquem estabilidade das características da fonte, existe risco inerente de variações futuras na vazão, temperatura ou qualidade da água devido a fatores geológicos, climáticos ou ambientais externos ao controle da empresa. Tais variações podem afetar a capacidade de produção ou a qualidade do produto final.<br/>
+A implementação e operação da planta de envase, bem como o estabelecimento de cadeia de suprimentos eficiente e logística de distribuição adequada para atendimento dos resgates, apresentam desafios operacionais significativos. Aumentos inesperados nos custos de energia, manutenção, transporte, mão de obra ou conformidade regulatória podem impactar negativamente a viabilidade econômica do projeto.</p>
+
+<p><b>1.3 Riscos Tecnológicos e de Segurança Cibernética</b><br/>
+A utilização de tecnologia blockchain e contratos inteligentes, embora ofereça vantagens em termos de transparência e automatização, expõe o projeto a riscos tecnológicos específicos. Bugs ou vulnerabilidades nos contratos inteligentes podem resultar em perdas de tokens, mau funcionamento das utilidades programadas ou exposição a ataques maliciosos.<br/>
+Riscos inerentes à plataforma blockchain escolhida, incluindo congestionamento da rede, volatilidade nas taxas de transação, ataques de 51% ou outras formas de comprometimento da segurança, podem afetar a funcionalidade e confiabilidade do sistema. Adicionalmente, ataques cibernéticos direcionados à plataforma de venda, sistemas de carteiras digitais ou infraestrutura tecnológica do projeto representam ameaças constantes.</p>
+
+<p><b>1.4 Riscos de Mercado e Execução do Projeto</b><br/>
+O valor do HWT em eventuais mercados secundários pode apresentar volatilidade extrema, e não há garantia de existência de liquidez adequada para negociação. A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
+Atrasos ou falhas na execução do cronograma planejado (roadmap), incluindo a obtenção de licenças, construção de infraestrutura ou desenvolvimento tecnológico, podem comprometer a viabilidade do projeto. A gestão inadequada dos recursos financeiros arrecadados na venda dos tokens representa risco adicional para a sustentabilidade do empreendimento.</p>
+
+<p><b>1.5 Restrições Jurisdicionais e Limitações Geográficas</b><br/>
+A oferta e comercialização do HWT podem estar sujeitas a restrições em determinadas jurisdições, dependendo da legislação local aplicável a criptoativos, tokens digitais e ofertas de valores mobiliários. É responsabilidade exclusiva de cada potencial adquirente verificar a legalidade da aquisição e posse do HWT em seu país de residência ou jurisdição de domicílio.<br/>
+A Hanuman Minas Ltda. reserva-se o direito de restringir ou proibir a participação de residentes de determinadas jurisdições na aquisição do HWT, especialmente daquelas onde tal participação possa configurar violação de leis locais ou expor a empresa a riscos regulatórios inaceitáveis.</p>
+
+<p><b>1.6 Identificação e Análise de Fatores de Risco</b></p>
+
+<p><b>1.6.1 Riscos Regulatórios e de Conformidade</b><br/>
+O ambiente regulatório para ativos virtuais encontra-se em constante evolução, tanto no Brasil quanto em jurisdições internacionais relevantes. Existe risco substancial de que autoridades regulatórias, incluindo a CVM, o BACEN ou órgãos internacionais, venham a classificar o HWT de forma diversa da pretendida pela emissora, potencialmente como valor mobiliário sujeito a regime regulatório mais restritivo.<br/>
+Mudanças na legislação aplicável a criptoativos, proteção de dados pessoais, direito do consumidor ou gestão de recursos hídricos podem impactar negativamente a viabilidade operacional do projeto ou impor custos adicionais significativos de conformidade. Adicionalmente, existe possibilidade de surgimento de disputas legais relacionadas à propriedade intelectual, interpretação de termos contratuais, direitos dos detentores de tokens ou responsabilidade ambiental.</p>
+
+<p><b>1.6.2 Riscos Operacionais e do Ativo Subjacente</b><br/>
+Embora os estudos técnicos indiquem estabilidade das características da fonte, existe risco inerente de variações futuras na vazão, temperatura ou qualidade da água devido a fatores geológicos, climáticos ou ambientais externos ao controle da empresa. Tais variações podem afetar a capacidade de produção ou a qualidade do produto final.<br/>
+A implementação e operação da planta de envase, bem como o estabelecimento de cadeia de suprimentos eficiente e logística de distribuição adequada para atendimento dos resgates, apresentam desafios operacionais significativos. Aumentos inesperados nos custos de energia, manutenção, transporte, mão de obra ou conformidade regulatória podem impactar negativamente a viabilidade econômica do projeto.</p>
+
+<p><b>1.6.3 Riscos Tecnológicos e de Segurança Cibernética</b><br/>
+A utilização de tecnologia blockchain e contratos inteligentes, embora ofereça vantagens em termos de transparência e automatização, expõe o projeto a riscos tecnológicos específicos. Bugs ou vulnerabilidades nos contratos inteligentes podem resultar em perdas de tokens, mau funcionamento das utilidades programadas ou exposição a ataques maliciosos.<br/>
+Riscos inerentes à plataforma blockchain escolhida, incluindo congestionamento da rede, volatilidade nas taxas de transação, ataques de 51% ou outras formas de comprometimento da segurança, podem afetar a funcionalidade e confiabilidade do sistema. Adicionalmente, ataques cibernéticos direcionados à plataforma de venda, sistemas de carteiras digitais ou infraestrutura tecnológica do projeto representam ameaças constantes.</p>
+
+<p><b>1.6.4 Riscos de Mercado e Execução do Projeto</b><br/>
+O valor do HWT em eventuais mercados secundários pode apresentar volatilidade extrema, e não há garantia de existência de liquidez adequada para negociação. A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
+Atrasos ou falhas na execução do cronograma planejado (roadmap), incluindo a obtenção de licenças, construção de infraestrutura ou desenvolvimento tecnológico, podem comprometer a viabilidade do projeto. A gestão inadequada dos recursos financeiros arrecadados na venda dos tokens representa risco adicional para a sustentabilidade do empreendimento.</p>
+
+<p><b>1.7 Avisos Legais e Disclaimers Obrigatórios</b></p>
+
+<p><b>1.7.1 Aviso de Risco de Investimento</b><br/>
+O HWT constitui token utilitário de risco. Não representa investimento financeiro, participação societária na Hanuman Minas Ltda. ou direito a rendimentos de qualquer natureza. O valor do token pode ser extremamente volátil e não há garantia de liquidez em mercados secundários. Adquirentes podem perder parcial ou integralmente o valor aplicado na aquisição.</p>
+
+<p><b>1.7.2 Disclaimer de Aconselhamento</b><br/>
+Este documento e quaisquer materiais associados ao HWT não constituem oferta de valor mobiliário, recomendação de investimento, aconselhamento financeiro, legal, tributário ou de qualquer outra natureza. Potenciais adquirentes devem realizar análise independente e consultar profissionais qualificados antes de tomar decisões relacionadas ao HWT.</p>
+
+<p><b>1.7.3 Limitações Jurisdicionais</b><br/>
+A oferta e venda do HWT podem ser restritas ou proibidas em determinadas jurisdições. É responsabilidade exclusiva do adquirente verificar a legalidade da aquisição em seu país de residência. O projeto não se destina a pessoas físicas ou jurídicas localizadas em jurisdições onde sua oferta seja considerada ilegal.</p>
+
+<p><b>1.7.4 Dependências Operacionais e Condicionantes para o Exercício do Direito de Resgate</b><br/>
+O sucesso do projeto e a capacidade efetiva de resgate da água mineral dependem de múltiplos fatores operacionais, logísticos, tecnológicos e regulatórios, todos sujeitos a riscos e incertezas. O projeto, seu cronograma de execução e termos operacionais podem sofrer alterações substanciais ou até mesmo inviabilização.</p>
+</AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-7">
                     <AccordionTrigger>Quando e como poderei resgatar a água física correspondente aos meus tokens HWT?</AccordionTrigger>
                     <AccordionContent>
-                      A previsão para o início da possibilidade de resgate da água física é a partir do final de 2026. Os detalhes exatos sobre o processo de resgate, logística, custos de envio (se aplicável) e os locais ou métodos de coleta serão comunicados oficialmente à medida que o projeto avançar para essa fase.
+A previsão para o início da possibilidade de resgate da água física é a partir do final de 2028, com as operações da fábrica de envase próxima à Fonte Hanuman, no município de Niquelândia.  Os detalhes exatos sobre o processo de resgate, logística, custos de envio (se aplicável) e os locais ou métodos de coleta serão comunicados oficialmente à medida que o projeto avançar para essa fase.
+A ordem de preferência para resgate da água segue a cronologia de compra pública do token originariamente na Plataforma Hanuman Water Token. O pedido de resgate deve ser feito com um prazo mínimo de antecedência de 90 (noventa) dias. As compras do HWT feitas na fase da pré-venda podem solicitar o resgate com prazo mínimo de 30 (trinta) dias. Todas entregas seguirão a capacidade e o operacional físico administrativo e regulatório determinado para a produção da Fonte.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-8">
@@ -753,9 +823,96 @@ export default function LandingPage() {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-10">
-                    <AccordionTrigger>Como o projeto HanumanWaterToken lida com a sustentabilidade da Fonte Hanuman?</AccordionTrigger>
+                    <AccordionTrigger>Como o projeto HanumaWaterToken lida com a sustentabilidade da Fonte Hanuman?</AccordionTrigger>
                     <AccordionContent>
-                      A sustentabilidade da Fonte Hanuman é uma prioridade. Realizamos estudos e implementamos práticas para garantir que a exploração da água seja feita de forma responsável, respeitando os ciclos naturais de reposição da fonte e o meio ambiente local. Parte dos recursos do projeto pode ser destinada à preservação e manutenção da área da fonte.
+<p><b>O projeto HWT foi estruturado com base em rigorosos fundamentos científicos e tecnológicos para garantir a sustentabilidade a longo prazo da Fonte Hanuman, combinando conservação ambiental, responsabilidade social e inovação tecnológica.</b></p>
+
+<ol className="list-decimal ml-6 space-y-2">
+  <li>
+    <b>Fundamentos Científicos Comprovados</b><br/>
+    <ul className="list-disc ml-6">
+      <li>Estudos universitários conduzidos pelo Instituto de Geociências da Universidade de Brasília (IG-UnB), publicados na revista Elsevier "Groundwater Sustainable and Development" (2022).</li>
+      <li>Reserva Explotável Anual (RExA): 3,77 milhões de m³/ano, estabelecendo limites conservadores para extração sustentável.</li>
+      <li>Reserva Total Permanente: 75,4 milhões de m³, garantindo disponibilidade para gerações futuras.</li>
+    </ul>
+  </li>
+  <li>
+    <b>Exploração Ultra-Conservadora</b><br/>
+    <ul className="list-disc ml-6">
+      <li>Pré-venda HWT: Apenas 100.000 m³ (0,13% da Reserva Total Permanente).</li>
+      <li>Produção do Poço Hanuman I: 485.000 m³/ano (apenas 12,9% da capacidade renovável anual).</li>
+      <li>Margem de Segurança: Utilização de apenas 2,65% da RExA na fase inicial.</li>
+      <li>A Hanuman Minas Ltda já obteve autorização da SEMAD-GO para a captação diária de 1.330 m³ (485.000 m³/ano) da Fonte Hanuman I.</li>
+    </ul>
+  </li>
+  <li>
+    <b>Governança Descentralizada e Transparente</b><br/>
+    <ul className="list-disc ml-6">
+      <li>Contratos inteligentes: Limitação automática da emissão de tokens pela RExA.</li>
+      <li>Monitoramento em tempo real: Sistema integrado à blockchain registra volumes extraídos e níveis piezométricos.</li>
+      <li>Revisões periódicas: Dados transparentes embasam ajustes na RExA para manter equilíbrio hídrico.</li>
+    </ul>
+  </li>
+  <li>
+    <b>Economia Circular e Impacto Socioambiental</b><br/>
+    <ul className="list-disc ml-6">
+      <li>Nova economia distributiva: Integração com cadeias produtivas locais no Cerrado.</li>
+      <li>Parcerias estratégicas: Colaboração com OSCIPs como a Pulsar Vida para desenvolvimento comunitário.</li>
+      <li>Arranjos produtivos: Cosmecêuticos, bebidas naturais e medicina integrativa na Chapada dos Veadeiros.</li>
+    </ul>
+  </li>
+  <li>
+    <b>Inovação Tecnológica Sustentável</b><br/>
+    <ul className="list-disc ml-6">
+      <li>Pesquisas de ponta: Estudos em neurociência quântica, tecnologias limpas e memória molecular.</li>
+      <li>Protocolos científicos: Publicações em revistas indexadas garantem transparência.</li>
+      <li>Aplicações futuras: Potencial uso em computação quântica e tecnologias emergentes.</li>
+    </ul>
+  </li>
+  <li>
+    <b>Compromisso ESG</b><br/>
+    O HWT representa um modelo pioneiro de tokenização de recursos naturais, alinhado aos critérios ESG (Environmental, Social, Governance), promovendo conservação do Patrimônio da Humanidade UNESCO e desenvolvimento sustentável regional.
+  </li>
+</ol>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-11">
+                    <AccordionTrigger className="whitespace-normal text-left">Como posso fazer o resgate do HWT antes do início das operações da indústria de envase da Fonte Hanuman, em Niquelândia?</AccordionTrigger>
+                    <AccordionContent>
+<p><b>Embora a operação completa de envase esteja prevista para o final de 2028, existe a possibilidade de resgate antecipado do HWT caso a ANM conceda autorização para exploração comercial da água da Fonte Hanuman I (processo ANM n. 860/360/2017) por meio de Guia de Utilização (GU).</b></p>
+
+<p>A <b>Guia de Utilização</b> é um instrumento regulatório comum no setor minerário, permitindo a exploração comercial de recursos minerais antes da concessão definitiva da Portaria de Lavra, sendo utilizada para minimizar custos de pesquisa. No entanto, águas minerais e termais atualmente não constam na lista de minerais autorizados para GU. Por isso, a Hanuman Minas Ltda protocolou requerimento específico junto à ANM para análise do caso da Água Hanuman, destacando sua multifuncionalidade e potencial para impulsionar arranjos produtivos e serviços na Chapada dos Veadeiros.</p>
+
+<p><b>Se a solicitação for deferida</b>, os detentores de HWT poderão solicitar o resgate antecipado da água para utilização como matéria-prima em:</p>
+<ul className="list-disc ml-6">
+  <li>Produção de cosmecêuticos e dermocosméticos</li>
+  <li>Produção de bebidas funcionais (kombucha, sucos naturais, cervejas artesanais, cafés gourmet)</li>
+  <li>Fornecimento para restaurantes e alta gastronomia</li>
+  <li>Produtos de uso externo e aplicações terapêuticas</li>
+</ul>
+
+<p><b>Processo de Solicitação:</b> Anúncios oficiais sobre a autorização da ANM e abertura do prazo para solicitação de resgate serão divulgados em nossos canais oficiais.</p>
+
+<p className="mt-2"><b>Importante:</b> A exploração mineral por Guia de Utilização estará sempre condicionada à conformidade com todas as licenças e ao atendimento de todas as exigências técnicas e sanitárias aplicáveis.</p>
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-12">
+                    <AccordionTrigger>Qual o compromisso para transparência, governança e comunicação?</AccordionTrigger>
+                    <AccordionContent>
+<ol className="list-decimal ml-6 space-y-2">
+  <li>
+    <b>Transparência Informacional</b><br/>
+    <p>A Hanuman Minas Ltda. compromete-se a fornecer informações claras, precisas e completas sobre o HWT, as operações da fonte mineral, os termos de utilização e os riscos envolvidos, sempre utilizando linguagem acessível e em conformidade com o Código de Defesa do Consumidor e as melhores práticas de mercado.</p>
+  </li>
+  <li>
+    <b>Monitoramento Regulatório Contínuo</b><br/>
+    <p>Reconhecendo a natureza dinâmica do ambiente regulatório para ativos virtuais, a empresa manterá monitoramento ativo das mudanças legislativas e normativas no Brasil e em outras jurisdições relevantes, adaptando suas práticas operacionais sempre que necessário para garantir a manutenção da conformidade.</p>
+  </li>
+  <li>
+    <b>Comunicação com Stakeholders</b><br/>
+    <p>Serão estabelecidos canais de comunicação adequados para manter os detentores de tokens informados sobre desenvolvimentos significativos do projeto, mudanças regulatórias relevantes e quaisquer circunstâncias que possam afetar seus direitos ou a viabilidade do empreendimento.</p>
+  </li>
+</ol>
                     </AccordionContent>
                   </AccordionItem>
                 </>
