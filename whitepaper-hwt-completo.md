@@ -113,6 +113,7 @@ A água da Fonte Hanuman possui comprovação técnica independente:
 - **ANM:** Parecer n. 134/2023-DEFIS-GO – Classificação para produção e envase
 - **ANM:** Parecer n. 78/2025/DEFIS-GO – Água declarada "adequada para consumo humano"
 - **ANM:** Teste de Produção Comercial: 1.330 m³/dia autorizados
+- **SEMAD-GO:** Termo de Autorização de Captação da Secretaria de Meio Ambiente e Desenvolvimento Sustentável do Estado de Goiás (SEMAD-GO) -  Temporária de um ano (até a definitiva) de Captação de Água do Poço/Fonte Hanuman I - 1.330 m3/Dia, 485.000 m3/Ano (Proc. n. PRE0018172/2025) 
 
 [Link para Parecer 134/2023](https://www.gov.br/anm/pt-br/assuntos/noticias/Parecer-n-134-2023-06-26-2023-Cumpride-Parecer-Jazida-Hanuman.pdf)
 
@@ -692,6 +693,8 @@ Este reconhecimento fundamentou-se em relatório técnico elaborado pelos geólo
 **Inclusão em Mapeamento Oficial:** A Jazida Hanuman foi incluída no mapeamento oficial de interesse das águas termais da Chapada dos Veadeiros elaborado pela GEDAM/SIC-GO, constando na poligonal do polo termal reconhecido pelo Estado. Esta inclusão oficial demonstra o alinhamento do projeto com as políticas públicas estaduais de desenvolvimento do setor mineral e turístico.
 
 **Implicações Regulatórias:** O reconhecimento institucional do Estado de Goiás fortalece a posição jurídica do projeto perante órgãos reguladores federais e reduz riscos relacionados a questionamentos sobre a viabilidade ou adequação do empreendimento, conferindo legitimidade institucional adicional ao HWT.
+
+**Autorização de Captação de Água da Secretaria de Meio Ambiente e Desenvolvimento Sustentavel do Estado de Goiás – SEMAD-GO:** Autorização de Captação das  Secretaria de Meio Ambiente e Desenvolvimento Sustentável do Estado de Goiás (SEMAD-GO) -  Temporária de um ano (até a definitiva) de Captação de Água do Poço/Fonte Hanuman I - 1.330 m3/Dia, 485.000 m3/Ano (Proc. n. PRE0018172/2025)
 
 ### 10.2 Natureza Jurídica do Hanuman Water Token (HWT)
 
