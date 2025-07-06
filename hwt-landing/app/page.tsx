@@ -940,7 +940,7 @@ A ordem de preferência para resgate da água segue a cronologia de compra públ
         <section className="py-16 md:py-24 bg-white">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter text-primary text-center mb-12">
-              Nossas Fontes de Água
+              Área da Jazida Hanuman
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="relative group overflow-hidden rounded-lg">
