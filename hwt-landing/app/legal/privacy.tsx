@@ -8,14 +8,13 @@ export default function PrivacyPolicy() {
       <h2 className="text-xl font-semibold mt-6 mb-2">1. Coleta de Dados</h2>
       <p className="mb-4">Coletamos apenas os dados necessários para a operação do sistema, como e-mail para autenticação, endereço de carteira Ethereum para transações e eventuais informações de KYC, exclusivamente para o resgate físico da água.</p>
       <h2 className="text-xl font-semibold mt-6 mb-2">2. Uso dos Dados</h2>
-      <p className="mb-4">Os dados coletados são utilizados para:
-        <ul className="list-disc ml-6">
-          <li>Processar compras e resgates de tokens HWT</li>
-          <li>Cumprir obrigações legais e regulatórias</li>
-          <li>Garantir a segurança e integridade da plataforma</li>
-          <li>Comunicar informações relevantes aos usuários</li>
-        </ul>
-      </p>
+      <p className="mb-2">Os dados coletados são utilizados para:</p>
+      <ul className="list-disc ml-6 mb-4">
+        <li>Processar compras e resgates de tokens HWT</li>
+        <li>Cumprir obrigações legais e regulatórias</li>
+        <li>Garantir a segurança e integridade da plataforma</li>
+        <li>Comunicar informações relevantes aos usuários</li>
+      </ul>
       <h2 className="text-xl font-semibold mt-6 mb-2">3. Compartilhamento</h2>
       <p className="mb-4">Não compartilhamos dados pessoais com terceiros, exceto quando exigido por lei ou para cumprimento de obrigações regulatórias.</p>
       <h2 className="text-xl font-semibold mt-6 mb-2">4. Segurança</h2>

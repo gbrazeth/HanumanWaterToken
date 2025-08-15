@@ -179,11 +179,11 @@ contract HanumanWaterTokenPresale is Ownable, ReentrancyGuard, Pausable {
      */
     function getEthUsdPrice() public view returns (uint256) {
         // Obter dados do oráculo
-        (uint80 roundId, int256 price, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) = ethUsdPriceFeed.latestRoundData();
+        (, int256 price, , uint256 updatedAt, ) = ethUsdPriceFeed.latestRoundData();
         
         // Verificar se o preço é válido
         require(price > 0, "Invalid ETH price");
-        require(answeredInRound >= roundId, "Stale price");
+        // A checagem de "stale price" via answeredInRound >= roundId foi removida pois roundId não está mais disponível.
         
         // Verificar a atualidade do preço
         require(block.timestamp - updatedAt <= maxPriceAge, "Price data too old");

@@ -13,13 +13,13 @@ import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "../../config/contract";
 // Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
 
-// Config Sepolia para uso no switchEthereumChain
+// Config Mainnet para uso no switchEthereumChain
 const NETWORK_CONFIG = {
-  chainId: '0xaa36a7', // 11155111 em hexadecimal
-  chainName: 'Sepolia Testnet',
-  nativeCurrency: { name: 'SepoliaETH', symbol: 'ETH', decimals: 18 },
-  rpcUrls: ['https://sepolia.infura.io/v3/127537b6f2bd41629ed69cc64efef98f'],
-  blockExplorerUrls: ['https://sepolia.etherscan.io']
+  chainId: '0x1', // 1 em hexadecimal
+  chainName: 'Ethereum Mainnet',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: [process.env.NEXT_PUBLIC_MAINNET_RPC_URL || `https://mainnet.infura.io/v3/${process.env.MAINNET_INFURA_KEY}`],
+  blockExplorerUrls: ['https://etherscan.io']
 };
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ArrowLeft, AlertCircle, Check } from "lucide-react"
@@ -371,9 +371,17 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
     }, 2000)
   }
 
+  const MIN_TOKENS = 10;
+
   // Função para processar o pagamento com base no método selecionado
   const processPayment = () => {
     setError(null)
+
+    // Validação do valor mínimo
+    if (Number(tokenAmount) < MIN_TOKENS) {
+      setError(`A quantidade mínima para compra é ${MIN_TOKENS} tokens.`)
+      return;
+    }
 
     switch (paymentMethod) {
       case "eth":

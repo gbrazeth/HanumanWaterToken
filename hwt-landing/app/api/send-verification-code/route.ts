@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       // Enviar o email com o código usando seu domínio verificado
       // Substitua "noreply@seudominio.com" pelo seu endereço de email real
       const { data, error } = await resend.emails.send({
-        from: "Hanuman Water Token <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM || "Hanuman Water Token <onboarding@resend.dev>",
         to: email,
         subject: "Seu código de verificação HWT",
         html: `

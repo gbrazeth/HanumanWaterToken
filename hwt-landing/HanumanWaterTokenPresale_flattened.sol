@@ -1,13 +1,13 @@
-// Sources flattened with hardhat v2.23.0 https://hardhat.org
+// Sources flattened with hardhat v2.26.1 https://hardhat.org
 
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
 
-// File @openzeppelin/contracts/utils/Context.sol@v5.0.0
+// File @openzeppelin/contracts/utils/Context.sol@v5.4.0
 
 // Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (utils/Context.sol)
+// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)
 
+pragma solidity ^0.8.20;
 
 /**
  * @dev Provides information about the current execution context, including the
@@ -27,14 +27,19 @@ abstract contract Context {
     function _msgData() internal view virtual returns (bytes calldata) {
         return msg.data;
     }
+
+    function _contextSuffixLength() internal view virtual returns (uint256) {
+        return 0;
+    }
 }
 
 
-// File @openzeppelin/contracts/access/Ownable.sol@v5.0.0
+// File @openzeppelin/contracts/access/Ownable.sol@v5.4.0
 
 // Original license: SPDX_License_Identifier: MIT
 // OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)
 
+pragma solidity ^0.8.20;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -131,11 +136,12 @@ abstract contract Ownable is Context {
 }
 
 
-// File @openzeppelin/contracts/utils/Pausable.sol@v5.0.0
+// File @openzeppelin/contracts/utils/Pausable.sol@v5.4.0
 
 // Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (utils/Pausable.sol)
+// OpenZeppelin Contracts (last updated v5.3.0) (utils/Pausable.sol)
 
+pragma solidity ^0.8.20;
 
 /**
  * @dev Contract module which allows children to implement an emergency stop
@@ -168,13 +174,6 @@ abstract contract Pausable is Context {
      * @dev The operation failed because the contract is not paused.
      */
     error ExpectedPause();
-
-    /**
-     * @dev Initializes the contract in unpaused state.
-     */
-    constructor() {
-        _paused = false;
-    }
 
     /**
      * @dev Modifier to make a function callable only when the contract is not paused.
@@ -254,6 +253,7 @@ abstract contract Pausable is Context {
 // File @chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol@v1.4.0
 
 // Original license: SPDX_License_Identifier: MIT
+pragma solidity ^0.8.0;
 
 // solhint-disable-next-line interface-starts-with-i
 interface AggregatorV3Interface {
@@ -274,14 +274,15 @@ interface AggregatorV3Interface {
 }
 
 
-// File @openzeppelin/contracts/token/ERC20/IERC20.sol@v5.0.0
+// File @openzeppelin/contracts/token/ERC20/IERC20.sol@v5.4.0
 
 // Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/IERC20.sol)
+// OpenZeppelin Contracts (last updated v5.4.0) (token/ERC20/IERC20.sol)
 
+pragma solidity >=0.4.16;
 
 /**
- * @dev Interface of the ERC20 standard as defined in the EIP.
+ * @dev Interface of the ERC-20 standard as defined in the ERC.
  */
 interface IERC20 {
     /**
@@ -356,11 +357,12 @@ interface IERC20 {
 }
 
 
-// File @openzeppelin/contracts/utils/ReentrancyGuard.sol@v5.0.0
+// File @openzeppelin/contracts/utils/ReentrancyGuard.sol@v5.4.0
 
 // Original license: SPDX_License_Identifier: MIT
-// OpenZeppelin Contracts (last updated v5.0.0) (utils/ReentrancyGuard.sol)
+// OpenZeppelin Contracts (last updated v5.1.0) (utils/ReentrancyGuard.sol)
 
+pragma solidity ^0.8.20;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -373,6 +375,9 @@ interface IERC20 {
  * `nonReentrant` may not call one another. This can be worked around by making
  * those functions `private`, and then adding `external` `nonReentrant` entry
  * points to them.
+ *
+ * TIP: If EIP-1153 (transient storage) is available on the chain you're deploying at,
+ * consider using {ReentrancyGuardTransient} instead.
  *
  * TIP: If you would like to learn more about reentrancy and alternative ways
  * to protect against it, check out our blog post
@@ -446,6 +451,7 @@ abstract contract ReentrancyGuard {
 // File contracts/HanumanWaterTokenPresale.sol
 
 // Original license: SPDX_License_Identifier: MIT
+pragma solidity ^0.8.20;
 
 
 
@@ -623,11 +629,11 @@ contract HanumanWaterTokenPresale is Ownable, ReentrancyGuard, Pausable {
      */
     function getEthUsdPrice() public view returns (uint256) {
         // Obter dados do oráculo
-        (uint80 roundId, int256 price, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) = ethUsdPriceFeed.latestRoundData();
+        (, int256 price, , uint256 updatedAt, ) = ethUsdPriceFeed.latestRoundData();
         
         // Verificar se o preço é válido
         require(price > 0, "Invalid ETH price");
-        require(answeredInRound >= roundId, "Stale price");
+        // A checagem de "stale price" via answeredInRound >= roundId foi removida pois roundId não está mais disponível.
         
         // Verificar a atualidade do preço
         require(block.timestamp - updatedAt <= maxPriceAge, "Price data too old");

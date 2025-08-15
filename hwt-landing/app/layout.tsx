@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Hanuman Water Token (HWT)',
+  description: 'Hanuman Water Token - Presale Platform',
   generator: 'v0.dev',
 }
 
@@ -14,6 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </head>
       <body>{children}</body>
     </html>
   )

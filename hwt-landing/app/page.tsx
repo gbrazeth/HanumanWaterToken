@@ -32,6 +32,7 @@ const scrollToSection = (elementId: string, offset = 80) => {
 }
 
 export default function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [showMoreFaqs, setShowMoreFaqs] = useState(false);
   const [authDialogOpen, setAuthDialogOpen] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -178,18 +179,19 @@ export default function LandingPage() {
     <div className="flex min-h-screen flex-col bg-logoBg">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-logoBg/95 backdrop-blur supports-[backdrop-filter]:bg-logoBg/60">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/hwt-logo.png"
-              alt="Logo do Hanuman Water Token"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <span className="text-xl font-bold text-primary">HWT</span>
-          </div>
-          <nav className="hidden md:flex gap-6">
+  <div className="container flex h-16 items-center justify-between">
+    <div className="flex items-center gap-2">
+      <Image
+        src="/hwt-logo.png"
+        alt="Logo do Hanuman Water Token"
+        width={40}
+        height={40}
+        className="rounded-full"
+      />
+      <span className="text-xl font-bold text-primary">HWT</span>
+    </div>
+    {/* Menu desktop */}
+    <nav className="hidden md:flex gap-6">
             <Link
               href="#nossa-fonte-de-agua"
               className="text-sm font-medium hover:text-primary"
@@ -231,7 +233,7 @@ export default function LandingPage() {
               Roadmap
             </Link>
             <a
-              href="https://sepolia.etherscan.io/address/0x5244adeB890F905dDa286Dc510afb1a8d63DE5AD"
+              href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
@@ -239,7 +241,7 @@ export default function LandingPage() {
               Contrato HWT
             </a>
             <a
-              href="https://sepolia.etherscan.io/address/0x16949Ae5d2C06393246353883522642A2D999C4b"
+              href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
@@ -257,28 +259,50 @@ export default function LandingPage() {
               FAQ
             </Link>
           </nav>
-          {isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Conta Conectada ({Number(tokenBalance) % 1 === 0 ? Number(tokenBalance) : Number(tokenBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} HWT)
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sair
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button className="bg-primary hover:bg-primary/90" onClick={() => setAuthDialogOpen(true)}>
-              Conectar-se
-            </Button>
-          )}
-        </div>
-      </header>
+    {/* Botão hamburguer mobile */}
+    <button
+      className="md:hidden flex items-center px-2 py-1"
+      onClick={() => setMenuOpen(!menuOpen)}
+      aria-label="Abrir menu"
+    >
+      <svg className="w-7 h-7 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+    {isLoggedIn ? (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
+            <User className="h-4 w-4" />
+            Conta Conectada ({Number(tokenBalance) % 1 === 0 ? Number(tokenBalance) : Number(tokenBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} HWT)
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+            <LogOut className="h-4 w-4 mr-2" />
+            Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ) : (
+      <Button className="bg-primary hover:bg-primary/90 ml-2" onClick={() => setAuthDialogOpen(true)}>
+        Conectar-se
+      </Button>
+    )}
+  </div>
+  {/* Menu mobile */}
+  {menuOpen && (
+    <nav className="flex flex-col md:hidden bg-white/95 shadow-md px-4 py-2 z-50 absolute w-full left-0 top-16 border-b">
+      <Link href="#nossa-fonte-de-agua" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('nossa-fonte-de-agua')}}>Sobre</Link>
+      <Link href="#benefits" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('benefits')}}>Benefícios</Link>
+      <Link href="#tokenomics" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('tokenomics', 120)}}>Tokenomics</Link>
+      <Link href="#roadmap" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('roadmap')}}>Roadmap</Link>
+      <a href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8" target="_blank" rel="noopener noreferrer" className="py-2 border-b text-primary font-medium">Contrato HWT</a>
+      <a href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d" target="_blank" rel="noopener noreferrer" className="py-2 border-b text-primary font-medium">Contrato Presale</a>
+      <Link href="#faq" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('faq')}}>FAQ</Link>
+    </nav>
+  )}
+</header>
 
       <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} onLoginSuccess={handleLoginSuccess} />
 
@@ -373,7 +397,7 @@ export default function LandingPage() {
                     </p>
                     <div className="space-y-1">
                       <p className="font-medium">Lançamento da Pré-Venda</p>
-                      <p className="text-muted-foreground">Período: 10/07/2025</p>
+                      <p className="text-muted-foreground">Período: 18/08/2025</p>
                       <p className="text-muted-foreground">Meta: Venda mínima de 100.000 m³ em 12 meses.</p>
                     </div>
                   </div>
@@ -1028,7 +1052,7 @@ A ordem de preferência para resgate da água segue a cronologia de compra públ
                   </a>
                 </li>
                 <li>
-                  <a href="https://sepolia.etherscan.io/address/0x5244adeB890F905dDa286Dc510afb1a8d63DE5AD" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     Contrato Inteligente
                   </a>
                 </li>
