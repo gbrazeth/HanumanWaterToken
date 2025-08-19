@@ -397,7 +397,7 @@ export default function LandingPage() {
                     </p>
                     <div className="space-y-1">
                       <p className="font-medium">Lançamento da Pré-Venda</p>
-                      <p className="text-muted-foreground">Período: 18/08/2025</p>
+                      <p className="text-muted-foreground">Período: 28/08/2025</p>
                       <p className="text-muted-foreground">Meta: Venda mínima de 100.000 m³ em 12 meses.</p>
                     </div>
                   </div>

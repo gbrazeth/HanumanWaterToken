@@ -542,149 +542,53 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                   </CardHeader>
                   <CardContent>
                     <Tabs defaultValue="crypto" className="w-full">
-                      <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="crypto">Criptomoedas</TabsTrigger>
-                        <TabsTrigger value="fiat">Moeda Fiduciária</TabsTrigger>
-                      </TabsList>
-
-                      <TabsContent value="crypto" className="space-y-4 mt-4">
-                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                          <div className="flex items-center space-x-2 border rounded-md p-3">
-                            <RadioGroupItem value="eth" id="eth" />
-                            <Label htmlFor="eth" className="flex-1 cursor-pointer">
-                              <div className="flex justify-between items-center">
-                                <span>Ethereum (ETH)</span>
-                                {isConnected && (
-                                  <span className="text-sm text-muted-foreground">
-                                    Saldo: {Number.parseFloat(ethBalance).toFixed(4)} ETH
-                                  </span>
-                                )}
-                              </div>
-                            </Label>
-                          </div>
-
-                          <div className="flex items-center space-x-2 border rounded-md p-3">
-                            <RadioGroupItem value="usdt" id="usdt" />
-                            <Label htmlFor="usdt" className="flex-1 cursor-pointer">
-                              <div className="flex justify-between items-center">
-                                <span>USDT</span>
-                                {isConnected && (
-                                  <span className="text-sm text-muted-foreground">
-                                    Saldo: {Number.parseFloat(usdtBalance).toFixed(2)} USDT
-                                  </span>
-                                )}
-                              </div>
-                            </Label>
-                          </div>
-                        </RadioGroup>
-
-                        {!isConnected ? (
-                          <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
-                            {isLoading ? "Conectando..." : "Conectar Carteira"}
-                          </Button>
-                        ) : (
-                          <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
-                            {isLoading ? "Processando..." : "Comprar Tokens"}
-                          </Button>
-                        )}
-                      </TabsContent>
-
-                      <TabsContent value="fiat" className="space-y-4 mt-4">
-                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                          <div className="flex items-center space-x-2 border rounded-md p-3">
-                            <RadioGroupItem value="pix" id="pix" />
-                            <Label htmlFor="pix" className="flex-1 cursor-pointer">
-                              PIX
-                            </Label>
-                          </div>
-
-                          <div className="flex items-center space-x-2 border rounded-md p-3">
-                            <RadioGroupItem value="credit_card" id="credit_card" />
-                            <Label htmlFor="credit_card" className="flex-1 cursor-pointer">
-                              Cartão de Crédito
-                            </Label>
-                          </div>
-                        </RadioGroup>
-
-                        {paymentMethod === "pix" && (
-                          <div className="space-y-4">
-                            {pixCode ? (
-                              <div className="flex flex-col items-center p-4 border rounded-md">
-                                <div className="mb-4 bg-white p-4 rounded-md">
-                                  <Image
-                                    src="/hwt-logo.png"
-                                    alt="Código QR PIX"
-                                    width={200}
-                                    height={200}
-                                    className="mx-auto"
-                                  />
-                                </div>
-                                <p className="text-sm text-center text-muted-foreground mb-2">
-                                  Escaneie o código QR com seu aplicativo bancário ou copie o código PIX abaixo:
-                                </p>
-                                <div className="w-full p-2 bg-muted rounded-md text-xs overflow-auto">
-                                  <code>{pixCode}</code>
-                                </div>
-                              </div>
-                            ) : (
-                              <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
-                                {isLoading ? "Gerando código..." : "Gerar Código PIX"}
-                              </Button>
-                            )}
-                          </div>
-                        )}
-
-                        {paymentMethod === "credit_card" && (
-                          <div className="space-y-4">
-                            <div className="space-y-2">
-                              <Label htmlFor="card-number">Número do Cartão</Label>
-                              <Input
-                                id="card-number"
-                                placeholder="0000 0000 0000 0000"
-                                value={cardNumber}
-                                onChange={(e) => setCardNumber(e.target.value)}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <Label htmlFor="card-name">Nome no Cartão</Label>
-                              <Input
-                                id="card-name"
-                                placeholder="Nome completo"
-                                value={cardName}
-                                onChange={(e) => setCardName(e.target.value)}
-                              />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <Label htmlFor="card-expiry">Data de Validade</Label>
-                                <Input
-                                  id="card-expiry"
-                                  placeholder="MM/AA"
-                                  value={cardExpiry}
-                                  onChange={(e) => setCardExpiry(e.target.value)}
-                                />
-                              </div>
-
-                              <div className="space-y-2">
-                                <Label htmlFor="card-cvc">CVC</Label>
-                                <Input
-                                  id="card-cvc"
-                                  placeholder="123"
-                                  value={cardCVC}
-                                  onChange={(e) => setCardCVC(e.target.value)}
-                                />
-                              </div>
-                            </div>
-
-                            <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
-                              {isLoading ? "Processando..." : "Pagar com Cartão"}
-                            </Button>
-                          </div>
-                        )}
-                      </TabsContent>
-                    </Tabs>
+  <TabsList className="grid w-full grid-cols-2">
+    <TabsTrigger value="crypto">Criptomoedas</TabsTrigger>
+    <TabsTrigger value="fiat">Moeda Fiduciária</TabsTrigger>
+  </TabsList>
+  <TabsContent value="crypto" className="space-y-4 mt-4">
+  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+    <div className="flex items-center space-x-2 border rounded-md p-3">
+      <RadioGroupItem value="eth" id="eth" />
+      <Label htmlFor="eth" className="flex-1 cursor-pointer">
+        <div className="flex justify-between items-center">
+          <span>Ethereum (ETH)</span>
+          {isConnected && (
+            <span className="text-sm text-muted-foreground">
+              Saldo: {Number.parseFloat(ethBalance).toFixed(4)} ETH
+            </span>
+          )}
+        </div>
+      </Label>
+    </div>
+  </RadioGroup>
+  {!isConnected ? (
+    <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
+      {isLoading ? "Conectando..." : "Conectar Carteira"}
+    </Button>
+  ) : (
+    <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
+      {isLoading ? "Processando..." : "Comprar Tokens"}
+    </Button>
+  )}
+</TabsContent>
+  <TabsContent value="fiat" className="space-y-4 mt-4">
+    <RadioGroup className="space-y-3">
+      <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
+        <RadioGroupItem value="pix" id="pix" disabled />
+        <Label htmlFor="pix" className="flex-1 cursor-not-allowed">
+          PIX <span className="ml-2 text-xs text-muted-foreground">(Em breve estará disponível)</span>
+        </Label>
+      </div>
+      <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
+        <RadioGroupItem value="credit_card" id="credit_card" disabled />
+        <Label htmlFor="credit_card" className="flex-1 cursor-not-allowed">
+          Cartão de Crédito <span className="ml-2 text-xs text-muted-foreground">(Em breve estará disponível)</span>
+        </Label>
+      </div>
+    </RadioGroup>
+  </TabsContent>
+</Tabs>
 
                     {error && (
                       <Alert variant="destructive" className="mt-4">
