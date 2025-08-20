@@ -16,7 +16,7 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
     // Constantes
     uint256 public constant TOKEN_PRICE_USD = 2;
     uint256 public constant MIN_REDEMPTION_AMOUNT = 100; // 100 litros
-    uint256 public constant MAX_SUPPLY = 500_000_000 * 10**18; // 500 milhões de tokens
+    uint256 public constant MAX_SUPPLY = 100_000_000 * 10**18; // 100 milhões de tokens, conforme o tokenomics
     uint256 public constant PUBLIC_ALLOCATION_PERCENTAGE = 80; // 80% para distribuição pública
     
     // Variáveis de estado
@@ -187,6 +187,10 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
         }
     }
 
+    /* DEPRECIADO: Funções de mint sob demanda representam um risco de segurança
+       e contradizem um modelo de fornecimento fixo. A melhor prática é criar (mintar)
+       o fornecimento total no construtor.
+
     /**
      * @dev Emite tokens durante o período de pré-venda
      * @param to Endereço do destinatário
@@ -273,6 +277,8 @@ contract HanumanWaterTokenV2 is ERC20, ERC20Burnable, Ownable, Pausable, Reentra
         totalConsultantsAllocation += amount;
         _mint(to, amount);
     }
+
+    */ // Fim do bloco de funções de mint depreciadas
 
     /**
      * @dev Registra uma compra de tokens (para compras off-chain)
