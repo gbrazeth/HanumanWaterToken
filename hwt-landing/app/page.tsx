@@ -350,6 +350,16 @@ export default function LandingPage() {
                   >
                     Saiba Mais
                   </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="border-primary text-primary hover:bg-primary/10"
+                    asChild
+                  >
+                    <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer">
+                      Site Institucional
+                    </Link>
+                  </Button>
                 </div>
               </div>
               <div className="flex items-center justify-center">
@@ -381,15 +391,15 @@ export default function LandingPage() {
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter text-primary">Nossa Fonte de Água</h2>
                 <p className="text-muted-foreground">
-                  A Fonte de Água Hanuman é uma jazida natural de água mineral alcalina e rica em nutrientes, originária de chuvas que caíram há mais de 9.000 anos no solo do Parque Nacional da Chapada dos Veadeiros (UNESCO), no Estado de Goiás. O Hanuman Water Token (HWT) transforma esse recurso único em um ativo digital rastreável via Blockchain, garantindo transparência e segurança no seu resgate. Cada 1 HWT representa 1 litro de água (1.000 ml), permitindo que esse bem vital seja gerenciado, negociado e utilizado de forma eficiente e sustentável.
+                  A Fonte de Água Hanuman é uma jazida natural de água mineral alcalina e rica em nutrientes, originária de chuvas que caíram há mais de 9.000 anos no solo do Parque Nacional da Chapada dos Veadeiros (UNESCO), no Estado de Goiás. O Hanuman Water Token (HWT) transforma esse recurso único em um ativo digital rastreável via Blockchain, garantindo transparência e segurança no seu resgate. Cada 1 HWT representa 1 litro de água (1.000 ml), permitindo que esse bem vital seja gerenciado e utilizado de forma eficiente e sustentável.
                 </p>
                 <p className="text-muted-foreground">
-                  Além de democratizar o acesso a uma água totalmente isenta de contaminantes da era moderna, filtrada e isolada por milênios nas formações geológicas de 1,75 bilhão de anos da Chapada dos Veadeiros, o HWT traz liquidez ao mercado e assegura a integridade da cadeia de suprimentos por meio da tecnologia Blockchain. Esse ecossistema inovador une hidrogeologia e tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam da preservação e distribuição responsável de uma água com características únicas e exclusivas no planeta.
+                  Além de democratizar o acesso a uma água totalmente isenta de contaminantes da era moderna, filtrada e isolada por milênios nas formações geológicas de 1,75 bilhão de anos da Chapada dos Veadeiros, o HWT assegura a integridade da cadeia de suprimentos por meio da tecnologia Blockchain. Esse ecossistema inovador une hidrogeologia e tecnologia, criando um novo modelo sustentável de governança, onde os detentores do token participam da preservação e distribuição responsável de uma água com características únicas e exclusivas no planeta.
                 </p>
                 <div className="mt-8 p-6 max-w-2xl mx-auto" style={{ backgroundColor: '#f4f8fb' }}>
 
                   <h3 className="text-xl font-bold text-primary">
-                    Hanuman Water Token (HWT) – Investindo no Futuro da Água Termal
+                    Hanuman Water Token (HWT) – Acessando o Futuro da Água Termal
                   </h3>
                   <div className="space-y-2">
                     <p className="text-muted-foreground">
@@ -475,54 +485,74 @@ export default function LandingPage() {
               <Card>
                 <CardContent className="p-6 text-center">
                   <Star className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Acesso VIP da 1ª Pré-Venda</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Resgate Prioritário</h3>
                   <p className="text-muted-foreground text-sm">
-                    Tenha preferência e prioridade de acesso aos lotes de água da Fonte Hanuman e aos possíveis empreendimentos médicos terapêuticos do ecossistema hipertermal Jazida Hanuman - Chapada dos Veadeiros.
+                    Direito de resgate prioritário durante períodos de alta demanda respeitando a ordem cronológica de compra do HWT.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <ChevronRight className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Preferência para Novas Ofertas</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Preferência de compra para ofertas públicas futuras de novos tokens de água da Jazida e Poço/Fonte Hanuman I, observada a ordem cronológica e quantitativo de compra do HWT.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <Percent className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Benefícios e Descontos Exclusivos </h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Descontos Exclusivos</h3>
                   <p className="text-muted-foreground text-sm">
-                    Economize na compra da Água Hanuman e possíveis serviços futuros do ecossistema. Compradores do HWT na 1ª Pré-Venda estão isentos dos custos de envase e embalagem para resgate na fábrica próxima à Fonte.
+                    Vantagens em produtos e serviços do ecossistema Hanuman.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <CalendarDays className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Eventos e Experiências</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Eventos Especiais</h3>
                   <p className="text-muted-foreground text-sm">
-                    Participe de degustações, visitas à região hidrogeológica da Jazida Hanuman e encontros exclusivos da comunidade.
+                    Participação em eventos exclusivos para detentores de tokens.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <Users className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Comunidade Premium</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Comunidade</h3>
                   <p className="text-muted-foreground text-sm">
-                    Junte-se a um grupo seleto de investidores e entusiastas da água mineral e blockchain.
+                    Acesso a uma comunidade de entusiastas.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
                   <Gift className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Benefícios por Engajamento</h3>
+                  <h3 className="text-xl font-bold mb-2 text-primary">Recompensas por Engajamento</h3>
                   <p className="text-muted-foreground text-sm">
-                    Obtenha benefícios especiais por pensar e contribuir para o desenvolvimento do sistema HWT.
+                    Benefícios adicionais para participantes ativos do ecossistema.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto mt-8">
+              <Card>
+                <CardContent className="p-6 text-center">
+                  <Leaf className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Suporte à Nova Economia</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Distributiva, Regenerativa, Inclusiva e Sustentável.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 text-center">
-                  <Leaf className="h-12 w-12 mx-auto mb-4 text-primary" />
-                  <h3 className="text-xl font-bold mb-2 text-primary">Apoio à Economia Sustentável e Distributiva</h3>
+                  <Shield className="h-12 w-12 mx-auto mb-4 text-primary" />
+                  <h3 className="text-xl font-bold mb-2 text-primary">Lastro</h3>
                   <p className="text-muted-foreground text-sm">
-                    Ao comprar o HWT você está colaborando para a implantação de um modelo de economia sustentável e distributivo, com arranjos produtivos e negócios inclusivos para a região da Chapada dos Veadeiros.
+                    Lastro em ativo físico tangível e vital. Qualidade cientificamente comprovada do recurso.
                   </p>
                 </CardContent>
               </Card>
@@ -558,7 +588,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span>Fundo de Liquidez e Reservas</span>
+                      <span>Fundo Operacional para Resgate</span>
                       <span>5%</span>
                     </div>
                     <Progress value={5} className="h-2" />
@@ -707,8 +737,7 @@ export default function LandingPage() {
                 <AccordionTrigger>Como posso comprar HWT?</AccordionTrigger>
                 <AccordionContent>
                   Durante a fase de pré-venda, você pode comprar HWT diretamente através da nossa plataforma usando
-                  criptomoeda ou moeda fiduciária. Após o lançamento, o HWT estará disponível nas principais exchanges
-                  descentralizadas. Fique atento aos nossos canais oficiais para informações sobre datas de venda e
+                  criptomoeda ou moeda fiduciária. Fique atento aos nossos canais oficiais para informações sobre datas de venda e
                   instruções detalhadas.
                 </AccordionContent>
               </AccordionItem>
@@ -787,7 +816,7 @@ A utilização de tecnologia blockchain e contratos inteligentes, embora ofereç
 Riscos inerentes à plataforma blockchain escolhida, incluindo congestionamento da rede, volatilidade nas taxas de transação, ataques de 51% ou outras formas de comprometimento da segurança, podem afetar a funcionalidade e confiabilidade do sistema. Adicionalmente, ataques cibernéticos direcionados à plataforma de venda, sistemas de carteiras digitais ou infraestrutura tecnológica do projeto representam ameaças constantes.</p>
 
 <p><b>1.4 Riscos de Mercado e Execução do Projeto</b><br/>
-O valor do HWT em eventuais mercados secundários pode apresentar volatilidade extrema, e não há garantia de existência de liquidez adequada para negociação. A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
+A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
 Atrasos ou falhas na execução do cronograma planejado (roadmap), incluindo a obtenção de licenças, construção de infraestrutura ou desenvolvimento tecnológico, podem comprometer a viabilidade do projeto. A gestão inadequada dos recursos financeiros arrecadados na venda dos tokens representa risco adicional para a sustentabilidade do empreendimento.</p>
 
 <p><b>1.5 Restrições Jurisdicionais e Limitações Geográficas</b><br/>
@@ -809,13 +838,13 @@ A utilização de tecnologia blockchain e contratos inteligentes, embora ofereç
 Riscos inerentes à plataforma blockchain escolhida, incluindo congestionamento da rede, volatilidade nas taxas de transação, ataques de 51% ou outras formas de comprometimento da segurança, podem afetar a funcionalidade e confiabilidade do sistema. Adicionalmente, ataques cibernéticos direcionados à plataforma de venda, sistemas de carteiras digitais ou infraestrutura tecnológica do projeto representam ameaças constantes.</p>
 
 <p><b>1.6.4 Riscos de Mercado e Execução do Projeto</b><br/>
-O valor do HWT em eventuais mercados secundários pode apresentar volatilidade extrema, e não há garantia de existência de liquidez adequada para negociação. A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
+A aceitação do conceito de água mineral tokenizada pelo mercado consumidor permanece incerta, podendo afetar a demanda pelo produto e, consequentemente, a utilidade do token.<br/>
 Atrasos ou falhas na execução do cronograma planejado (roadmap), incluindo a obtenção de licenças, construção de infraestrutura ou desenvolvimento tecnológico, podem comprometer a viabilidade do projeto. A gestão inadequada dos recursos financeiros arrecadados na venda dos tokens representa risco adicional para a sustentabilidade do empreendimento.</p>
 
 <p><b>1.7 Avisos Legais e Disclaimers Obrigatórios</b></p>
 
 <p><b>1.7.1 Aviso de Risco de Investimento</b><br/>
-O HWT constitui token utilitário de risco. Não representa investimento financeiro, participação societária na Hanuman Minas Ltda. ou direito a rendimentos de qualquer natureza. O valor do token pode ser extremamente volátil e não há garantia de liquidez em mercados secundários. Adquirentes podem perder parcial ou integralmente o valor aplicado na aquisição.</p>
+O HWT constitui token utilitário de risco. Não representa investimento financeiro, participação societária na Hanuman Minas Ltda. ou direito a rendimentos de qualquer natureza.</p>
 
 <p><b>1.7.2 Disclaimer de Aconselhamento</b><br/>
 Este documento e quaisquer materiais associados ao HWT não constituem oferta de valor mobiliário, recomendação de investimento, aconselhamento financeiro, legal, tributário ou de qualquer outra natureza. Potenciais adquirentes devem realizar análise independente e consultar profissionais qualificados antes de tomar decisões relacionadas ao HWT.</p>
@@ -837,13 +866,7 @@ A ordem de preferência para resgate da água segue a cronologia de compra públ
                   <AccordionItem value="item-8">
                     <AccordionTrigger>Qual a quantidade mínima de HWT que posso comprar?</AccordionTrigger>
                     <AccordionContent>
-                      Durante a fase de pré-venda, a quantidade mínima de compra é de 1 token por transacao. Porém apenas com 100 tokens HWT que voce conseguira receber a agua . Para mais detalhes sobre como comprar, visite nossa seção de checkout ou entre em contato com nosso suporte.
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-9">
-                    <AccordionTrigger>O projeto tem planos para listagem do HWT em outras exchanges após a pré-venda?</AccordionTrigger>
-                    <AccordionContent>
-                      Sim, após a conclusão da pré-venda e o lançamento oficial do token, temos planos de buscar listagens em exchanges de criptomoedas relevantes para aumentar a liquidez e o acesso ao HWT. Anúncios sobre listagens serão feitos através dos nossos canais oficiais.
+                      Durante a fase de pré-venda, a quantidade mínima para compra são 10 tokens por transacao. Porém apenas com 100 tokens HWT que voce conseguira receber a agua . Para mais detalhes sobre como comprar, visite nossa seção de checkout ou entre em contato com nosso suporte.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-10">

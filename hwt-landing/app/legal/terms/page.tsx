@@ -14,7 +14,7 @@ export default function TermsOfService() {
       <h2 className="text-xl font-semibold mt-6 mb-2">4. Resgate de Água</h2>
       <p className="mb-4">O resgate físico da água mineral está sujeito à aprovação KYC e às condições operacionais descritas no whitepaper.</p>
       <h2 className="text-xl font-semibold mt-6 mb-2">5. Limitação de Responsabilidade</h2>
-      <p className="mb-4">A Hanuman Minas Ltda. não se responsabiliza por perdas decorrentes de falhas técnicas, ataques cibernéticos, volatilidade do mercado ou restrições regulatórias.</p>
+      <p className="mb-4">A Hanuman Minas Ltda. não se responsabiliza por perdas decorrentes de falhas técnicas, ataques cibernéticos ou restrições regulatórias.</p>
       <h2 className="text-xl font-semibold mt-6 mb-2">6. Alterações</h2>
       <p className="mb-4">Os termos podem ser modificados a qualquer momento. O uso continuado implica aceitação das novas condições.</p>
     </div>
