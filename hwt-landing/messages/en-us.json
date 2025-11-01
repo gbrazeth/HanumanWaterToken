@@ -1,0 +1,327 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "benefits": "Benefits",
+    "tokenomics": "Tokenomics",
+    "roadmap": "Roadmap",
+    "hwtContract": "HWT Contract",
+    "presale": "Presale Contract",
+    "presaleContract": "Presale Contract",
+    "faq": "FAQ",
+    "login": "Login",
+    "logout": "Logout",
+    "myAccount": "My Account"
+  },
+  "hero": {
+    "title": "Uniting Hydrogeology and Technology",
+    "subtitle": "The First Token Backed by Millennial Hyperthermal Mineral Water",
+    "description": "Hanuman Water Token (HWT) is transforming water resource management through blockchain technology, ensuring transparency and efficiency in the distribution of Hanuman Water - Millennial Hyperthermal Multifunctional Mineral Water - Tritium-Free",
+    "cta": {
+      "buyNow": "Buy HWT",
+      "learnMore": "Learn More"
+    }
+  },
+  "stats": {
+    "tokensSold": "Tokens Sold",
+    "waterReserve": "Water Reserve",
+    "holders": "Holders",
+    "presaleEnds": "Presale Ends In"
+  },
+  "about": {
+    "title": "Our Water Source",
+    "description1": "The Hanuman Water Source is a natural deposit of alkaline mineral water rich in nutrients, originating from rainfall that fell over 9,000 years ago on the soil of Chapada dos Veadeiros National Park (UNESCO), in the State of Goiás. The Hanuman Water Token (HWT) transforms this unique resource into a traceable digital asset via Blockchain, ensuring transparency and security in its redemption. Each 1 HWT represents 1 liter of water (1,000 ml), allowing this vital resource to be managed and used efficiently and sustainably.",
+    "description2": "In addition to democratizing access to water completely free from modern-era contaminants, filtered and isolated for millennia in the 1.75 billion-year-old geological formations of Chapada dos Veadeiros, HWT ensures supply chain integrity through Blockchain technology. This innovative ecosystem unites hydrogeology and technology, creating a new sustainable governance model where token holders participate in the preservation and responsible distribution of water with unique and exclusive characteristics on the planet.",
+    "presaleBox": {
+      "title": "Hanuman Water Token (HWT) – Accessing the Future of Thermal Water",
+      "price": "The Hanuman Water Token (HWT) has a minimum price of $2 per liter.",
+      "launchTitle": "Pre-Sale Launch",
+      "period": "Period: 08/28/2025",
+      "goal": "Goal: Minimum sale of 100,000 m³ in 12 months."
+    },
+    "features": {
+      "realWorldAsset": {
+        "title": "Real World Asset",
+        "description": "Each HWT represents a specific volume of hyperthermal mineral water from the Hanuman Deposit and Source, ensuring a direct link with a tangible, vital, and multifunctional resource."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "description": "Complete visibility in the water supply chain through blockchain technology, ensuring traceability and trust."
+      },
+      "communityGovernance": {
+        "title": "Community Governance",
+        "description": "HWT holders participate in key project decisions, promoting decentralized and democratic management."
+      }
+    }
+  },
+  "benefits": {
+    "title": "Exclusive HWT Benefits",
+    "priorityRedemption": {
+      "title": "Priority Redemption",
+      "description": "Priority redemption right during high demand periods respecting the chronological order of HWT purchase."
+    },
+    "newOffers": {
+      "title": "Preference for New Offers",
+      "description": "Purchase preference for future public offerings of new water tokens from Jazida and Hanuman I Well/Source, observing the chronological order and quantity of HWT purchase."
+    },
+    "discounts": {
+      "title": "Exclusive Discounts",
+      "description": "Advantages on products and services from the Hanuman ecosystem."
+    },
+    "events": {
+      "title": "Special Events",
+      "description": "Participation in exclusive events for token holders."
+    },
+    "community": {
+      "title": "Community",
+      "description": "Access to a community of enthusiasts."
+    },
+    "rewards": {
+      "title": "Engagement Rewards",
+      "description": "Additional benefits for active ecosystem participants."
+    },
+    "economy": {
+      "title": "Support for New Economy",
+      "description": "Distributive, Regenerative, Inclusive and Sustainable."
+    },
+    "backing": {
+      "title": "Backing",
+      "description": "Backed by tangible and vital physical asset. Scientifically proven resource quality."
+    }
+  },
+  "tokenomics": {
+    "title": "Tokenomics",
+    "distributionTitle": "Distribution",
+    "distribution": {
+      "publicDistribution": "Public Distribution",
+      "developmentTeam": "Development Team",
+      "operationalFund": "Operational Fund for Redemption",
+      "strategicPartnerships": "Strategic Partnerships",
+      "communityRewards": "Community Rewards",
+      "advisorsAndSales": "Advisors and Sales"
+    },
+    "detailsTitle": "Token Details",
+    "details": {
+      "totalSupply": "Total Supply",
+      "tokenPrice": "Token Price",
+      "minPurchase": "Minimum Purchase",
+      "blockchain": "Blockchain",
+      "tokenStandard": "Token Standard"
+    }
+  },
+  "roadmap": {
+    "title": "Development Roadmap",
+    "phase1": {
+      "title": "Planning and Structuring",
+      "subtitle": "Phase 1",
+      "items": [
+        "Definition of scope and technical requirements",
+        "Landing Page Design",
+        "Initial Smart Contract Development",
+        "Initial Integration Setup"
+      ]
+    },
+    "phase2": {
+      "title": "Development and Integration",
+      "subtitle": "Phase 2",
+      "items": [
+        "Complete Landing Page Development (Frontend and Backend)",
+        "Smart Contract Finalization",
+        "Pre-Sale Checkout Development",
+        "Testing and Adjustments"
+      ]
+    },
+    "phase3": {
+      "title": "Final Testing and Launch",
+      "subtitle": "Phase 3",
+      "items": [
+        "Smart Contract Audit",
+        "Real purchase tests on Landing Page",
+        "Official Launch"
+      ]
+    },
+    "phase4": {
+      "title": "Phase 4: Consolidation",
+      "quarter": "Q3 2025",
+      "items": [
+        "International Expansion",
+        "New Water Tokens",
+        "Corporate Partnerships",
+        "Decentralized Governance"
+      ]
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "showMore": "See more",
+    "showLess": "See less",
+    "questions": {
+      "whatIsHWT": {
+        "question": "What is HWT?",
+        "answer": "The Hanuman Water Token (HWT) is a utility token that grants its holder the right to access through redemption a volume of hyperthermal mineral water distributed or bottled from the Hanuman I Well/Source or any other well/source within the polygon of the 48.69 hectare area of the Hanuman Deposit, in the municipality of Niquelândia, Chapada dos Veadeiros, State of Goiás, Brazil, researched in process no. 860.360/2017, of the National Mining Agency (ANM), within authorized limits and according to current regulations.\nNature of the Right:\n- It is not an investment security (there are no dividends, interest or expectation of appreciation);\n- Strictly linked to the utilitarian use of water for human consumption, thermalism, therapeutic or industrial purposes, subject to regulatory licenses and authorizations"
+      },
+      "howToBuy": {
+        "question": "How can I buy HWT?",
+        "answer": "During the pre-sale phase, you can purchase HWT directly through our platform using cryptocurrency or fiat currency. Stay tuned to our official channels for information on sales dates and detailed instructions."
+      },
+      "whatMakesUnique": {
+        "question": "What makes HWT unique?",
+        "answer": "The Hanuman Source represents an extraordinary convergence between science, sustainability and technological innovation, offering a unique opportunity to access a vital and multifunctional resource. Located in the heart of the Brazilian Cerrado, this mineral source combines environmental preservation, social responsibility and technological innovation.\n\n1. Proven Scientific Foundations\nUniversity Studies: Research conducted by the Institute of Geosciences of the University of Brasília (IG-UnB), published in the Elsevier journal \"Groundwater Sustainable and Development\" (2022)\nAnnual Exploitable Reserve (RExA): 3.77 million m³/year, establishing conservative limits for sustainable extraction\nPermanent Total Reserve: 75.4 million m³, ensuring availability for future generations\n\n2. Ultra-Conservative Exploration\nHWT Pre-sale: Only 100,000 m³ (0.13% of the Permanent Total Reserve)\nHanuman Well I Production: 485,000 m³/year (only 12.9% of annual renewable capacity)\nSafety Margin: Use of only 2.65% of RExA in the initial phase\n2.1. Hanuman Minas Ltda has already obtained from the National Mining Agency (ANM) the classification as \"fluoridated hyperthermal mineral water at the source\" and the declaration of \"suitability for human consumption and industrial bottling\", as well as authorization from the Secretariat of Environment and Sustainable Development of the State of Goiás (SEMAD-GO), for the daily capture of 1,330 m³, 485,000 m³/year, from Hanuman Source I.\n\n3. Decentralized and Transparent Governance\nSmart Contracts: Automatic limitation of token issuance by RExA\nReal-Time Monitoring: System integrated with blockchain records extracted volumes and piezometric levels\nPeriodic Reviews: Transparent data support adjustments in RExA to maintain water balance\n\n4. Circular Economy and Socio-Environmental Impact\nNew Distributive Economy: Integration with local production chains in the Cerrado\nStrategic Partnerships: Collaboration with OSCIPs such as Pulsar Vida for community development\nProductive Arrangements: Cosmeceuticals, natural beverages and integrative medicine in Chapada dos Veadeiros\n\n5. Sustainable Technological Innovation\nCutting-edge Research: Studies in quantum neuroscience, clean technologies and molecular memory\nScientific Protocols: Publications in indexed journals ensure transparency\nFuture Applications: Potential use in quantum computing and emerging technologies\n\n6. ESG Commitment\nHWT represents a pioneering model of natural resource tokenization, aligned with ESG (Environmental, Social, Governance) criteria, promoting conservation of UNESCO World Heritage and regional sustainable development."
+      },
+      "utility": {
+        "question": "What is the utility of HWT?",
+        "answer": "HWT is a utility token that represents a right to a real volume of mineral water from the Hanuman Deposit and Source. In the future (expected from the end of 2028), holders will be able to choose to redeem the physical water corresponding to their tokens or continue to trade them. Additionally, HWT may in the future grant VIP access and benefits to the ventures and businesses of the Hanuman Deposit ecosystem."
+      },
+      "blockchain": {
+        "question": "How does blockchain technology guarantee the security and transparency of HWT?",
+        "answer": "All transactions and ownership of HWT tokens are recorded immutably on the Ethereum blockchain (being an ERC-20 token). This means that records are public, verifiable by anyone, and cannot be fraudulently altered, ensuring complete transparency and security about who owns the tokens."
+      },
+      "risks": {
+        "question": "What are the main risks of investing in HWT?",
+        "answer": "1. Identification and Risk Factors\n\n1.1 Regulatory and Compliance Risks\nThe regulatory environment for virtual assets is constantly evolving, both in Brazil and in relevant international jurisdictions. There is substantial risk that regulatory authorities, including CVM, BACEN or international bodies, may classify HWT differently than intended by the issuer, potentially as a security subject to a more restrictive regulatory regime.\nChanges in legislation applicable to crypto assets, personal data protection, consumer rights or water resource management may negatively impact the operational viability of the project or impose significant additional compliance costs. Additionally, there is the possibility of legal disputes arising related to intellectual property, interpretation of contractual terms, token holder rights or environmental liability.\n\n1.2 Operational Risks and Underlying Asset\nAlthough technical studies indicate stability of the source characteristics, there is inherent risk of future variations in flow, temperature or water quality due to geological, climatic or environmental factors beyond the company's control. Such variations may affect production capacity or final product quality.\nThe implementation and operation of the bottling plant, as well as the establishment of an efficient supply chain and adequate distribution logistics for redemption fulfillment, present significant operational challenges. Unexpected increases in energy, maintenance, transportation, labor or regulatory compliance costs may negatively impact the project's economic viability.\n\n1.3 Technological and Cybersecurity Risks\nThe use of blockchain technology and smart contracts, while offering advantages in terms of transparency and automation, exposes the project to specific technological risks. Bugs or vulnerabilities in smart contracts may result in token losses, malfunction of programmed utilities or exposure to malicious attacks.\nRisks inherent to the chosen blockchain platform, including network congestion, transaction fee volatility, 51% attacks or other forms of security compromise, may affect the system's functionality and reliability. Additionally, cyberattacks targeting the sales platform, digital wallet systems or the project's technological infrastructure represent constant threats.\n\n1.4 Market and Project Execution Risks\nThe acceptance of the tokenized mineral water concept by the consumer market remains uncertain, potentially affecting demand for the product and, consequently, the token's utility.\nDelays or failures in executing the planned roadmap, including obtaining licenses, infrastructure construction or technological development, may compromise the project's viability. Inadequate management of financial resources raised from token sales represents an additional risk to the enterprise's sustainability.\n\n1.5 Jurisdictional Restrictions and Geographic Limitations\nThe offer and commercialization of HWT may be subject to restrictions in certain jurisdictions, depending on local legislation applicable to crypto assets, digital tokens and securities offerings. It is the exclusive responsibility of each potential acquirer to verify the legality of acquiring and holding HWT in their country of residence or domicile jurisdiction.\nHanuman Minas Ltda. reserves the right to restrict or prohibit participation of residents of certain jurisdictions in acquiring HWT, especially those where such participation may constitute violation of local laws or expose the company to unacceptable regulatory risks.\n\n1.6 Identification and Analysis of Risk Factors\n\n1.6.1 Regulatory and Compliance Risks\nThe regulatory environment for virtual assets is constantly evolving, both in Brazil and in relevant international jurisdictions. There is substantial risk that regulatory authorities, including CVM, BACEN or international bodies, may classify HWT differently than intended by the issuer, potentially as a security subject to a more restrictive regulatory regime.\nChanges in legislation applicable to crypto assets, personal data protection, consumer rights or water resource management may negatively impact the operational viability of the project or impose significant additional compliance costs. Additionally, there is the possibility of legal disputes arising related to intellectual property, interpretation of contractual terms, token holder rights or environmental liability.\n\n1.6.2 Operational Risks and Underlying Asset\nAlthough technical studies indicate stability of the source characteristics, there is inherent risk of future variations in flow, temperature or water quality due to geological, climatic or environmental factors beyond the company's control. Such variations may affect production capacity or final product quality.\nThe implementation and operation of the bottling plant, as well as the establishment of an efficient supply chain and adequate distribution logistics for redemption fulfillment, present significant operational challenges. Unexpected increases in energy, maintenance, transportation, labor or regulatory compliance costs may negatively impact the project's economic viability.\n\n1.6.3 Technological and Cybersecurity Risks\nThe use of blockchain technology and smart contracts, while offering advantages in terms of transparency and automation, exposes the project to specific technological risks. Bugs or vulnerabilities in smart contracts may result in token losses, malfunction of programmed utilities or exposure to malicious attacks.\nRisks inherent to the chosen blockchain platform, including network congestion, transaction fee volatility, 51% attacks or other forms of security compromise, may affect the system's functionality and reliability. Additionally, cyberattacks targeting the sales platform, digital wallet systems or the project's technological infrastructure represent constant threats.\n\n1.6.4 Market and Project Execution Risks\nThe acceptance of the tokenized mineral water concept by the consumer market remains uncertain, potentially affecting demand for the product and, consequently, the token's utility.\nDelays or failures in executing the planned roadmap, including obtaining licenses, infrastructure construction or technological development, may compromise the project's viability. Inadequate management of financial resources raised from token sales represents an additional risk to the enterprise's sustainability.\n\n1.7 Legal Notices and Mandatory Disclaimers\n\n1.7.1 Investment Risk Notice\nHWT constitutes a risky utility token. It does not represent a financial investment, equity participation in Hanuman Minas Ltda. or right to income of any nature.\n\n1.7.2 Advisory Disclaimer\nThis document and any materials associated with HWT do not constitute a securities offering, investment recommendation, financial, legal, tax or any other nature advice. Potential acquirers should conduct independent analysis and consult qualified professionals before making decisions related to HWT.\n\n1.7.3 Jurisdictional Limitations\nThe offer and sale of HWT may be restricted or prohibited in certain jurisdictions. It is the exclusive responsibility of the acquirer to verify the legality of acquisition in their country of residence. The project is not intended for individuals or legal entities located in jurisdictions where its offer is considered illegal.\n\n1.7.4 Operational Dependencies and Conditions for Exercise of Redemption Right\nThe project's success and effective capacity to redeem mineral water depend on multiple operational, logistical, technological and regulatory factors, all subject to risks and uncertainties. The project, its execution timeline and operational terms may undergo substantial changes or even become unfeasible."
+      },
+      "redemption": {
+        "question": "When and how can I redeem the physical water corresponding to my HWT tokens?",
+        "answer": "The forecast for the start of the possibility of redeeming physical water is from the end of 2028, with the operations of the bottling factory near the Hanuman Source, in the municipality of Niquelândia. The exact details about the redemption process, logistics, shipping costs (if applicable) and collection locations or methods will be officially communicated as the project advances to this phase.\nThe order of preference for water redemption follows the chronology of public purchase of the token originally on the Hanuman Water Token Platform. The redemption request must be made with a minimum advance notice of 90 (ninety) days. Purchases of HWT made in the pre-sale phase can request redemption with a minimum notice of 30 (thirty) days. All deliveries will follow the capacity and physical administrative and regulatory operations determined for the production of the Source."
+      },
+      "minPurchase": {
+        "question": "What is the minimum amount of HWT I can buy?",
+        "answer": "During the pre-sale phase, the minimum quantity for purchase is 10 tokens per transaction. However, only with 100 HWT tokens will you be able to receive the water. For more details on how to buy, visit our checkout section or contact our support."
+      },
+      "sustainability": {
+        "question": "How does the HanumanWaterToken project deal with the sustainability of the Hanuman Source?",
+        "answer": "The HWT project was structured based on rigorous scientific and technological foundations to ensure the long-term sustainability of the Hanuman Source, combining environmental conservation, social responsibility and technological innovation.\n\n1. Proven Scientific Foundations\n• University studies conducted by the Institute of Geosciences of the University of Brasília (IG-UnB), published in the Elsevier journal \"Groundwater Sustainable and Development\" (2022).\n• Annual Exploitable Reserve (RExA): 3.77 million m³/year, establishing conservative limits for sustainable extraction.\n• Permanent Total Reserve: 75.4 million m³, ensuring availability for future generations.\n\n2. Ultra-Conservative Exploration\n• HWT Pre-sale: Only 100,000 m³ (0.13% of the Permanent Total Reserve).\n• Hanuman Well I Production: 485,000 m³/year (only 12.9% of annual renewable capacity).\n• Safety Margin: Use of only 2.65% of RExA in the initial phase.\n• Hanuman Minas Ltda has already obtained authorization from SEMAD-GO for the daily capture of 1,330 m³ (485,000 m³/year) from Hanuman Source I.\n\n3. Decentralized and Transparent Governance\n• Smart contracts: Automatic limitation of token issuance by RExA.\n• Real-time monitoring: System integrated with blockchain records extracted volumes and piezometric levels.\n• Periodic reviews: Transparent data support adjustments in RExA to maintain water balance.\n\n4. Circular Economy and Socio-Environmental Impact\n• New distributive economy: Integration with local production chains in the Cerrado.\n• Strategic partnerships: Collaboration with OSCIPs such as Pulsar Vida for community development.\n• Productive arrangements: Cosmeceuticals, natural beverages and integrative medicine in Chapada dos Veadeiros.\n\n5. Sustainable Technological Innovation\n• Cutting-edge research: Studies in quantum neuroscience, clean technologies and molecular memory.\n• Scientific protocols: Publications in indexed journals ensure transparency.\n• Future applications: Potential use in quantum computing and emerging technologies.\n\n6. ESG Commitment\nHWT represents a pioneering model of natural resource tokenization, aligned with ESG (Environmental, Social, Governance) criteria, promoting conservation of UNESCO World Heritage and regional sustainable development."
+      },
+      "earlyRedemption": {
+        "question": "How can I redeem HWT before the start of operations of the Hanuman Source bottling industry in Niquelândia?",
+        "answer": "Although the complete bottling operation is scheduled for the end of 2028, there is the possibility of early redemption of HWT if ANM grants authorization for commercial exploitation of water from Hanuman Source I (ANM process no. 860/360/2017) through a Utilization Guide (GU).\n\nThe Utilization Guide is a common regulatory instrument in the mining sector, allowing commercial exploitation of mineral resources before the definitive granting of the Mining Permit, being used to minimize research costs. However, mineral and thermal waters are not currently on the list of minerals authorized for GU. Therefore, Hanuman Minas Ltda filed a specific request with ANM for analysis of the Hanuman Water case, highlighting its multifunctionality and potential to boost productive arrangements and services in Chapada dos Veadeiros.\n\nIf the request is approved, HWT holders will be able to request early redemption of water for use as raw material in:\n• Production of cosmeceuticals and dermocosmetics\n• Production of functional beverages (kombucha, natural juices, craft beers, gourmet coffees)\n• Supply for restaurants and haute cuisine\n• External use products and therapeutic applications\n\nRequest Process: Official announcements about ANM authorization and opening of the redemption request period will be published on our official channels.\n\nImportant: Mineral exploitation by Utilization Guide will always be conditioned to compliance with all licenses and meeting all applicable technical and sanitary requirements."
+      },
+      "transparency": {
+        "question": "What is the commitment to transparency, governance and communication?",
+        "answer": "1. Information Transparency\nHanuman Minas Ltda. commits to providing clear, accurate and complete information about HWT, mineral source operations, terms of use and risks involved, always using accessible language and in compliance with the Consumer Protection Code and best market practices.\n\n2. Continuous Regulatory Monitoring\nRecognizing the dynamic nature of the regulatory environment for virtual assets, the company will maintain active monitoring of legislative and regulatory changes in Brazil and other relevant jurisdictions, adapting its operational practices whenever necessary to ensure maintenance of compliance.\n\n3. Stakeholder Communication\nAppropriate communication channels will be established to keep token holders informed about significant project developments, relevant regulatory changes and any circumstances that may affect their rights or the viability of the enterprise."
+      }
+    }
+  },
+  "cta": {
+    "title": "Join the Future of Water Management",
+    "description": "Be part of the revolution in sustainable water resource management with HWT",
+    "button": "Buy HWT Now"
+  },
+  "gallery": {
+    "title": "Hanuman Springs"
+  },
+  "footer": {
+    "description": "Transforming water resource management",
+    "quickLinks": {
+      "title": "Quick Links",
+      "about": "About",
+      "tokenomics": "Tokenomics",
+      "roadmap": "Roadmap"
+    },
+    "resources": {
+      "title": "Resources",
+      "whitepaper": "Whitepaper",
+      "documentation": "Documentation",
+      "smartContract": "Smart Contract"
+    },
+    "community": {
+      "title": "Community",
+      "twitter": "Twitter",
+      "telegram": "Telegram",
+      "discord": "Discord"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "disclaimer": "Legal Notice"
+    },
+    "copyright": "All rights reserved."
+  },
+  "presale": {
+    "title": "HWT Presale",
+    "connectWallet": "Connect Wallet",
+    "walletConnected": "Wallet Connected",
+    "yourBalance": "Your HWT Balance",
+    "amount": "Amount",
+    "enterAmount": "Enter amount",
+    "youWillReceive": "You will receive",
+    "buyWithETH": "Buy with ETH",
+    "buyWithUSDT": "Buy with USDT",
+    "processing": "Processing...",
+    "success": "Purchase completed successfully!",
+    "error": "Error processing purchase",
+    "minPurchase": "Minimum purchase: $10",
+    "maxPurchase": "Maximum purchase: $100,000"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "Hanuman Minas Ltda. values the privacy and protection of personal data of its users. This policy describes how we collect, use, store and protect your information when using our services and platforms, including the website, landing page and the HanumanWaterToken (HWT) purchase and redemption system.",
+    "section1": {
+      "title": "1. Data Collection",
+      "content": "We collect only the data necessary for system operation, such as email for authentication, Ethereum wallet address for transactions and any KYC information, exclusively for physical water redemption."
+    },
+    "section2": {
+      "title": "2. Data Use",
+      "intro": "The collected data is used to:",
+      "items": [
+        "Process HWT token purchases and redemptions",
+        "Comply with legal and regulatory obligations",
+        "Ensure platform security and integrity",
+        "Communicate relevant information to users"
+      ]
+    },
+    "section3": {
+      "title": "3. Sharing",
+      "content": "We do not share personal data with third parties, except when required by law or to comply with regulatory obligations."
+    },
+    "section4": {
+      "title": "4. Security",
+      "content": "We adopt technical and organizational measures to protect data against unauthorized access, loss or misuse."
+    },
+    "section5": {
+      "title": "5. User Rights",
+      "content": "You can request deletion, correction or access to your personal data at any time by contacting us through the official channel."
+    },
+    "section6": {
+      "title": "6. Changes",
+      "content": "This policy may be updated periodically. The most recent version will always be available on our website."
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "intro": "By using the services and platforms of Hanuman Minas Ltda., including the acquisition and use of HanumanWaterToken (HWT), you agree to the following terms:",
+    "section1": {
+      "title": "1. Token Nature",
+      "content": "HWT is a utility token, it does not represent securities, equity participation or income promise."
+    },
+    "section2": {
+      "title": "2. Eligibility",
+      "content": "Users must be over 18 years old and comply with the laws of their jurisdiction."
+    },
+    "section3": {
+      "title": "3. Platform Use",
+      "content": "Use is permitted only for legitimate purposes. Any fraudulent, illicit use or that violates third party rights is prohibited."
+    },
+    "section4": {
+      "title": "4. Water Redemption",
+      "content": "Physical redemption of mineral water is subject to KYC approval and operational conditions described in the whitepaper."
+    },
+    "section5": {
+      "title": "5. Limitation of Liability",
+      "content": "Hanuman Minas Ltda. is not responsible for losses resulting from technical failures, cyber attacks or regulatory restrictions."
+    },
+    "section6": {
+      "title": "6. Changes",
+      "content": "Terms may be modified at any time. Continued use implies acceptance of the new conditions."
+    }
+  },
+  "disclaimer": {
+    "title": "Legal Notice",
+    "items": [
+      "HWT is a utility token. It does not constitute a financial investment, equity participation or right to income.",
+      "The acquisition and use of HWT may be restricted or prohibited in certain jurisdictions. It is the user's responsibility to verify legality in their locality.",
+      "Information provided on the website, whitepaper or promotional materials does not constitute financial, legal or tax advice. It is recommended to consult qualified professionals before making any decision."
+    ]
+  }
+}

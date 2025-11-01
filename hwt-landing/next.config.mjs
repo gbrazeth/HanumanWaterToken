@@ -1,3 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./i18n.ts');
+
 let userConfig = undefined
 try {
   // try to import ESM first
@@ -27,6 +31,12 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // Disable static generation for legal pages during development
+  ...(process.env.NODE_ENV === 'development' && {
+    generateBuildId: async () => {
+      return 'development-' + Date.now()
+    }
+  }),
 }
 
 if (userConfig) {
@@ -48,4 +58,4 @@ if (userConfig) {
   }
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig);
