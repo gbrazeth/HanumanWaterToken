@@ -323,5 +323,38 @@
       "A aquisição e uso do HWT podem ser restritos ou proibidos em determinadas jurisdições. É responsabilidade do usuário verificar a legalidade em sua localidade.",
       "Informações fornecidas no site, whitepaper ou materiais promocionais não constituem aconselhamento financeiro, jurídico ou tributário. Recomenda-se consultar profissionais qualificados antes de qualquer decisão."
     ]
+  },
+  "checkout": {
+    "title": "Comprar HWT",
+    "subtitle": "Adquira tokens HWT e faça parte da revolução na gestão de recursos hídricos.",
+    "backToHome": "Voltar para a página inicial",
+    "purchaseDetails": "Detalhes da Compra",
+    "paymentMethod": "Método de Pagamento",
+    "tokenQuantity": "Quantidade de Tokens (HWT)",
+    "valueInUSD": "Valor em USD",
+    "equivalentWater": "Água Equivalente",
+    "liters": "litros",
+    "waterRedemptionNote": "Para receber água da fonte Hanuman, é necessário adquirir no mínimo 100 tokens HWT (equivalente a 100 litros de água).",
+    "cryptoCurrency": "Criptomoedas",
+    "fiatCurrency": "Moeda Fiduciária",
+    "balance": "Saldo",
+    "buyTokens": "Comprar Tokens",
+    "processing": "Processando...",
+    "connectWallet": "Conectar Carteira",
+    "connecting": "Conectando...",
+    "purchaseSuccess": "Compra Realizada com Sucesso!",
+    "purchaseSuccessMessage": "Sua compra de {amount} HWT foi processada com sucesso. Os tokens serão enviados para sua carteira em breve.",
+    "addToMetaMask": "Adicionar HWT à MetaMask",
+    "makeAnotherPurchase": "Fazer outra compra",
+    "errorTitle": "Erro",
+    "metaMaskNotInstalled": "MetaMask não está instalado",
+    "metaMaskNotFound": "MetaMask não encontrada.",
+    "errorAddingToken": "Erro ao adicionar token na Metamask.",
+    "wrongNetwork": "Rede incorreta. Por favor, conecte-se à rede Ethereum Mainnet.",
+    "transactionFailed": "Transação falhou. Por favor, tente novamente.",
+    "comingSoon": "(Em breve estará disponível)",
+    "pix": "PIX",
+    "creditCard": "Cartão de Crédito",
+    "allRightsReserved": "Todos os direitos reservados."
   }
 }

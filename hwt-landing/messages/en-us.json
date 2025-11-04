@@ -323,5 +323,38 @@
       "The acquisition and use of HWT may be restricted or prohibited in certain jurisdictions. It is the user's responsibility to verify legality in their locality.",
       "Information provided on the website, whitepaper or promotional materials does not constitute financial, legal or tax advice. It is recommended to consult qualified professionals before making any decision."
     ]
+  },
+  "checkout": {
+    "title": "Buy HWT",
+    "subtitle": "Acquire HWT tokens and be part of the revolution in water resource management.",
+    "backToHome": "Back to home page",
+    "purchaseDetails": "Purchase Details",
+    "paymentMethod": "Payment Method",
+    "tokenQuantity": "Token Quantity (HWT)",
+    "valueInUSD": "Value in USD",
+    "equivalentWater": "Equivalent Water",
+    "liters": "liters",
+    "waterRedemptionNote": "To receive water from the Hanuman source, you need to purchase at least 100 HWT tokens (equivalent to 100 liters of water).",
+    "cryptoCurrency": "Cryptocurrencies",
+    "fiatCurrency": "Fiat Currency",
+    "balance": "Balance",
+    "buyTokens": "Buy Tokens",
+    "processing": "Processing...",
+    "connectWallet": "Connect Wallet",
+    "connecting": "Connecting...",
+    "purchaseSuccess": "Purchase Completed Successfully!",
+    "purchaseSuccessMessage": "Your purchase of {amount} HWT has been successfully processed. The tokens will be sent to your wallet shortly.",
+    "addToMetaMask": "Add HWT to MetaMask",
+    "makeAnotherPurchase": "Make another purchase",
+    "errorTitle": "Error",
+    "metaMaskNotInstalled": "MetaMask is not installed",
+    "metaMaskNotFound": "MetaMask not found.",
+    "errorAddingToken": "Error adding token to Metamask.",
+    "wrongNetwork": "Wrong network. Please connect to Ethereum Mainnet.",
+    "transactionFailed": "Transaction failed. Please try again.",
+    "comingSoon": "(Coming soon)",
+    "pix": "PIX",
+    "creditCard": "Credit Card",
+    "allRightsReserved": "All rights reserved."
   }
 }

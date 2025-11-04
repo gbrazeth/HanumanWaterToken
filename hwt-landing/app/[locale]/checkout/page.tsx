@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/contract";
+import { useTranslations } from 'next-intl';
 // Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
 
 // Config Mainnet para uso no switchEthereumChain
@@ -61,6 +62,8 @@ const USDT_ABI = [
 // Usando os endereços importados do arquivo de configuração
 
 export default function CheckoutPage() {
+  const t = useTranslations('checkout');
+  
   // DEBUG: Exibir o valor importado do endereço do contrato
   console.log("[DEBUG] TOKEN_CONTRACT_ADDRESS:", TOKEN_CONTRACT_ADDRESS);
   const [tokenAmount, setTokenAmount] = useState<string>("10")
@@ -418,7 +421,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
           </div>
           <Link href="/" className="flex items-center text-sm font-medium hover:text-primary">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar para a página inicial
+            {t('backToHome')}
           </Link>
         </div>
       </header>
@@ -426,9 +429,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
       <main className="flex-1 py-12">
         <div className="container px-4">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">Comprar HWT</h1>
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">{t('title')}</h1>
             <p className="mt-2 text-muted-foreground">
-              Adquira tokens HWT e faça parte da revolução na gestão de recursos hídricos.
+              {t('subtitle')}
             </p>
           </div>
 
@@ -439,10 +442,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                   <div className="mb-4 rounded-full bg-green-100 p-3">
                     <Check className="h-8 w-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-primary mb-2">Compra Realizada com Sucesso!</h2>
+                  <h2 className="text-2xl font-bold text-primary mb-2">{t('purchaseSuccess')}</h2>
                   <p className="text-muted-foreground mb-6">
-                    Sua compra de {tokenAmount} HWT foi processada com sucesso. Os tokens serão enviados para sua
-                    carteira em breve.
+                    {t('purchaseSuccessMessage').replace('{amount}', tokenAmount)}
                   </p>
                   <Button
                     className="mb-6"
@@ -462,21 +464,21 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             },
                           } as any);
                         } catch (err) {
-                          alert('Erro ao adicionar token na Metamask.');
+                          alert(t('errorAddingToken'));
                         }
                       } else {
-                        alert('MetaMask não encontrada.');
+                        alert(t('metaMaskNotFound'));
                       }
                     }}
                   >
-                    Adicionar HWT à MetaMask
+                    {t('addToMetaMask')}
                   </Button>
                   <div className="flex gap-4">
                     <Button asChild>
-                      <Link href="/">Voltar para a página inicial</Link>
+                      <Link href="/">{t('backToHome')}</Link>
                     </Button>
                     <Button variant="outline" onClick={() => setSuccess(false)}>
-                      Fazer outra compra
+                      {t('makeAnotherPurchase')}
                     </Button>
                   </div>
                 </div>
@@ -487,12 +489,12 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
               <div>
                 <Card>
                   <CardHeader>
-                    <CardTitle>Detalhes da Compra</CardTitle>
+                    <CardTitle>{t('purchaseDetails')}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label htmlFor="token-amount">Quantidade de Tokens (HWT)</Label>
+                        <Label htmlFor="token-amount">{t('tokenQuantity')}</Label>
                         <Input
                           id="token-amount"
                           type="number"
@@ -505,15 +507,15 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
 
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label>Valor em USD</Label>
+                          <Label>{t('valueInUSD')}</Label>
                           <div className="p-2 border rounded-md bg-muted">
                             <span className="text-lg font-medium">${usdAmount}</span>
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label>Água Equivalente</Label>
+                          <Label>{t('equivalentWater')}</Label>
                           <div className="p-2 border rounded-md bg-muted">
-                            <span className="text-lg font-medium">{waterAmount} litros</span>
+                            <span className="text-lg font-medium">{waterAmount} {t('liters')}</span>
                           </div>
                         </div>
                       </div>
@@ -524,7 +526,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             <AlertCircle className="h-5 w-5 text-primary mr-3" />
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Para receber água da fonte Hanuman, é necessário adquirir no mínimo 100 tokens HWT (equivalente a 100 litros de água).
+                                {t('waterRedemptionNote')}
                               </p>
                             </div>
                           </div>
@@ -538,13 +540,13 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
               <div>
                 <Card>
                   <CardHeader>
-                    <CardTitle>Método de Pagamento</CardTitle>
+                    <CardTitle>{t('paymentMethod')}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Tabs defaultValue="crypto" className="w-full">
   <TabsList className="grid w-full grid-cols-2">
-    <TabsTrigger value="crypto">Criptomoedas</TabsTrigger>
-    <TabsTrigger value="fiat">Moeda Fiduciária</TabsTrigger>
+    <TabsTrigger value="crypto">{t('cryptoCurrency')}</TabsTrigger>
+    <TabsTrigger value="fiat">{t('fiatCurrency')}</TabsTrigger>
   </TabsList>
   <TabsContent value="crypto" className="space-y-4 mt-4">
   <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
@@ -555,7 +557,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
           <span>Ethereum (ETH)</span>
           {isConnected && (
             <span className="text-sm text-muted-foreground">
-              Saldo: {Number.parseFloat(ethBalance).toFixed(4)} ETH
+              {t('balance')}: {Number.parseFloat(ethBalance).toFixed(4)} ETH
             </span>
           )}
         </div>
@@ -564,11 +566,11 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
   </RadioGroup>
   {!isConnected ? (
     <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
-      {isLoading ? "Conectando..." : "Conectar Carteira"}
+      {isLoading ? t('connecting') : t('connectWallet')}
     </Button>
   ) : (
     <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
-      {isLoading ? "Processando..." : "Comprar Tokens"}
+      {isLoading ? t('processing') : t('buyTokens')}
     </Button>
   )}
 </TabsContent>
@@ -577,13 +579,13 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
       <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
         <RadioGroupItem value="pix" id="pix" disabled />
         <Label htmlFor="pix" className="flex-1 cursor-not-allowed">
-          PIX <span className="ml-2 text-xs text-muted-foreground">(Em breve estará disponível)</span>
+          {t('pix')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
         </Label>
       </div>
       <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
         <RadioGroupItem value="credit_card" id="credit_card" disabled />
         <Label htmlFor="credit_card" className="flex-1 cursor-not-allowed">
-          Cartão de Crédito <span className="ml-2 text-xs text-muted-foreground">(Em breve estará disponível)</span>
+          {t('creditCard')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
         </Label>
       </div>
     </RadioGroup>
@@ -593,7 +595,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                     {error && (
                       <Alert variant="destructive" className="mt-4">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Erro</AlertTitle>
+                        <AlertTitle>{t('errorTitle')}</AlertTitle>
                         <AlertDescription>{error}</AlertDescription>
                       </Alert>
                     )}
@@ -619,7 +621,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
               <span className="text-lg font-bold text-primary">HWT</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} HanumanWater Token. Todos os direitos reservados.
+              © {new Date().getFullYear()} HanumanWater Token. {t('allRightsReserved')}
             </p>
           </div>
         </div>
