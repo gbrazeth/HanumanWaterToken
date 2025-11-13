@@ -45,23 +45,6 @@ const nextConfig = {
             key: 'Cross-Origin-Embedder-Policy',
             value: 'unsafe-none',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self' https:",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https: blob:",
-              "style-src 'self' 'unsafe-inline' https:",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data: https:",
-              "connect-src 'self' https: wss: data: blob:",
-              "frame-src 'self' https:",
-              "frame-ancestors 'self' https://*.vercel.app https://*.pages.dev https://hanumanwatertoken.com https://*.hanumanwatertoken.com",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-              "upgrade-insecure-requests",
-            ].join('; '),
-          },
         ],
       },
     ]
