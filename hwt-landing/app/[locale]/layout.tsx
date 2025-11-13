@@ -3,6 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import type { Metadata } from 'next';
+import { Web3Provider } from '@/components/web3-provider';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -33,9 +34,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <Web3Provider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </Web3Provider>
       </body>
     </html>
   );

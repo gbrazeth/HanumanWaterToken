@@ -12,6 +12,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/contract";
 import { useTranslations } from 'next-intl';
+import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 // Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
 
 // Config Mainnet para uso no switchEthereumChain
@@ -64,18 +66,22 @@ const USDT_ABI = [
 export default function CheckoutPage() {
   const t = useTranslations('checkout');
   
-  // DEBUG: Exibir o valor importado do endereço do contrato
-  console.log("[DEBUG] TOKEN_CONTRACT_ADDRESS:", TOKEN_CONTRACT_ADDRESS);
+  // Wagmi hooks para WalletConnect
+  const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const { open } = useWeb3Modal();
+  const { data: balanceData } = useBalance({
+    address: address,
+  });
+  
+  // Contract addresses loaded from config
   const [tokenAmount, setTokenAmount] = useState<string>("10")
   const [usdAmount, setUsdAmount] = useState<string>("20")
   const [waterAmount, setWaterAmount] = useState<string>("10")
   const [paymentMethod, setPaymentMethod] = useState<string>("eth")
-  const [isConnected, setIsConnected] = useState<boolean>(false)
-  const [walletAddress, setWalletAddress] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-  const [ethBalance, setEthBalance] = useState<string>("0")
   const [usdtBalance, setUsdtBalance] = useState<string>("0")
   const [pixCode, setPixCode] = useState<string>("")
 
@@ -85,16 +91,22 @@ export default function CheckoutPage() {
   const [cardExpiry, setCardExpiry] = useState<string>("")
   const [cardCVC, setCardCVC] = useState<string>("")
 
-  // Efeito para verificar se o Metamask está conectado
+  // Efeito para atualizar saldos quando conectar
   useEffect(() => {
-    checkIfWalletIsConnected()
-  }, [])
+    if (isConnected && address) {
+      // Limpar erro ao conectar
+      setError(null)
+      getBalances(address)
+    }
+  }, [isConnected, address])
 
   // Função para verificar e trocar para a rede correta
   const checkAndSwitchNetwork = async () => {
     try {
+      // Se não tiver window.ethereum (carteira custodial), retorna true
       if (typeof window.ethereum === "undefined") {
-        throw new Error("MetaMask não está instalado")
+        // Custodial wallet detected (e.g., WalletConnect Google)
+        return true
       }
 
       // Tentar trocar para a rede Sepolia
@@ -128,82 +140,46 @@ export default function CheckoutPage() {
     }
   }
 
-  // Função para verificar se o Metamask está conectado
-  const checkIfWalletIsConnected = async () => {
-    try {
-      if (typeof window.ethereum !== "undefined") {
-        // Primeiro verificar e trocar para a rede correta
-        const networkOk = await checkAndSwitchNetwork()
-        if (!networkOk) return
-
-        const accounts = await window.ethereum.request({ method: "eth_accounts" })
-
-        if (accounts.length > 0) {
-          setIsConnected(true)
-          setWalletAddress(accounts[0])
-
-          // Obter saldos
-          await getBalances(accounts[0])
-        }
-      }
-    } catch (error) {
-      console.error("Erro ao verificar conexão com a carteira:", error)
-    }
-  }
-
   // Função para obter saldos
-  const getBalances = async (address: string) => {
+  const getBalances = async (walletAddress: string) => {
     try {
-      if (!window.ethereum) throw new Error("MetaMask não encontrado")
+      // Se não tiver window.ethereum (carteira custodial como Google), apenas retorna
+      if (!window.ethereum) {
+        // Custodial wallet - USDT balance not available
+        setUsdtBalance("0")
+        return
+      }
+
       const provider = new ethers.providers.Web3Provider(window.ethereum as any)
 
-      // Primeiro verificar e trocar para a rede correta
+      // Verificar rede apenas se tiver window.ethereum
       const networkOk = await checkAndSwitchNetwork()
-      if (!networkOk) return
-
-      // Obter saldo de ETH
-      const ethBalance = await provider.getBalance(address)
-      setEthBalance(ethers.utils.formatEther(ethBalance))
+      if (!networkOk) {
+        // Network not confirmed, continue without USDT balance
+        setUsdtBalance("0")
+        return
+      }
 
       try {
         // Obter saldo de USDT
         const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider)
-        const usdtBalance = await usdtContract.balanceOf(address)
+        const usdtBalance = await usdtContract.balanceOf(walletAddress)
         setUsdtBalance(ethers.utils.formatUnits(usdtBalance, 6)) // USDT tem 6 casas decimais
       } catch (usdtError) {
-        console.error("Erro ao obter saldo de USDT:", usdtError)
-        // Não mostrar erro para o usuário, apenas definir saldo como zero
-        // já que é normal não ter USDT
+        // USDT balance not available, set to zero
         setUsdtBalance("0")
       }
     } catch (error) {
-      console.error("Erro ao obter saldos:", error)
-      setError("Erro ao obter saldos. Por favor, verifique se está conectado à rede Sepolia.")
+      // Unable to get balances, set to zero
+      setUsdtBalance("0")
     }
   }
 
-  // Função para conectar ao Metamask
+  // Função para conectar carteira usando WalletConnect
   const connectWallet = async () => {
     try {
-      if (typeof window.ethereum !== "undefined") {
-        // Primeiro verificar e trocar para a rede correta
-        const networkOk = await checkAndSwitchNetwork()
-        if (!networkOk) return
-
-        setIsLoading(true)
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        })
-        if (accounts.length > 0) {
-          setIsConnected(true)
-          setWalletAddress(accounts[0])
-
-          // Obter saldos
-          await getBalances(accounts[0])
-        }
-      } else {
-        setError("Por favor, instale a extensão Metamask para conectar sua carteira.")
-      }
+      setIsLoading(true)
+      await open()
     } catch (error) {
       console.error("Erro ao conectar com a carteira:", error)
       setError("Erro ao conectar com a carteira. Por favor, tente novamente.")
@@ -317,7 +293,7 @@ export default function CheckoutPage() {
         const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
 
         // Verificar allowance
-        const allowance = await usdtContract.allowance(walletAddress, PRESALE_ADDRESS)
+        const allowance = await usdtContract.allowance(address, PRESALE_ADDRESS)
         const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
 
         // Se necessário, aprovar o contrato para gastar USDT
@@ -555,9 +531,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
       <Label htmlFor="eth" className="flex-1 cursor-pointer">
         <div className="flex justify-between items-center">
           <span>Ethereum (ETH)</span>
-          {isConnected && (
+          {isConnected && balanceData && (
             <span className="text-sm text-muted-foreground">
-              {t('balance')}: {Number.parseFloat(ethBalance).toFixed(4)} ETH
+              {t('balance')}: {Number.parseFloat(balanceData.formatted).toFixed(4)} ETH
             </span>
           )}
         </div>
@@ -569,9 +545,40 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
       {isLoading ? t('connecting') : t('connectWallet')}
     </Button>
   ) : (
-    <Button onClick={processPayment} className="w-full bg-primary" disabled={isLoading}>
-      {isLoading ? t('processing') : t('buyTokens')}
-    </Button>
+    <div className="space-y-3">
+      <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+        <p className="text-sm font-medium text-green-800">{t('walletConnected')}</p>
+        <p className="text-xs text-green-600 mt-1 font-mono">
+          {address?.slice(0, 6)}...{address?.slice(-4)}
+        </p>
+      </div>
+      
+      {balanceData && Number(balanceData.formatted) === 0 && (
+        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+          <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
+          <p className="text-xs text-yellow-600 mt-1">
+            Você precisa adicionar ETH à sua carteira para comprar tokens.
+          </p>
+          <Button 
+            onClick={() => open({ view: 'OnRampProviders' })} 
+            variant="outline" 
+            size="sm"
+            className="mt-2 w-full"
+          >
+            💳 Comprar ETH com Cartão
+          </Button>
+        </div>
+      )}
+      
+      <div className="flex gap-2">
+        <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+          {isLoading ? t('processing') : t('buyTokens')}
+        </Button>
+        <Button onClick={() => disconnect()} variant="outline" className="px-4">
+          {t('disconnect')}
+        </Button>
+      </div>
+    </div>
   )}
 </TabsContent>
   <TabsContent value="fiat" className="space-y-4 mt-4">

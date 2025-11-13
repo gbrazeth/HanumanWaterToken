@@ -1,32 +1,56 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
+import { logger } from "@/lib/logger"
+import { isValidEmail, checkRateLimit } from "@/lib/validators"
 
-// Armazenamento temporário para códigos de verificação
-// Em produção, use um banco de dados ou Redis
+/**
+ * Temporary storage for verification codes
+ * TODO: Replace with Redis or database in production
+ */
 const verificationCodes: Record<string, { code: string; expires: number }> = {}
 
 export async function POST(request: Request) {
   try {
-    // Verificar se a API key está definida
-    console.log("=== VERIFICANDO API KEY ===")
-    console.log("Todas as variáveis de ambiente:", process.env)
     const apiKey = process.env.RESEND_API_KEY
-    console.log("API Key encontrada:", apiKey)
 
     if (!apiKey) {
-      console.error("RESEND_API_KEY não está definida nas variáveis de ambiente")
-      // Fallback para modo de desenvolvimento se a API key não estiver disponível
+      logger.warn("RESEND_API_KEY not configured, using development mode")
       return handleDevMode(request)
     }
+
+    logger.debug("Email API initialized", { hasApiKey: !!apiKey })
 
     // Inicializar o cliente Resend com a API key
     const resend = new Resend(apiKey)
 
-    // Extrair o email do corpo da requisição
+    // Extract and validate email from request body
     const { email } = await request.json()
 
-    if (!email || typeof email !== "string" || !email.includes("@")) {
-      return NextResponse.json({ error: "Email inválido" }, { status: 400 })
+    // Validate email format
+    if (!isValidEmail(email)) {
+      logger.warn("Invalid email format attempted", { email: email?.slice(0, 3) + '***' })
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
+    }
+
+    // Rate limiting: max 5 requests per email per minute
+    const rateLimit = checkRateLimit(`email:${email}`, 5, 60000)
+    if (!rateLimit.allowed) {
+      logger.warn("Rate limit exceeded for email verification", { 
+        email: email.slice(0, 3) + '***',
+        resetTime: new Date(rateLimit.resetTime).toISOString()
+      })
+      return NextResponse.json(
+        { 
+          error: "Too many requests. Please try again later.",
+          retryAfter: Math.ceil((rateLimit.resetTime - Date.now()) / 1000)
+        },
+        { 
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimit.resetTime - Date.now()) / 1000))
+          }
+        }
+      )
     }
 
     // Gerar um código de 6 dígitos
@@ -39,9 +63,9 @@ export async function POST(request: Request) {
     }
 
     try {
-      console.log("=== INÍCIO DO PROCESSO DE ENVIO ===")
-      console.log("API Key configurada:", apiKey ? "Sim" : "Não")
-      console.log("Tentando enviar email para:", email)
+      logger.info("Sending verification email", { 
+        email: email.replace(/(.{3}).*(@.*)/, '$1***$2') // Mask email
+      })
 
       // Enviar o email com o código usando seu domínio verificado
       // Substitua "noreply@seudominio.com" pelo seu endereço de email real
@@ -90,21 +114,19 @@ export async function POST(request: Request) {
       })
 
       if (error) {
-        console.error("=== ERRO NO ENVIO DO EMAIL ===")
-        console.error("Erro detalhado do Resend:", JSON.stringify(error))
-        console.error("Dados da tentativa:", { from: "onboarding@resend.dev", to: email })
-        // Fallback para modo de desenvolvimento se houver erro no envio
+        logger.error("Failed to send email via Resend", error)
+        // Fallback to development mode on email error
         return NextResponse.json({
           success: true,
-          message: "Modo de fallback: Erro ao enviar email real, usando modo de desenvolvimento",
-          devCode: verificationCode,
+          message: "Fallback mode: Using development verification",
+          devCode: process.env.NODE_ENV === 'development' ? verificationCode : undefined,
         })
       }
 
-      console.log("Email enviado com sucesso:", data)
+      logger.info("Verification email sent successfully")
       return NextResponse.json({ success: true })
     } catch (emailError) {
-      console.error("Erro ao enviar email:", emailError)
+      logger.error("Email sending error", emailError)
 
       // Fallback para modo de desenvolvimento se houver erro no envio
       return NextResponse.json({
@@ -114,10 +136,10 @@ export async function POST(request: Request) {
       })
     }
   } catch (error) {
-    console.error("Erro no servidor:", error)
+    logger.error("Server error in verification code endpoint", error)
     return NextResponse.json(
       {
-        error: `Erro interno do servidor: ${error instanceof Error ? error.message : "Erro desconhecido"}`,
+        error: "Internal server error",
       },
       { status: 500 },
     )
@@ -142,19 +164,19 @@ async function handleDevMode(request: Request) {
       expires: Date.now() + 10 * 60 * 1000,
     }
 
-    console.log("Código gerado para", email, ":", verificationCode)
+    logger.debug("Development mode: verification code generated", { email })
 
-    // Modo de desenvolvimento - retorna sucesso com o código
+    // Development mode - return code for testing
     return NextResponse.json({
       success: true,
-      message: "Modo de desenvolvimento: código gerado com sucesso",
+      message: "Development mode: verification code generated",
       devCode: verificationCode,
     })
   } catch (error) {
-    console.error("Erro no modo de desenvolvimento:", error)
+    logger.error("Error in development mode", error)
     return NextResponse.json(
       {
-        error: `Erro interno do servidor: ${error instanceof Error ? error.message : "Erro desconhecido"}`,
+        error: "Internal server error",
       },
       { status: 500 },
     )

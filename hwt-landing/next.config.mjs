@@ -31,6 +31,24 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // Headers para resolver problemas de CORS e COOP com WalletConnect
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none',
+          },
+        ],
+      },
+    ]
+  },
   // Disable static generation for legal pages during development
   ...(process.env.NODE_ENV === 'development' && {
     generateBuildId: async () => {

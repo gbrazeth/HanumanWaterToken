@@ -11,7 +11,8 @@
     "faq": "FAQ",
     "login": "Login",
     "logout": "Logout",
-    "myAccount": "My Account"
+    "myAccount": "My Account",
+    "buyHWT": "Buy HWT"
   },
   "hero": {
     "title": "Uniting Hydrogeology and Technology",
@@ -355,6 +356,8 @@
     "comingSoon": "(Coming soon)",
     "pix": "PIX",
     "creditCard": "Credit Card",
-    "allRightsReserved": "All rights reserved."
+    "allRightsReserved": "All rights reserved.",
+    "walletConnected": "Wallet Connected",
+    "disconnect": "Disconnect"
   }
 }

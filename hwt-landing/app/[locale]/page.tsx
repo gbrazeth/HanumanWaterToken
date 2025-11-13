@@ -1,24 +1,20 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from 'next-intl'
-import { TOKEN_ABI, TOKEN_CONTRACT_ADDRESS } from "@/config/contract";
-import { NETWORK_CONFIG } from "@/config/contract";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Droplet, Shield, Users, ChevronRight, ArrowRight, Star, Percent, CalendarDays, Gift, Leaf } from "lucide-react"
-import { AuthDialog } from "@/components/auth-dialog"
 import { LanguageSwitcher } from "@/components/language-switcher"
-// Primeiro, vamos adicionar o import para o DropdownMenu
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { LogOut, User } from "lucide-react"
 
 const scrollToSection = (elementId: string, offset = 80) => {
+  if (typeof window === 'undefined') return
+  
   const element = document.getElementById(elementId)
   if (element) {
     const bodyRect = document.body.getBoundingClientRect().top
@@ -37,149 +33,9 @@ export default function LandingPage() {
   const t = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMoreFaqs, setShowMoreFaqs] = useState(false);
-  const [authDialogOpen, setAuthDialogOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [tokenBalance, setTokenBalance] = useState("0")
-
-  // Verificar se o usuário já está logado ao carregar a página
-  const fetchTokenBalance = async (identifier: string) => {
-    try {
-      // Importar ethers dinamicamente apenas no cliente
-      const { ethers } = await import('ethers')
-
-      // Se o identificador for um endereço Ethereum válido
-      if (ethers.utils.isAddress(identifier)) {
-        let provider;
-        if (typeof window !== 'undefined' && (window as any).ethereum) {
-          provider = new ethers.providers.Web3Provider((window as any).ethereum);
-        } else {
-          provider = new ethers.providers.JsonRpcProvider(NETWORK_CONFIG.rpcUrls[0]);
-        }
-        const contract = new ethers.Contract(TOKEN_CONTRACT_ADDRESS, TOKEN_ABI, provider)
-
-        // Buscar o saldo e os decimais do token
-        const [balance, decimals] = await Promise.all([
-          contract.balanceOf(identifier),
-          contract.decimals()
-        ])
-
-        // Formatar o saldo considerando os decimais
-        const formattedBalance = ethers.utils.formatUnits(balance, decimals)
-        return formattedBalance
-      } else {
-        // Se não for um endereço (ex: email), retorna 0
-        // TODO: Implementar mapeamento de email para endereço se necessário
-        return "0"
-      }
-    } catch (error) {
-      console.error("Erro ao buscar saldo de tokens:", error)
-      return "0"
-    }
-  }
-
-  useEffect(() => {
-    const authToken = localStorage.getItem("hwt-auth-token")
-    if (authToken) {
-      try {
-        const tokenData = JSON.parse(authToken)
-        // Verificar se o token não expirou (opcional - 7 dias)
-        const expirationTime = 7 * 24 * 60 * 60 * 1000 // 7 dias em milissegundos
-        if (Date.now() - tokenData.timestamp < expirationTime) {
-          setIsLoggedIn(true)
-        } else {
-          // Token expirado, remover
-          localStorage.removeItem("hwt-auth-token")
-        }
-      } catch (error) {
-        console.error("Erro ao verificar autenticação:", error)
-        localStorage.removeItem("hwt-auth-token")
-      }
-    }
-
-    // Função para obter o endereço conectado na MetaMask
-    const getConnectedAddress = async (): Promise<string | null> => {
-      if (typeof window !== 'undefined' && (window as any).ethereum) {
-        try {
-          const accounts = await (window as any).ethereum.request({ method: 'eth_accounts' });
-          if (accounts && accounts.length > 0) {
-            return accounts[0];
-          }
-        } catch (e) {
-          // Silenciar
-        }
-      }
-      return null;
-    };
-
-    // Atualiza saldo ao receber evento de compra ou ao carregar
-    const updateBalance = async () => {
-      let address = await getConnectedAddress();
-      if (address) {
-        const balance = await fetchTokenBalance(address);
-        setTokenBalance(balance);
-      } else {
-        // fallback: método antigo (email ou auth-token)
-        const authToken = localStorage.getItem("hwt-auth-token");
-        if (authToken) {
-          try {
-            const tokenData = JSON.parse(authToken);
-            const identifier = tokenData.address || tokenData.email;
-            const balance = await fetchTokenBalance(identifier);
-            setTokenBalance(balance);
-          } catch (error) {
-            console.error("Erro ao atualizar saldo após compra:", error);
-          }
-        }
-      }
-    };
-
-    // Atualizar saldo ao carregar a página
-    updateBalance();
-    // Atualizar saldo ao receber evento customizado
-    window.addEventListener('hwt-balance-updated', updateBalance);
-    return () => {
-      window.removeEventListener('hwt-balance-updated', updateBalance);
-    };
-  }, [])
-
-  const handleLoginSuccess = async () => {
-    setIsLoggedIn(true)
-    // Buscar o saldo de tokens quando o usuário fizer login
-    const authToken = localStorage.getItem("hwt-auth-token")
-    if (authToken) {
-      try {
-        const tokenData = JSON.parse(authToken)
-        // Se for uma carteira Metamask, usa o endereço da carteira
-        // Se for login por email/Google, usa o email como identificador
-        const identifier = tokenData.address || tokenData.email
-        const balance = await fetchTokenBalance(identifier)
-        setTokenBalance(balance)
-      } catch (error) {
-        console.error("Erro ao buscar saldo inicial:", error)
-      }
-    }
-  }
-
-  // Agora, vamos adicionar a função handleLogout logo após a função handleLoginSuccess
-  const handleLogout = () => {
-    // Verificar se o usuário está conectado via Metamask
-    if (typeof window.ethereum !== "undefined") {
-      // Não há um método direto para "desconectar" do Metamask,
-      // mas podemos limpar o estado da aplicação
-      console.log("Desconectando da carteira Metamask")
-    }
-
-    // Limpar qualquer token ou sessão armazenada
-    localStorage.removeItem("hwt-auth-token")
-
-    // Atualizar o estado para desconectado
-    setIsLoggedIn(false)
-
-    console.log("Usuário desconectado com sucesso")
-  }
 
   return (
-    <div className="flex min-h-screen flex-col bg-logoBg">
+    <div className="flex min-h-screen flex-col bg-logoBg" suppressHydrationWarning>
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-logoBg/95 backdrop-blur supports-[backdrop-filter]:bg-logoBg/60">
   <div className="container flex h-16 items-center justify-between">
@@ -277,27 +133,12 @@ export default function LandingPage() {
         </svg>
       </button>
       
-      {/* Login/Account Button */}
-      {isLoggedIn ? (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button className="bg-primary hover:bg-primary/90 flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Conta Conectada ({Number(tokenBalance) % 1 === 0 ? Number(tokenBalance) : Number(tokenBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} HWT)
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-            <LogOut className="h-4 w-4 mr-2" />
-            {t('navigation.logout')}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ) : (
-      <Button className="bg-primary hover:bg-primary/90 ml-2" onClick={() => setAuthDialogOpen(true)}>
-        {t('navigation.login')}
+      {/* Buy HWT Button */}
+      <Button asChild className="bg-primary hover:bg-primary/90 ml-2">
+        <Link href="/checkout">
+          {t('navigation.buyHWT')}
+        </Link>
       </Button>
-    )}
     </div>
   </div>
   {/* Menu mobile */}
@@ -313,8 +154,6 @@ export default function LandingPage() {
     </nav>
   )}
 </header>
-
-      <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} onLoginSuccess={handleLoginSuccess} />
 
       <main className="flex-1">
         {/* Hero Section */}
