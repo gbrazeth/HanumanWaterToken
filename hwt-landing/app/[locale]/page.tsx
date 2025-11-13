@@ -92,20 +92,20 @@ export default function LandingPage() {
               {t('navigation.roadmap')}
             </Link>
             <a
-              href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium hover:text-primary"
-            >
-              {t('navigation.hwtContract')}
-            </a>
-            <a
               href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm font-medium hover:text-primary"
             >
               {t('navigation.presaleContract')}
+            </a>
+            <a
+              href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium hover:text-primary"
+            >
+              {t('navigation.hwtContract')}
             </a>
             <Link
               href="#faq"
@@ -148,8 +148,8 @@ export default function LandingPage() {
       <Link href="#benefits" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('benefits')}}>{t('navigation.benefits')}</Link>
       <Link href="#tokenomics" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('tokenomics', 120)}}>{t('navigation.tokenomics')}</Link>
       <Link href="#roadmap" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('roadmap')}}>{t('navigation.roadmap')}</Link>
-      <a href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8" target="_blank" rel="noopener noreferrer" className="py-2 border-b text-primary font-medium">{t('navigation.hwtContract')}</a>
       <a href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d" target="_blank" rel="noopener noreferrer" className="py-2 border-b text-primary font-medium">{t('navigation.presaleContract')}</a>
+      <a href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8" target="_blank" rel="noopener noreferrer" className="py-2 border-b text-primary font-medium">{t('navigation.hwtContract')}</a>
       <Link href="#faq" className="py-2 border-b text-primary font-medium" onClick={e => {e.preventDefault(); setMenuOpen(false); scrollToSection('faq')}}>{t('navigation.faq')}</Link>
     </nav>
   )}
@@ -760,17 +760,17 @@ export default function LandingPage() {
               <h3 className="font-semibold mb-4 text-primary">{t('footer.resources.title')}</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="https://gbrazeth.github.io/HanumanWaterToken/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     {t('footer.resources.whitepaper')}
                   </a>
                 </li>
                 <li>
-                  <a href="https://gbrazeth.github.io/HanumanWaterToken/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     {t('footer.resources.documentation')}
                   </a>
                 </li>
                 <li>
-                  <a href="https://etherscan.io/address/0x86C064635a535Aa681fD5c58ffa3639bD2d09fF8" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
                     {t('footer.resources.smartContract')}
                   </a>
                 </li>
