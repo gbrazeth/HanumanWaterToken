@@ -567,6 +567,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
           >
             💳 Comprar ETH com Cartão
           </Button>
+          <p className="text-xs text-yellow-600 mt-2 italic">
+            💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
+          </p>
         </div>
       )}
       
