@@ -35,3 +35,8 @@ pnpm-debug.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hardhat
+artifacts/
+cache/
+typechain-types/
