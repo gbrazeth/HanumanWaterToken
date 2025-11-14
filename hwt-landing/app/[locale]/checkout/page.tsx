@@ -659,7 +659,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                 </div>
                                 
                                 <div className="flex gap-2">
-                                  <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+                                  <Button onClick={() => open({ view: 'OnRampProviders' })} className="flex-1 bg-primary" disabled={isLoading}>
                                     {isLoading ? t('processing') : `💳 ${t('payWithPixCard')}`}
                                   </Button>
                                   <Button onClick={() => disconnect()} variant="outline" className="px-4">
