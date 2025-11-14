@@ -1,6 +1,6 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { cookieStorage, createStorage } from 'wagmi'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { mainnet } from 'wagmi/chains'
 
 // Get projectId from https://cloud.walletconnect.com
 export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID'
@@ -14,8 +14,8 @@ const metadata = {
   icons: ['https://hanumanwatertoken.com/hwt-logo.png']
 }
 
-// Create wagmiConfig
-const chains = [mainnet, sepolia] as const
+// Create wagmiConfig - usando apenas Mainnet para produção
+const chains = [mainnet] as const
 export const config = defaultWagmiConfig({
   chains,
   projectId,

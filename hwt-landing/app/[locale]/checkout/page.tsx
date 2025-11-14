@@ -14,7 +14,7 @@ import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/
 import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
-// Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
+// Usando endereços da Mainnet para produção
 
 // Config Mainnet para uso no switchEthereumChain
 const NETWORK_CONFIG = {
@@ -109,7 +109,7 @@ export default function CheckoutPage() {
         return true
       }
 
-      // Tentar trocar para a rede Sepolia
+      // Tentar trocar para a rede Mainnet
       try {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
@@ -132,9 +132,9 @@ export default function CheckoutPage() {
       console.error("Erro ao trocar de rede:", error)
       // Erro 4001 significa que o usuário rejeitou a solicitação
       if ((error as any).code === 4001) {
-        setError("Você precisa aceitar a troca de rede para Sepolia no MetaMask")
+        setError("Você precisa aceitar a troca de rede para Ethereum Mainnet no MetaMask")
       } else {
-        setError("Por favor, conecte-se à rede Sepolia (Ethereum Testnet)")
+        setError("Por favor, conecte-se à rede Ethereum Mainnet")
       }
       return false
     }
