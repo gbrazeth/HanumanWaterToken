@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/contract";
@@ -519,88 +518,84 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                     <CardTitle>{t('paymentMethod')}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Tabs defaultValue="crypto" className="w-full">
-  <TabsList className="grid w-full grid-cols-2">
-    <TabsTrigger value="crypto">{t('cryptoCurrency')}</TabsTrigger>
-    <TabsTrigger value="fiat">{t('fiatCurrency')}</TabsTrigger>
-  </TabsList>
-  <TabsContent value="crypto" className="space-y-4 mt-4">
-  <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-    <div className="flex items-center space-x-2 border rounded-md p-3">
-      <RadioGroupItem value="eth" id="eth" />
-      <Label htmlFor="eth" className="flex-1 cursor-pointer">
-        <div className="flex justify-between items-center">
-          <span>Ethereum (ETH)</span>
-          {isConnected && balanceData && (
-            <span className="text-sm text-muted-foreground">
-              {t('balance')}: {Number.parseFloat(balanceData.formatted).toFixed(4)} ETH
-            </span>
-          )}
-        </div>
-      </Label>
-    </div>
-  </RadioGroup>
-  {!isConnected ? (
-    <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
-      {isLoading ? t('connecting') : t('connectWallet')}
-    </Button>
-  ) : (
-    <div className="space-y-3">
-      <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-        <p className="text-sm font-medium text-green-800">{t('walletConnected')}</p>
-        <p className="text-xs text-green-600 mt-1 font-mono">
-          {address?.slice(0, 6)}...{address?.slice(-4)}
-        </p>
-      </div>
-      
-      {balanceData && Number(balanceData.formatted) === 0 && (
-        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-          <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
-          <p className="text-xs text-yellow-600 mt-1">
-            Você precisa adicionar ETH à sua carteira para comprar tokens.
-          </p>
-          <Button 
-            onClick={() => open({ view: 'OnRampProviders' })} 
-            variant="outline" 
-            size="sm"
-            className="mt-2 w-full"
-          >
-            💳 Comprar ETH com Cartão
-          </Button>
-          <p className="text-xs text-yellow-600 mt-2 italic">
-            💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
-          </p>
-        </div>
-      )}
-      
-      <div className="flex gap-2">
-        <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
-          {isLoading ? t('processing') : t('buyTokens')}
-        </Button>
-        <Button onClick={() => disconnect()} variant="outline" className="px-4">
-          {t('disconnect')}
-        </Button>
-      </div>
-    </div>
-  )}
-</TabsContent>
-  <TabsContent value="fiat" className="space-y-4 mt-4">
-    <RadioGroup className="space-y-3">
-      <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
-        <RadioGroupItem value="pix" id="pix" disabled />
-        <Label htmlFor="pix" className="flex-1 cursor-not-allowed">
-          {t('pix')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
-        </Label>
-      </div>
-      <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
-        <RadioGroupItem value="credit_card" id="credit_card" disabled />
-        <Label htmlFor="credit_card" className="flex-1 cursor-not-allowed">
-          {t('creditCard')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
-        </Label>
-      </div>
-    </RadioGroup>
-  </TabsContent>
-</Tabs>
+                    <div className="w-full">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold">{t('cryptoCurrency')}/{t('fiatCurrency')}</h3>
+                        <p className="text-sm text-muted-foreground">Escolha seu método de pagamento</p>
+                      </div>
+                      <div className="space-y-4">
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="eth" id="eth" />
+                            <Label htmlFor="eth" className="flex-1 cursor-pointer">
+                              <div className="flex justify-between items-center">
+                                <span>Ethereum (ETH)</span>
+                                {isConnected && balanceData && (
+                                  <span className="text-sm text-muted-foreground">
+                                    {t('balance')}: {Number.parseFloat(balanceData.formatted).toFixed(4)} ETH
+                                  </span>
+                                )}
+                              </div>
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
+                            <RadioGroupItem value="pix" id="pix" disabled />
+                            <Label htmlFor="pix" className="flex-1 cursor-not-allowed">
+                              {t('pix')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
+                            <RadioGroupItem value="credit_card" id="credit_card" disabled />
+                            <Label htmlFor="credit_card" className="flex-1 cursor-not-allowed">
+                              {t('creditCard')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                        {!isConnected ? (
+                          <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
+                            {isLoading ? t('connecting') : t('connectWallet')}
+                          </Button>
+                        ) : (
+                          <div className="space-y-3">
+                            <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                              <p className="text-sm font-medium text-green-800">{t('walletConnected')}</p>
+                              <p className="text-xs text-green-600 mt-1 font-mono">
+                                {address?.slice(0, 6)}...{address?.slice(-4)}
+                              </p>
+                            </div>
+                            
+                            {balanceData && Number(balanceData.formatted) === 0 && (
+                              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                                <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
+                                <p className="text-xs text-yellow-600 mt-1">
+                                  Você precisa adicionar ETH à sua carteira para comprar tokens.
+                                </p>
+                                <Button 
+                                  onClick={() => open({ view: 'OnRampProviders' })} 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="mt-2 w-full"
+                                >
+                                  💳 Comprar ETH com Cartão
+                                </Button>
+                                <p className="text-xs text-yellow-600 mt-2 italic">
+                                  💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
+                                </p>
+                              </div>
+                            )}
+                            
+                            <div className="flex gap-2">
+                              <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+                                {isLoading ? t('processing') : t('buyTokens')}
+                              </Button>
+                              <Button onClick={() => disconnect()} variant="outline" className="px-4">
+                                {t('disconnect')}
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
                     {error && (
                       <Alert variant="destructive" className="mt-4">
