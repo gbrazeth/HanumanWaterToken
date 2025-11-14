@@ -131,9 +131,9 @@ export default function CheckoutPage() {
       console.error("Erro ao trocar de rede:", error)
       // Erro 4001 significa que o usuário rejeitou a solicitação
       if ((error as any).code === 4001) {
-        setError("Você precisa aceitar a troca de rede para Ethereum Mainnet no MetaMask")
+        setError(t('acceptNetworkSwitch'))
       } else {
-        setError("Por favor, conecte-se à rede Ethereum Mainnet")
+        setError(t('connectToMainnet'))
       }
       return false
     }
@@ -248,7 +248,7 @@ export default function CheckoutPage() {
           return
         }
 
-        if (!window.ethereum) throw new Error("MetaMask não encontrado")
+        if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
         const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
         const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
@@ -299,7 +299,7 @@ export default function CheckoutPage() {
           return
         }
 
-        if (!window.ethereum) throw new Error("MetaMask não encontrado")
+        if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
       const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
 
@@ -542,9 +542,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                       <div className="border rounded-lg p-4">
                         <div className="mb-4">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
-                            💰 Carteiras Crypto
+                            💰 {t('cryptoWallets')}
                           </h3>
-                          <p className="text-sm text-muted-foreground">MetaMask, WalletConnect, Coinbase Wallet, etc.</p>
+                          <p className="text-sm text-muted-foreground">{t('cryptoWalletsDescription')}</p>
                         </div>
                         
                         <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
@@ -567,7 +567,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                           <div className="mt-4">
                             {!isConnected ? (
                               <Button onClick={connectCryptoWallet} className="w-full" disabled={isLoading}>
-                                {isLoading ? t('connecting') : '🔗 Conectar Carteira Crypto'}
+                                {isLoading ? t('connecting') : `🔗 ${t('connectCryptoWallet')}`}
                               </Button>
                             ) : (
                               <div className="space-y-3">
@@ -580,9 +580,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                 
                                 {balanceData && Number(balanceData.formatted) === 0 && (
                                   <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                                    <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
+                                    <p className="text-sm font-medium text-yellow-800">⚠️ {t('insufficientBalance')}</p>
                                     <p className="text-xs text-yellow-600 mt-1">
-                                      Você precisa adicionar ETH à sua carteira para comprar tokens.
+                                      {t('insufficientBalanceDescription')}
                                     </p>
                                     <Button 
                                       onClick={() => open({ view: 'OnRampProviders' })} 
@@ -590,10 +590,10 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                       size="sm"
                                       className="mt-2 w-full"
                                     >
-                                      💳 Comprar ETH com Cartão
+                                      💳 {t('buyETHWithCard')}
                                     </Button>
                                     <p className="text-xs text-yellow-600 mt-2 italic">
-                                      💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
+                                      💡 {t('recommendedMeld')}
                                     </p>
                                   </div>
                                 )}
@@ -616,9 +616,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                       <div className="border rounded-lg p-4">
                         <div className="mb-4">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
-                            💳 Pagamento Tradicional
+                            💳 {t('traditionalPayment')}
                           </h3>
-                          <p className="text-sm text-muted-foreground">PIX, Cartão de Crédito via Email/Google/Redes Sociais</p>
+                          <p className="text-sm text-muted-foreground">{t('traditionalPaymentDescription')}</p>
                         </div>
                         
                         <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
@@ -626,9 +626,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             <RadioGroupItem value="social" id="social" />
                             <Label htmlFor="social" className="flex-1 cursor-pointer">
                               <div className="flex justify-between items-center">
-                                <span>PIX / Cartão de Crédito</span>
+                                <span>{t('pixCreditCard')}</span>
                                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                  Via Email/Google
+                                  {t('viaEmailGoogle')}
                                 </span>
                               </div>
                             </Label>
@@ -640,27 +640,27 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             {!isConnected ? (
                               <div className="space-y-3">
                                 <Button onClick={connectSocialWallet} className="w-full" disabled={isLoading}>
-                                  {isLoading ? t('connecting') : '📧 Conectar com Email/Google'}
+                                  {isLoading ? t('connecting') : `📧 ${t('connectEmailGoogle')}`}
                                 </Button>
                                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-                                  <p className="text-sm font-medium text-blue-800">💡 Como funciona?</p>
+                                  <p className="text-sm font-medium text-blue-800">💡 {t('howItWorks')}</p>
                                   <p className="text-xs text-blue-600 mt-1">
-                                    Conecte com seu email ou conta Google para acessar opções de pagamento com PIX e cartão de crédito.
+                                    {t('howItWorksDescription')}
                                   </p>
                                 </div>
                               </div>
                             ) : (
                               <div className="space-y-3">
                                 <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-                                  <p className="text-sm font-medium text-green-800">Conectado!</p>
+                                  <p className="text-sm font-medium text-green-800">{t('connected')}</p>
                                   <p className="text-xs text-green-600 mt-1">
-                                    Agora você pode pagar com PIX ou cartão de crédito.
+                                    {t('connectedDescription')}
                                   </p>
                                 </div>
                                 
                                 <div className="flex gap-2">
                                   <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
-                                    {isLoading ? t('processing') : '💳 Pagar com PIX/Cartão'}
+                                    {isLoading ? t('processing') : `💳 ${t('payWithPixCard')}`}
                                   </Button>
                                   <Button onClick={() => disconnect()} variant="outline" className="px-4">
                                     {t('disconnect')}

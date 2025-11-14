@@ -29,10 +29,11 @@ const scrollToSection = (elementId: string, offset = 80) => {
   }
 }
 
-export default function LandingPage() {
+export default function LandingPage({ params }: { params: { locale: string } }) {
   const t = useTranslations();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMoreFaqs, setShowMoreFaqs] = useState(false);
+  const { locale } = params;
 
   return (
     <div className="flex min-h-screen flex-col bg-logoBg" suppressHydrationWarning>
@@ -135,7 +136,7 @@ export default function LandingPage() {
       
       {/* Buy HWT Button */}
       <Button asChild className="bg-primary hover:bg-primary/90 ml-2">
-        <Link href="/checkout">
+        <Link href={`/${locale}/checkout`}>
           {t('navigation.buyHWT')}
         </Link>
       </Button>
@@ -187,7 +188,7 @@ export default function LandingPage() {
                 </p>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <Button size="lg" className="bg-primary hover:bg-primary/90 flex-1 sm:flex-none min-w-[140px]" asChild>
-                    <Link href="/checkout">
+                    <Link href={`/${locale}/checkout`}>
                       {t('hero.cta.buyNow')} <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -673,7 +674,7 @@ export default function LandingPage() {
               {t('cta.description')}
             </p>
             <Button size="lg" className="mt-6" style={{ backgroundColor: '#3F5767', color: '#fff' }} asChild>
-              <Link href="/checkout">{t('cta.button')}</Link>
+              <Link href={`/${locale}/checkout`}>{t('cta.button')}</Link>
             </Button>
           </div>
         </section>

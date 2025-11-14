@@ -358,6 +358,25 @@
     "creditCard": "Cartão de Crédito",
     "allRightsReserved": "Todos os direitos reservados.",
     "walletConnected": "Carteira Conectada",
-    "disconnect": "Desconectar"
+    "disconnect": "Desconectar",
+    "cryptoWallets": "Carteiras Crypto",
+    "cryptoWalletsDescription": "MetaMask, WalletConnect, Coinbase Wallet, etc.",
+    "traditionalPayment": "Pagamento Tradicional",
+    "traditionalPaymentDescription": "PIX, Cart\u00e3o de Cr\u00e9dito via Email/Google/Redes Sociais",
+    "connectCryptoWallet": "Conectar Carteira Crypto",
+    "connectEmailGoogle": "Conectar com Email/Google",
+    "pixCreditCard": "PIX / Cart\u00e3o de Cr\u00e9dito",
+    "viaEmailGoogle": "Via Email/Google",
+    "howItWorks": "Como funciona?",
+    "howItWorksDescription": "Conecte com seu email ou conta Google para acessar op\u00e7\u00f5es de pagamento com PIX e cart\u00e3o de cr\u00e9dito.",
+    "connected": "Conectado!",
+    "connectedDescription": "Agora voc\u00ea pode pagar com PIX ou cart\u00e3o de cr\u00e9dito.",
+    "payWithPixCard": "Pagar com PIX/Cart\u00e3o",
+    "insufficientBalance": "Saldo insuficiente",
+    "insufficientBalanceDescription": "Voc\u00ea precisa adicionar ETH \u00e0 sua carteira para comprar tokens.",
+    "buyETHWithCard": "Comprar ETH com Cart\u00e3o",
+    "recommendedMeld": "Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indispon\u00edvel)",
+    "acceptNetworkSwitch": "Voc\u00ea precisa aceitar a troca de rede para Ethereum Mainnet no MetaMask",
+    "connectToMainnet": "Por favor, conecte-se \u00e0 rede Ethereum Mainnet"
   }
 }
