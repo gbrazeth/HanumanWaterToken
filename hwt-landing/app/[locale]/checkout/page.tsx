@@ -77,7 +77,7 @@ export default function CheckoutPage() {
   const [tokenAmount, setTokenAmount] = useState<string>("10")
   const [usdAmount, setUsdAmount] = useState<string>("20")
   const [waterAmount, setWaterAmount] = useState<string>("10")
-  const [paymentMethod, setPaymentMethod] = useState<string>("eth")
+  const [paymentMethod, setPaymentMethod] = useState('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -174,14 +174,33 @@ export default function CheckoutPage() {
     }
   }
 
-  // Função para conectar carteira usando WalletConnect
-  const connectWallet = async () => {
+  // Função para conectar carteira crypto
+  const connectCryptoWallet = async () => {
+    setIsLoading(true)
+    setError('')
+    setPaymentMethod('eth')
+    
     try {
-      setIsLoading(true)
-      await open()
+      await open({ view: 'Connect' })
     } catch (error) {
-      console.error("Erro ao conectar com a carteira:", error)
-      setError("Erro ao conectar com a carteira. Por favor, tente novamente.")
+      console.error('Erro ao conectar carteira crypto:', error)
+      setError('Erro ao conectar carteira crypto. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Função para conectar com email/social (pagamento tradicional)
+  const connectSocialWallet = async () => {
+    setIsLoading(true)
+    setError('')
+    setPaymentMethod('social')
+    
+    try {
+      await open({ view: 'Connect' })
+    } catch (error) {
+      console.error('Erro ao conectar com email/social:', error)
+      setError('Erro ao conectar. Tente novamente.')
     } finally {
       setIsLoading(false)
     }
@@ -518,19 +537,23 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                     <CardTitle>{t('paymentMethod')}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="w-full">
-                      <div className="mb-4">
-                        <h3 className="text-lg font-semibold">{t('cryptoCurrency')}/{t('fiatCurrency')}</h3>
-                        <p className="text-sm text-muted-foreground">Escolha seu método de pagamento</p>
-                      </div>
-                      <div className="space-y-4">
+                    <div className="w-full space-y-6">
+                      {/* Seção 1: Carteiras Crypto */}
+                      <div className="border rounded-lg p-4">
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            💰 Carteiras Crypto
+                          </h3>
+                          <p className="text-sm text-muted-foreground">MetaMask, WalletConnect, Coinbase Wallet, etc.</p>
+                        </div>
+                        
                         <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
                           <div className="flex items-center space-x-2 border rounded-md p-3">
                             <RadioGroupItem value="eth" id="eth" />
                             <Label htmlFor="eth" className="flex-1 cursor-pointer">
                               <div className="flex justify-between items-center">
                                 <span>Ethereum (ETH)</span>
-                                {isConnected && balanceData && (
+                                {isConnected && balanceData && paymentMethod === 'eth' && (
                                   <span className="text-sm text-muted-foreground">
                                     {t('balance')}: {Number.parseFloat(balanceData.formatted).toFixed(4)} ETH
                                   </span>
@@ -538,60 +561,113 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                               </div>
                             </Label>
                           </div>
-                          <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
-                            <RadioGroupItem value="pix" id="pix" disabled />
-                            <Label htmlFor="pix" className="flex-1 cursor-not-allowed">
-                              {t('pix')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
-                            </Label>
+                        </RadioGroup>
+                        
+                        {paymentMethod === 'eth' && (
+                          <div className="mt-4">
+                            {!isConnected ? (
+                              <Button onClick={connectCryptoWallet} className="w-full" disabled={isLoading}>
+                                {isLoading ? t('connecting') : '🔗 Conectar Carteira Crypto'}
+                              </Button>
+                            ) : (
+                              <div className="space-y-3">
+                                <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                                  <p className="text-sm font-medium text-green-800">{t('walletConnected')}</p>
+                                  <p className="text-xs text-green-600 mt-1 font-mono">
+                                    {address?.slice(0, 6)}...{address?.slice(-4)}
+                                  </p>
+                                </div>
+                                
+                                {balanceData && Number(balanceData.formatted) === 0 && (
+                                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                                    <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
+                                    <p className="text-xs text-yellow-600 mt-1">
+                                      Você precisa adicionar ETH à sua carteira para comprar tokens.
+                                    </p>
+                                    <Button 
+                                      onClick={() => open({ view: 'OnRampProviders' })} 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="mt-2 w-full"
+                                    >
+                                      💳 Comprar ETH com Cartão
+                                    </Button>
+                                    <p className="text-xs text-yellow-600 mt-2 italic">
+                                      💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
+                                    </p>
+                                  </div>
+                                )}
+                                
+                                <div className="flex gap-2">
+                                  <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+                                    {isLoading ? t('processing') : t('buyTokens')}
+                                  </Button>
+                                  <Button onClick={() => disconnect()} variant="outline" className="px-4">
+                                    {t('disconnect')}
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center space-x-2 border rounded-md p-3 opacity-50 cursor-not-allowed">
-                            <RadioGroupItem value="credit_card" id="credit_card" disabled />
-                            <Label htmlFor="credit_card" className="flex-1 cursor-not-allowed">
-                              {t('creditCard')} <span className="ml-2 text-xs text-muted-foreground">{t('comingSoon')}</span>
+                        )}
+                      </div>
+
+                      {/* Seção 2: Pagamento Tradicional */}
+                      <div className="border rounded-lg p-4">
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            💳 Pagamento Tradicional
+                          </h3>
+                          <p className="text-sm text-muted-foreground">PIX, Cartão de Crédito via Email/Google/Redes Sociais</p>
+                        </div>
+                        
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                          <div className="flex items-center space-x-2 border rounded-md p-3">
+                            <RadioGroupItem value="social" id="social" />
+                            <Label htmlFor="social" className="flex-1 cursor-pointer">
+                              <div className="flex justify-between items-center">
+                                <span>PIX / Cartão de Crédito</span>
+                                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                  Via Email/Google
+                                </span>
+                              </div>
                             </Label>
                           </div>
                         </RadioGroup>
-                        {!isConnected ? (
-                          <Button onClick={connectWallet} className="w-full" disabled={isLoading}>
-                            {isLoading ? t('connecting') : t('connectWallet')}
-                          </Button>
-                        ) : (
-                          <div className="space-y-3">
-                            <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-                              <p className="text-sm font-medium text-green-800">{t('walletConnected')}</p>
-                              <p className="text-xs text-green-600 mt-1 font-mono">
-                                {address?.slice(0, 6)}...{address?.slice(-4)}
-                              </p>
-                            </div>
-                            
-                            {balanceData && Number(balanceData.formatted) === 0 && (
-                              <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                                <p className="text-sm font-medium text-yellow-800">⚠️ Saldo insuficiente</p>
-                                <p className="text-xs text-yellow-600 mt-1">
-                                  Você precisa adicionar ETH à sua carteira para comprar tokens.
-                                </p>
-                                <Button 
-                                  onClick={() => open({ view: 'OnRampProviders' })} 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="mt-2 w-full"
-                                >
-                                  💳 Comprar ETH com Cartão
+                        
+                        {paymentMethod === 'social' && (
+                          <div className="mt-4">
+                            {!isConnected ? (
+                              <div className="space-y-3">
+                                <Button onClick={connectSocialWallet} className="w-full" disabled={isLoading}>
+                                  {isLoading ? t('connecting') : '📧 Conectar com Email/Google'}
                                 </Button>
-                                <p className="text-xs text-yellow-600 mt-2 italic">
-                                  💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
-                                </p>
+                                <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                  <p className="text-sm font-medium text-blue-800">💡 Como funciona?</p>
+                                  <p className="text-xs text-blue-600 mt-1">
+                                    Conecte com seu email ou conta Google para acessar opções de pagamento com PIX e cartão de crédito.
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                                  <p className="text-sm font-medium text-green-800">Conectado!</p>
+                                  <p className="text-xs text-green-600 mt-1">
+                                    Agora você pode pagar com PIX ou cartão de crédito.
+                                  </p>
+                                </div>
+                                
+                                <div className="flex gap-2">
+                                  <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+                                    {isLoading ? t('processing') : '💳 Pagar com PIX/Cartão'}
+                                  </Button>
+                                  <Button onClick={() => disconnect()} variant="outline" className="px-4">
+                                    {t('disconnect')}
+                                  </Button>
+                                </div>
                               </div>
                             )}
-                            
-                            <div className="flex gap-2">
-                              <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
-                                {isLoading ? t('processing') : t('buyTokens')}
-                              </Button>
-                              <Button onClick={() => disconnect()} variant="outline" className="px-4">
-                                {t('disconnect')}
-                              </Button>
-                            </div>
                           </div>
                         )}
                       </div>
