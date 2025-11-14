@@ -13,7 +13,7 @@ import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/contract";
 import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
 // Certifique-se que TOKEN_CONTRACT_ADDRESS está atualizado para o endereço da Sepolia: 0xE03CBA5b5818Ae164D098f349809DA0567F31038
 
 // Config Mainnet para uso no switchEthereumChain
@@ -69,7 +69,7 @@ export default function CheckoutPage() {
   // Wagmi hooks para WalletConnect
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { open } = useWeb3Modal();
+  const { open, isReady } = useWeb3ModalSafe();
   const { data: balanceData } = useBalance({
     address: address,
   });
