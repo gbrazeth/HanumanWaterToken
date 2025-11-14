@@ -62,8 +62,9 @@ const USDT_ABI = [
 
 // Usando os endereços importados do arquivo de configuração
 
-export default function CheckoutPage() {
+export default function CheckoutPage({ params }: { params: { locale: string } }) {
   const t = useTranslations('checkout');
+  const { locale } = params;
   
   // Wagmi hooks para WalletConnect
   const { address, isConnected } = useAccount();
@@ -413,7 +414,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
             />
             <span className="text-xl font-bold text-primary">HWT</span>
           </div>
-          <Link href="/" className="flex items-center text-sm font-medium hover:text-primary">
+          <Link href={`/${locale}`} className="flex items-center text-sm font-medium hover:text-primary">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('backToHome')}
           </Link>
@@ -469,7 +470,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                   </Button>
                   <div className="flex gap-4">
                     <Button asChild>
-                      <Link href="/">{t('backToHome')}</Link>
+                      <Link href={`/${locale}`}>{t('backToHome')}</Link>
                     </Button>
                     <Button variant="outline" onClick={() => setSuccess(false)}>
                       {t('makeAnotherPurchase')}
