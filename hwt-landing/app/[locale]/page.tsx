@@ -284,8 +284,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+          {/* Scroll indicator - Hidden on mobile */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden lg:block">
             <div 
               className="flex flex-col items-center cursor-pointer group animate-bounce"
               onClick={() => scrollToSection("nossa-fonte-de-agua")}
@@ -319,7 +319,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                 <p className="text-muted-foreground">
                   {t('about.description2')}
                 </p>
-                <div className="mt-8 p-6 max-w-2xl mx-auto" style={{ backgroundColor: '#f4f8fb' }}>
+                <div className="mt-8 p-6 max-w-2xl mx-auto border-2 border-white rounded-lg shadow-lg" style={{ backgroundColor: '#f4f8fb' }}>
 
                   <h3 className="text-xl font-bold text-primary">
                     {t('about.presaleBox.title')}
@@ -339,8 +339,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
@@ -413,8 +413,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
           </div>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
@@ -513,8 +513,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
@@ -609,8 +609,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
@@ -702,8 +702,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
           </Tabs>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
@@ -815,8 +815,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </Accordion>
           </div>
 
-          {/* Scroll indicator para próxima seção */}
-          <div className="container px-4 mt-16">
+          {/* Scroll indicator para próxima seção - Hidden on mobile */}
+          <div className="container px-4 mt-16 hidden lg:block">
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
