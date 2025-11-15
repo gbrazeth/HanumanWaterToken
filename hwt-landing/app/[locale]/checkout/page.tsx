@@ -245,6 +245,45 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     return /MetaMask/i.test(userAgent) || (window as any).ethereum?.isMetaMask && /Mobile|Android|iPhone|iPad/i.test(userAgent);
   }
 
+  // Função para tentar abrir MetaMask com múltiplos métodos
+  const openMetaMaskApp = () => {
+    const currentUrl = `${window.location.host}${window.location.pathname}`
+    
+    // URLs diferentes para tentar
+    const urls = [
+      `https://metamask.app.link/dapp/${currentUrl}`,
+      `metamask://dapp/${currentUrl}`,
+      `https://metamask.io/download/`,
+      `metamask://`
+    ]
+    
+    console.log('🔗 Tentando abrir MetaMask com URLs:', urls)
+    
+    // Tentar cada URL com delay
+    urls.forEach((url, index) => {
+      setTimeout(() => {
+        console.log(`🔗 Tentativa ${index + 1}: ${url}`)
+        
+        if (index === 0) {
+          // Primeira tentativa: window.open
+          const opened = window.open(url, '_blank')
+          if (!opened || opened.closed) {
+            console.log('🔗 window.open falhou para:', url)
+          }
+        } else {
+          // Outras tentativas: location.href
+          try {
+            window.location.href = url
+          } catch (e) {
+            console.log('🔗 location.href falhou para:', url, e)
+          }
+        }
+      }, index * 1500) // 1.5 segundos entre cada tentativa
+    })
+    
+    return urls[0] // Retornar a primeira URL para o link manual
+  }
+
 
   // Função para comprar tokens com ETH
   const buyWithETH = async () => {
@@ -339,39 +378,19 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         
         console.log('🚀 Enviando transação:', txConfig)
 
-        // Para WalletConnect mobile, implementar estratégia específica
+        // Para WalletConnect mobile, implementar estratégia proativa
         if (isMobile && !window.ethereum?.isMetaMask) {
-          console.log('🔄 WalletConnect mobile: implementando estratégia de transação...')
+          console.log('🔄 WalletConnect mobile detectado: abrindo MetaMask proativamente...')
           
-          // Tentar executar a transação e capturar se precisa abrir o app
-          try {
-            const tx = await presaleContract.buyWithETH(txConfig)
-            console.log('✅ Transação enviada via WalletConnect:', tx.hash)
-            
-            // Aguardar confirmação
-            const receipt = await tx.wait()
-            console.log('✅ Transação confirmada:', receipt)
-          } catch (wcError: any) {
-            console.log('⚠️ Erro WalletConnect mobile:', wcError)
-            
-            // Se o erro indica que precisa abrir o MetaMask
-            if (wcError.message?.includes('User rejected') || 
-                wcError.message?.includes('user rejected') ||
-                wcError.code === 4001) {
-              
-              // Tentar abrir MetaMask via deep link
-              const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
-              console.log('🔗 Abrindo MetaMask via deep link:', metamaskDeepLink)
-              
-              // Abrir o link
-              window.open(metamaskDeepLink, '_blank')
-              
-              // Informar o usuário
-              throw new Error('Por favor, complete a transação no app MetaMask que foi aberto.')
-            } else {
-              throw wcError
-            }
-          }
+          // Usar função robusta para abrir MetaMask
+          const primaryUrl = openMetaMaskApp()
+          
+          // Informar o usuário com opção manual
+          const manualLink = `<a href="${primaryUrl}" target="_blank" style="color: #0066cc; text-decoration: underline;">Clique aqui se o MetaMask não abriu automaticamente</a>`
+          setError(`🚀 MetaMask está sendo aberto... ${manualLink}`)
+          setIsLoading(false)
+          return
+          
         } else {
           // Executar transação normal (desktop ou MetaMask mobile browser)
           const tx = await presaleContract.buyWithETH(txConfig)
@@ -826,6 +845,17 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                       3. Digite: hanumanwatertoken.com.br<br/>
                                       4. Conecte sua carteira aqui
                                     </p>
+                                    <Button 
+                                      onClick={() => {
+                                        const url = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+                                        window.open(url, '_blank')
+                                      }}
+                                      variant="outline" 
+                                      size="sm" 
+                                      className="mt-2 w-full text-xs"
+                                    >
+                                      🔗 Abrir no MetaMask App
+                                    </Button>
                                   </div>
                                 )}
                               </div>
