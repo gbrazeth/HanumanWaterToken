@@ -31,6 +31,32 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  webpack: (config, { isServer }) => {
+    // Resolver problemas com módulos opcionais do pino e WalletConnect
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      'pino-pretty': false,
+      'lokijs': false,
+      'encoding': false,
+      'fs': false,
+      'net': false,
+      'tls': false,
+    };
+    
+    // Ignorar módulos opcionais que causam problemas no build
+    config.externals = config.externals || [];
+    if (!isServer) {
+      config.externals.push('pino-pretty', 'lokijs', 'encoding');
+    }
+    
+    // Configurar aliases para módulos problemáticos
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'pino-pretty': false,
+    };
+    
+    return config;
+  },
   // Headers para resolver problemas de CORS e COOP com WalletConnect
   async headers() {
     return [
