@@ -33,7 +33,10 @@
     "trustIndicators": {
       "auditedSecure": "Audited & Secure",
       "realWaterTokenized": "Real Water Tokenized",
-      "activeCommunity": "Active Community"
+      "activeCommunity": "Active Community",
+      "verified": "Verified",
+      "tangible": "Tangible",
+      "active": "Active"
     }
   },
   "stats": {
@@ -399,6 +402,8 @@
     "recommendedMeld": "Recommended: Use <strong>Meld.io</strong> (Coinbase temporarily unavailable)",
     "metaMaskNotFound": "MetaMask not found",
     "acceptNetworkSwitch": "You need to accept the network switch to Ethereum Mainnet in MetaMask",
-    "connectToMainnet": "Please connect to Ethereum Mainnet network"
+    "connectToMainnet": "Please connect to Ethereum Mainnet network",
+    "selectQuantity": "Select Quantity",
+    "confirmation": "Confirmation"
   }
 }

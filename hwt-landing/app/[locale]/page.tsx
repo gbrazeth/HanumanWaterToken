@@ -206,22 +206,23 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                   </div>
 
                   {/* CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                     <Button 
                       size="lg" 
-                      className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20" 
+                      className="group bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-8 py-3 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20 relative overflow-hidden" 
                       asChild
                     >
-                      <Link href={`/${locale}/checkout`} className="flex items-center gap-3">
+                      <Link href={`/${locale}/checkout`} className="flex items-center gap-2 relative z-10">
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
                         {t('hero.cta.buyNow')} 
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 group-hover:scale-110 transition-all duration-300" />
                       </Link>
                     </Button>
                     
                     <Button
                       variant="outline"
                       size="lg"
-                      className="border-2 border-primary/60 text-primary hover:bg-primary hover:text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-white/80 backdrop-blur-sm hover:border-primary"
+                      className="border-2 border-primary/60 text-primary hover:bg-primary hover:text-white font-semibold px-6 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-white/80 backdrop-blur-sm hover:border-primary"
                       onClick={() => scrollToSection("nossa-fonte-de-agua")}
                     >
                       {t('hero.cta.learnMore')}
@@ -230,31 +231,44 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                     <Button
                       variant="ghost"
                       size="lg"
-                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-6 py-4 text-base transition-all duration-300 rounded-full border border-transparent hover:border-primary/30"
+                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-4 py-2 text-sm transition-all duration-300 rounded-full border border-transparent hover:border-primary/30"
                       asChild
                     >
                       <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                         {t('navigation.institutionalSite')}
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </Link>
                     </Button>
                   </div>
 
-                  {/* Trust indicators */}
-                  <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4 mb-20">
-                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
-                      <Shield className="h-4 w-4 text-green-600" />
-                      <span>{t('hero.trustIndicators.auditedSecure')}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
-                      <Droplet className="h-4 w-4 text-blue-600" />
-                      <span>{t('hero.trustIndicators.realWaterTokenized')}</span>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
-                      <Users className="h-4 w-4 text-purple-600" />
-                      <span>{t('hero.trustIndicators.activeCommunity')}</span>
+                  {/* Trust indicators - Ultra compacto */}
+                  <div className="pt-2 mb-8">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-primary/10">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-green-50 border border-green-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mb-1">
+                            <Shield className="h-4 w-4 text-green-600" />
+                          </div>
+                          <span className="font-semibold text-xs text-green-800">{t('hero.trustIndicators.auditedSecure')}</span>
+                          <span className="text-xs text-green-600 opacity-80">{t('hero.trustIndicators.verified')}</span>
+                        </div>
+                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-blue-50 border border-blue-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-1">
+                            <Droplet className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <span className="font-semibold text-xs text-blue-800">{t('hero.trustIndicators.realWaterTokenized')}</span>
+                          <span className="text-xs text-blue-600 opacity-80">{t('hero.trustIndicators.tangible')}</span>
+                        </div>
+                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-purple-50 border border-purple-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mb-1">
+                            <Users className="h-4 w-4 text-purple-600" />
+                          </div>
+                          <span className="font-semibold text-xs text-purple-800">{t('hero.trustIndicators.activeCommunity')}</span>
+                          <span className="text-xs text-purple-600 opacity-80">{t('hero.trustIndicators.active')}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -284,18 +298,19 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator - Hidden on mobile */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden lg:block">
+          {/* Scroll indicator - Centralizado abaixo da imagem */}
+          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 lg:left-3/4 lg:-translate-x-1/2 z-20 hidden lg:block">
             <div 
               className="flex flex-col items-center cursor-pointer group animate-bounce"
               onClick={() => scrollToSection("nossa-fonte-de-agua")}
             >
-              <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+              <div className="bg-white/95 backdrop-blur-sm rounded-full px-4 py-2 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
                 <span className="text-sm font-semibold">{t('navigationButtons.ourWaterSource')}</span>
               </div>
-              <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              <ChevronRight className="h-5 w-5 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
             </div>
           </div>
+
         </section>
 
         {/* Water Source Section */}
@@ -890,7 +905,22 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
         </section>
       </main>
 
-      <footer className="border-t border-primary/20 bg-logoBg">
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t border-gray-200 p-4 shadow-lg">
+        <Button 
+          size="lg" 
+          className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold py-4 text-lg shadow-xl rounded-full" 
+          asChild
+        >
+          <Link href={`/${locale}/checkout`} className="flex items-center justify-center gap-2">
+            {t('hero.cta.buyNow')} 
+            <ArrowRight className="h-5 w-5" />
+          </Link>
+        </Button>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-primary text-white py-12 pb-20 lg:pb-12">
         <div className="container px-4 py-8 md:py-12">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
@@ -902,72 +932,72 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                   height={40}
                   className="rounded-full"
                 />
-                <span className="text-xl font-bold text-primary">HWT</span>
+                <span className="text-xl font-bold text-white">HWT</span>
               </div>
-              <p className="text-sm text-muted-foreground">{t('footer.description')}</p>
+              <p className="text-sm text-white/80">{t('footer.description')}</p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-primary">{t('footer.quickLinks.title')}</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.quickLinks.title')}</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="#nossa-fonte-de-agua" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="#nossa-fonte-de-agua" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.quickLinks.about')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="#tokenomics" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="#tokenomics" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.quickLinks.tokenomics')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="#roadmap" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href="#roadmap" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.quickLinks.roadmap')}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-primary">{t('footer.resources.title')}</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.resources.title')}</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.resources.whitepaper')}
                   </a>
                 </li>
                 <li>
-                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://gbrazeth.github.io/HanumanWaterToken/docs/whitepaper/whitepaper-hwt-completo.html" target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.resources.documentation')}
                   </a>
                 </li>
                 <li>
-                  <a href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary">
+                  <a href="https://etherscan.io/address/0x67A506934aA8Bb00E92a706Ba40c373F6269B44d" target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.resources.smartContract')}
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 text-primary">{t('footer.legal.title')}</h3>
+              <h3 className="font-semibold mb-4 text-white">{t('footer.legal.title')}</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link href="/legal/privacy" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href={`/${locale}/legal/privacy`} className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.legal.privacy')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/legal/terms" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href={`/${locale}/legal/terms`} className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.legal.terms')}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/legal/disclaimer" className="text-sm text-muted-foreground hover:text-primary">
+                  <Link href={`/${locale}/legal/disclaimer`} className="text-sm text-white/70 hover:text-white transition-colors">
                     {t('footer.legal.disclaimer')}
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
+          <div className="mt-8 pt-8 border-t border-white/20 text-center text-sm text-white/70">
             © {new Date().getFullYear()} HanumanWater Token. {t('footer.copyright')}
           </div>
         </div>

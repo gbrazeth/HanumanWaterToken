@@ -82,6 +82,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasSelectedQuantity, setHasSelectedQuantity] = useState<boolean>(false)
   const [usdtBalance, setUsdtBalance] = useState<string>("0")
   const [pixCode, setPixCode] = useState<string>("")
 
@@ -210,6 +211,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   // Função para atualizar o valor em USD e água quando o número de tokens mudar
   const handleTokenAmountChange = (value: string) => {
     setTokenAmount(value)
+    setHasSelectedQuantity(true) // Marcar que o usuário interagiu
 
     // Calcular valor em USD (1 HWT = $2)
     const usdValue = Number.parseFloat(value) * 2
@@ -423,6 +425,44 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
 
       <main className="flex-1 py-12">
         <div className="container px-4">
+          {/* Progress Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-center space-x-4 mb-6">
+              <div className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  hasSelectedQuantity && tokenAmount && Number(tokenAmount) > 0 ? 'bg-green-500 text-white' : 'bg-primary text-white'
+                }`}>
+                  {hasSelectedQuantity && tokenAmount && Number(tokenAmount) > 0 ? '✓' : '1'}
+                </div>
+                <span className="ml-2 text-sm font-medium">{t('selectQuantity')}</span>
+              </div>
+              
+              <div className={`h-0.5 w-16 ${hasSelectedQuantity && tokenAmount && Number(tokenAmount) > 0 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+              
+              <div className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  hasSelectedQuantity && tokenAmount && Number(tokenAmount) > 0 && !isConnected ? 'bg-primary text-white' : 
+                  isConnected ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'
+                }`}>
+                  {isConnected ? '✓' : '2'}
+                </div>
+                <span className="ml-2 text-sm font-medium">{t('connectWallet')}</span>
+              </div>
+              
+              <div className={`h-0.5 w-16 ${isConnected ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+              
+              <div className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  success ? 'bg-green-500 text-white' : 
+                  isConnected && hasSelectedQuantity && tokenAmount && Number(tokenAmount) > 0 ? 'bg-primary text-white' : 'bg-gray-300 text-gray-600'
+                }`}>
+                  {success ? '✓' : '3'}
+                </div>
+                <span className="ml-2 text-sm font-medium">{t('confirmation')}</span>
+              </div>
+            </div>
+          </div>
+          
           <div className="mb-8">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">{t('title')}</h1>
             <p className="mt-2 text-muted-foreground">
@@ -488,8 +528,60 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className="space-y-2">
+                      <div className="space-y-4">
                         <Label htmlFor="token-amount">{t('tokenQuantity')}</Label>
+                        
+                        {/* Pacotes Pré-definidos */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                          <button
+                            onClick={() => handleTokenAmountChange("100")}
+                            className={`p-3 rounded-lg border-2 transition-all duration-300 ${
+                              tokenAmount === "100" 
+                                ? "border-primary bg-primary/10 text-primary" 
+                                : "border-gray-200 hover:border-primary/50 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="text-center">
+                              <div className="font-bold text-lg">100 HWT</div>
+                              <div className="text-xs text-muted-foreground">Starter</div>
+                              <div className="text-sm font-medium">$200</div>
+                            </div>
+                          </button>
+                          
+                          <button
+                            onClick={() => handleTokenAmountChange("500")}
+                            className={`p-3 rounded-lg border-2 transition-all duration-300 relative ${
+                              tokenAmount === "500" 
+                                ? "border-primary bg-primary/10 text-primary" 
+                                : "border-gray-200 hover:border-primary/50 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                              Popular
+                            </div>
+                            <div className="text-center">
+                              <div className="font-bold text-lg">500 HWT</div>
+                              <div className="text-xs text-muted-foreground">Standard</div>
+                              <div className="text-sm font-medium">$1,000</div>
+                            </div>
+                          </button>
+                          
+                          <button
+                            onClick={() => handleTokenAmountChange("1000")}
+                            className={`p-3 rounded-lg border-2 transition-all duration-300 ${
+                              tokenAmount === "1000" 
+                                ? "border-primary bg-primary/10 text-primary" 
+                                : "border-gray-200 hover:border-primary/50 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="text-center">
+                              <div className="font-bold text-lg">1000 HWT</div>
+                              <div className="text-xs text-muted-foreground">Premium</div>
+                              <div className="text-sm font-medium">$2,000</div>
+                            </div>
+                          </button>
+                        </div>
+                        
                         <Input
                           id="token-amount"
                           type="number"
@@ -497,6 +589,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                           value={tokenAmount}
                           onChange={(e) => handleTokenAmountChange(e.target.value)}
                           className="text-lg"
+                          placeholder="Ou digite uma quantidade personalizada"
                         />
                       </div>
 
@@ -583,7 +676,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                                     <p className="text-sm font-medium text-yellow-800">⚠️ {t('insufficientBalance')}</p>
                                     <p className="text-xs text-yellow-600 mt-1">
-                                      {t('insufficientBalanceDescription')}
+                                      Você precisa adicionar <strong>ETH</strong> à sua carteira para comprar tokens.
                                     </p>
                                     <Button 
                                       onClick={() => open({ view: 'OnRampProviders' })} 
@@ -591,7 +684,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                       size="sm"
                                       className="mt-2 w-full"
                                     >
-                                      💳 {t('buyETHWithCard')}
+                                      💳 Comprar <strong>ETH</strong> com PIX ou Cartão
                                     </Button>
                                     <p className="text-xs text-yellow-600 mt-2 italic">
                                       💡 {t.rich('recommendedMeld', {
@@ -659,6 +752,24 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   <p className="text-xs text-green-600 mt-1">
                                     {t('connectedDescription')}
                                   </p>
+                                </div>
+
+                                {/* Aviso de saldo insuficiente */}
+                                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                                  <p className="text-sm font-medium text-yellow-800 flex items-center gap-2">
+                                    ⚠️ {t('insufficientBalance')}
+                                  </p>
+                                  <p className="text-xs text-yellow-700 mt-1">
+                                    Você precisa adicionar <strong>ETH</strong> à sua carteira para comprar tokens.
+                                  </p>
+                                  <div className="mt-2">
+                                    <p className="text-xs font-medium text-yellow-800">
+                                      💳 Comprar <strong>ETH</strong> com PIX ou Cartão
+                                    </p>
+                                    <p className="text-xs text-yellow-700 mt-1">
+                                      💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
+                                    </p>
+                                  </div>
                                 </div>
                                 
                                 <div className="flex gap-2">
