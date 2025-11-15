@@ -1,13 +1,25 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { initWeb3Modal } from '@/lib/web3modal-singleton'
 
 export function Web3ModalInit() {
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
-    // Initialize on mount
-    initWeb3Modal()
+    setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    
+    // Initialize on mount with delay to ensure client-side
+    const timer = setTimeout(() => {
+      initWeb3Modal()
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [mounted])
 
   return null
 }

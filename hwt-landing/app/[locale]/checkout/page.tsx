@@ -13,6 +13,7 @@ import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/
 import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
+import { ClientOnly } from '@/components/client-only';
 // Usando endereços da Mainnet para produção
 
 // Config Mainnet para uso no switchEthereumChain

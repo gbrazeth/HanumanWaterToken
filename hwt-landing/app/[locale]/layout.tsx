@@ -3,7 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import type { Metadata } from 'next';
-import { Web3Provider } from '@/components/web3/web3-provider';
+import { Web3ProviderDynamic } from '@/components/web3/web3-provider-dynamic';
 import { StructuredData } from '@/components/seo/structured-data';
 import '../globals.css';
 
@@ -62,9 +62,16 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/images/logos/hwt-logo.png',
+    icon: [
+      { url: '/favicon.svg?v=2', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png?v=2', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png?v=2', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico?v=2', sizes: '48x48', type: 'image/x-icon' }
+    ],
+    shortcut: '/favicon.ico?v=2',
+    apple: [
+      { url: '/apple-touch-icon.png?v=2', sizes: '180x180', type: 'image/png' }
+    ],
   },
   manifest: '/manifest.json',
 };
@@ -92,14 +99,19 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+        <link rel="icon" href="/favicon-32x32.png?v=2" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/favicon-16x16.png?v=2" sizes="16x16" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" />
         <StructuredData />
       </head>
       <body suppressHydrationWarning>
-        <Web3Provider>
+        <Web3ProviderDynamic>
           <NextIntlClientProvider messages={messages}>
             {children}
           </NextIntlClientProvider>
-        </Web3Provider>
+        </Web3ProviderDynamic>
       </body>
     </html>
   );

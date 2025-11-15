@@ -41,19 +41,32 @@ const nextConfig = {
       'fs': false,
       'net': false,
       'tls': false,
+      '@react-native-async-storage/async-storage': false,
     };
     
     // Ignorar módulos opcionais que causam problemas no build
     config.externals = config.externals || [];
     if (!isServer) {
-      config.externals.push('pino-pretty', 'lokijs', 'encoding');
+      config.externals.push(
+        'pino-pretty', 
+        'lokijs', 
+        'encoding',
+        '@react-native-async-storage/async-storage'
+      );
     }
     
     // Configurar aliases para módulos problemáticos
     config.resolve.alias = {
       ...config.resolve.alias,
       'pino-pretty': false,
+      '@react-native-async-storage/async-storage': false,
     };
+
+    // Suprimir warnings específicos do MetaMask SDK
+    config.ignoreWarnings = [
+      { module: /node_modules\/@metamask\/sdk/ },
+      { message: /Can't resolve '@react-native-async-storage\/async-storage'/ },
+    ];
     
     return config;
   },
