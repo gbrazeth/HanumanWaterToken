@@ -905,22 +905,9 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
         </section>
       </main>
 
-      {/* Sticky Mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t border-gray-200 p-4 shadow-lg">
-        <Button 
-          size="lg" 
-          className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold py-4 text-lg shadow-xl rounded-full" 
-          asChild
-        >
-          <Link href={`/${locale}/checkout`} className="flex items-center justify-center gap-2">
-            {t('hero.cta.buyNow')} 
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-        </Button>
-      </div>
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-12 pb-20 lg:pb-12">
+      <footer className="bg-primary text-white py-12">
         <div className="container px-4 py-8 md:py-12">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div>
