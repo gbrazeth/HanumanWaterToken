@@ -5,6 +5,8 @@ import { locales } from '@/i18n';
 import type { Metadata } from 'next';
 import { Web3ProviderDynamic } from '@/components/web3/web3-provider-dynamic';
 import { StructuredData } from '@/components/seo/structured-data';
+import { ErrorBoundary } from '@/components/error-boundary';
+import '@/lib/polyfills';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -107,11 +109,13 @@ export default async function LocaleLayout({
         <StructuredData />
       </head>
       <body suppressHydrationWarning>
-        <Web3ProviderDynamic>
-          <NextIntlClientProvider messages={messages}>
-            {children}
-          </NextIntlClientProvider>
-        </Web3ProviderDynamic>
+        <ErrorBoundary>
+          <Web3ProviderDynamic>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+            </NextIntlClientProvider>
+          </Web3ProviderDynamic>
+        </ErrorBoundary>
       </body>
     </html>
   );

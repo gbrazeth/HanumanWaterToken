@@ -32,6 +32,14 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
   webpack: (config, { isServer }) => {
+    // Polyfill para indexedDB no servidor
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'fake-indexeddb': false,
+      };
+    }
+
     // Resolver problemas com módulos opcionais do pino e WalletConnect
     config.resolve.fallback = {
       ...config.resolve.fallback,

@@ -1,14 +1,21 @@
 'use client'
 
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { State, WagmiProvider } from 'wagmi'
 import { config } from '@/config/wagmi'
 import { Web3ModalInit } from './web3-modal-init'
 import { logger } from '@/lib/logger'
 
-// Setup queryClient
-const queryClient = new QueryClient()
+// Setup queryClient with error handling
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 export function Web3Provider({
   children,
@@ -17,8 +24,14 @@ export function Web3Provider({
   children: ReactNode
   initialState?: State
 }) {
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !mounted) return
 
     // Sobrescrever console.error para filtrar erros não críticos
     const originalError = console.error
@@ -88,7 +101,11 @@ export function Web3Provider({
       window.removeEventListener('error', handleError, true)
       window.removeEventListener('unhandledrejection', handleUnhandledRejection, true)
     }
-  }, [])
+  }, [mounted])
+
+  if (!mounted) {
+    return <div suppressHydrationWarning>{children}</div>
+  }
 
   return (
     <WagmiProvider config={config} initialState={initialState}>
