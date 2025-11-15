@@ -190,12 +190,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     setPaymentMethod('eth')
     
     try {
-      // Verificar se precisa abrir MetaMask mobile
-      const needsDeepLink = openMetaMaskMobile()
-      
-      if (!needsDeepLink) {
-        await open({ view: 'Connect' })
-      }
+      // Sempre usar WalletConnect normal para conectar
+      await open({ view: 'Connect' })
     } catch (error) {
       console.error('Erro ao conectar carteira crypto:', error)
       setError('Erro ao conectar carteira crypto. Tente novamente.')
@@ -249,26 +245,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     return /MetaMask/i.test(userAgent) || (window as any).ethereum?.isMetaMask && /Mobile|Android|iPhone|iPad/i.test(userAgent);
   }
 
-  // Função para abrir MetaMask mobile via deep link se necessário
-  const openMetaMaskMobile = () => {
-    const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent);
-    const hasMetaMask = (window as any).ethereum?.isMetaMask;
-    
-    if (isMobile && !hasMetaMask) {
-      // Se está no mobile mas não tem MetaMask injetado, tentar abrir o app
-      const currentUrl = window.location.href;
-      const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
-      
-      console.log('🔗 Tentando abrir MetaMask mobile:', metamaskDeepLink);
-      
-      // Tentar abrir o deep link
-      window.location.href = metamaskDeepLink;
-      
-      return true;
-    }
-    
-    return false;
-  }
 
   // Função para comprar tokens com ETH
   const buyWithETH = async () => {
@@ -301,33 +277,17 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
 
         if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
         
-        // Para MetaMask mobile, implementar lógica específica
-        if (isMetaMaskMobile()) {
-          console.log('🔄 MetaMask mobile detectado, preparando transação...')
+        // Para mobile, verificar se consegue processar transação
+        const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
+        
+        if (isMobile) {
+          console.log('📱 Mobile detectado, verificando capacidade de transação...')
           
-          // Verificar se estamos no browser do MetaMask ou externo
-          const isInMetaMaskBrowser = (window as any).ethereum?.isMetaMask && /MetaMask/i.test(navigator.userAgent)
-          
-          if (!isInMetaMaskBrowser) {
-            // Se não estamos no browser do MetaMask, tentar abrir o app
-            console.log('🔗 Não está no browser MetaMask, tentando abrir app...')
-            const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
-            window.open(metamaskDeepLink, '_blank')
-            
-            // Aguardar um pouco e tentar novamente
-            await new Promise(resolve => setTimeout(resolve, 2000))
-            
-            // Verificar se agora temos acesso ao MetaMask
-            if (!window.ethereum?.isMetaMask) {
-              throw new Error('Por favor, abra este site no browser do MetaMask mobile.')
-            }
-          }
-          
-          // Tentar focar na janela atual
+          // Tentar focar na janela atual para garantir que o provider está ativo
           window.focus()
           
-          // Aguardar um pouco para garantir que o MetaMask está pronto
-          await new Promise(resolve => setTimeout(resolve, 500))
+          // Aguardar um pouco para garantir que o provider está pronto
+          await new Promise(resolve => setTimeout(resolve, 300))
         }
         
         const provider = new ethers.providers.Web3Provider(window.ethereum as any)
@@ -372,7 +332,31 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
-      setError("Erro ao processar a compra. Por favor, tente novamente.")
+      
+      // Se é mobile e o erro pode ser relacionado ao MetaMask não estar acessível
+      const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
+      const errorMessage = (error as any)?.message?.toLowerCase() || ''
+      
+      if (isMobile && (
+        errorMessage.includes('user rejected') || 
+        errorMessage.includes('user denied') ||
+        errorMessage.includes('metamask') ||
+        !window.ethereum?.isMetaMask
+      )) {
+        console.log('🔗 Erro de acesso MetaMask mobile, tentando deep link...')
+        
+        // Tentar abrir MetaMask via deep link
+        const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+        
+        setError(`Para completar a transação, abra este link no MetaMask: ${metamaskDeepLink}`)
+        
+        // Tentar abrir automaticamente
+        setTimeout(() => {
+          window.open(metamaskDeepLink, '_blank')
+        }, 1000)
+      } else {
+        setError("Erro ao processar a compra. Por favor, tente novamente.")
+      }
     } finally {
       setIsLoading(false)
     }
