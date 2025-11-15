@@ -12,7 +12,10 @@
     "login": "Entrar",
     "logout": "Sair",
     "myAccount": "Minha Conta",
-    "buyHWT": "Comprar HWT"
+    "buyHWT": "Comprar HWT",
+    "ourWaterSource": "Nossa Fonte de Água",
+    "features": "Características",
+    "institutionalSite": "Site Institucional"
   },
   "hero": {
     "title": "Unindo Hidrogeologia e Tecnologia",
@@ -21,6 +24,16 @@
     "cta": {
       "buyNow": "Comprar HWT",
       "learnMore": "Saiba Mais"
+    },
+    "stats": {
+      "years": "Anos",
+      "hyperthermal": "Hipertermal",
+      "natural": "Natural"
+    },
+    "trustIndicators": {
+      "auditedSecure": "Auditado & Seguro",
+      "realWaterTokenized": "Água Real Tokenizada",
+      "activeCommunity": "Comunidade Ativa"
     }
   },
   "stats": {
@@ -210,6 +223,15 @@
   },
   "gallery": {
     "title": "Área da Jazida Hanuman"
+  },
+  "navigationButtons": {
+    "ourWaterSource": "Nossa Fonte de Água",
+    "features": "Características",
+    "benefits": "Benefícios", 
+    "tokenomics": "Tokenomics",
+    "roadmap": "Roadmap",
+    "faq": "FAQ",
+    "buyHWT": "Comprar HWT"
   },
   "footer": {
     "description": "Transformando a gestão de recursos hídricos",

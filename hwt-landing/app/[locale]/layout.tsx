@@ -3,7 +3,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import type { Metadata } from 'next';
-import { Web3Provider } from '@/components/web3-provider';
+import { Web3Provider } from '@/components/web3/web3-provider';
 import '../globals.css';
 
 export const metadata: Metadata = {

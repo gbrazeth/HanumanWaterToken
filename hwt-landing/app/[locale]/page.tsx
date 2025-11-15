@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from 'next-intl'
@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Droplet, Shield, Users, ChevronRight, ArrowRight, Star, Percent, CalendarDays, Gift, Leaf } from "lucide-react"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { LanguageSwitcher } from "@/components/layout/language-switcher"
 
 const scrollToSection = (elementId: string, offset = 80) => {
   if (typeof window === 'undefined') return
@@ -29,11 +29,11 @@ const scrollToSection = (elementId: string, offset = 80) => {
   }
 }
 
-export default function LandingPage({ params }: { params: { locale: string } }) {
+export default function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
   const t = useTranslations();
+  const { locale } = React.use(params);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showMoreFaqs, setShowMoreFaqs] = useState(false);
-  const { locale } = params;
 
   return (
     <div className="flex min-h-screen flex-col bg-logoBg" suppressHydrationWarning>
@@ -42,7 +42,7 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
   <div className="container flex h-16 items-center justify-between">
     <div className="flex items-center gap-2">
       <Image
-        src="/hwt-logo.png"
+        src="/images/logos/hwt-logo.png"
         alt="Logo do Hanuman Water Token"
         width={40}
         height={40}
@@ -157,76 +157,149 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
 </header>
 
       <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative">
-          <div className="absolute inset-0 overflow-hidden">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.39.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source,%20prominently%20displaying%20the%20HWT%20token%20branding.%20The%20structure%20is%20-xyhrFL0mgi0EGbO4awnEkE5wOnOeHP.webp"
-              alt="HWT Futuristic Water Facility"
-              width={1920}
-              height={800}
-              className="object-cover w-full h-full opacity-20"
-            />
+        {/* Hero Section - Centralizado e Limpo */}
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+          {/* Background uniforme */}
+          <div className="absolute inset-0 bg-logoBg"></div>
+
+          {/* Conteúdo centralizado */}
+          <div className="relative z-10 container mx-auto px-4 py-8">
+            <div className="min-h-[85vh] flex items-center">
+              <div className="grid lg:grid-cols-12 gap-12 items-center w-full">
+                
+                {/* Coluna esquerda - Conteúdo */}
+                <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
+                  
+                  {/* Título principal */}
+                  <div className="space-y-6">
+                    <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight text-primary">
+                      {t('hero.title')}
+                    </h1>
+                    
+                    {/* Linha decorativa */}
+                    <div className="flex items-center gap-4 justify-center lg:justify-start">
+                      <div className="h-1 w-20 bg-gradient-to-r from-primary to-primary/60 rounded-full"></div>
+                      <Droplet className="h-6 w-6 text-primary" />
+                      <div className="h-1 w-20 bg-gradient-to-r from-primary/60 to-primary rounded-full"></div>
+                    </div>
+                  </div>
+
+                  {/* Descrição */}
+                  <p className="text-xl md:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                    {t('hero.description')}
+                  </p>
+                  
+                  {/* Stats em cards */}
+                  <div className="grid grid-cols-3 gap-4 py-6">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-2xl font-bold text-primary">9.000</div>
+                      <div className="text-sm text-gray-600">{t('hero.stats.years')}</div>
+                    </div>
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-2xl font-bold text-primary">42°C</div>
+                      <div className="text-sm text-gray-600">{t('hero.stats.hyperthermal')}</div>
+                    </div>
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-2xl font-bold text-primary">100%</div>
+                      <div className="text-sm text-gray-600">{t('hero.stats.natural')}</div>
+                    </div>
+                  </div>
+
+                  {/* CTAs */}
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center">
+                    <Button 
+                      size="lg" 
+                      className="bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20" 
+                      asChild
+                    >
+                      <Link href={`/${locale}/checkout`} className="flex items-center gap-3">
+                        {t('hero.cta.buyNow')} 
+                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="border-2 border-primary/60 text-primary hover:bg-primary hover:text-white font-semibold px-8 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-white/80 backdrop-blur-sm hover:border-primary"
+                      onClick={() => scrollToSection("nossa-fonte-de-agua")}
+                    >
+                      {t('hero.cta.learnMore')}
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="lg"
+                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-6 py-4 text-base transition-all duration-300 rounded-full border border-transparent hover:border-primary/30"
+                      asChild
+                    >
+                      <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        {t('navigation.institutionalSite')}
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </Link>
+                    </Button>
+                  </div>
+
+                  {/* Trust indicators */}
+                  <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-4 mb-20">
+                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
+                      <Shield className="h-4 w-4 text-green-600" />
+                      <span>{t('hero.trustIndicators.auditedSecure')}</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
+                      <Droplet className="h-4 w-4 text-blue-600" />
+                      <span>{t('hero.trustIndicators.realWaterTokenized')}</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm font-medium text-gray-600 shadow-sm border border-gray-200">
+                      <Users className="h-4 w-4 text-purple-600" />
+                      <span>{t('hero.trustIndicators.activeCommunity')}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Coluna direita - Imagem */}
+                <div className="lg:col-span-5 flex justify-center items-center">
+                  <div className="relative">
+                    {/* Container da imagem */}
+                    <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-primary/10">
+                      <Image
+                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.39.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source,%20prominently%20displaying%20the%20HWT%20token%20branding.%20The%20structure%20is%20-axQPVyW3jf0Cf7UlwYOEii7HfaQbHx.webp"
+                        alt="HWT Futuristic Water Processing Facility"
+                        width={600}
+                        height={450}
+                        className="rounded-2xl w-full h-auto object-cover"
+                        priority
+                      />
+                      
+                      {/* Badge flutuante */}
+                      <div className="absolute -top-4 -right-4 bg-primary text-white px-4 py-2 rounded-full shadow-lg">
+                        <span className="font-bold text-sm">Blockchain</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="container relative px-4 py-24 md:py-32">
-            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="mb-6">
-                  <Image
-                    src="/hwt-logo.png"
-                    alt="Logo do Hanuman Water Token"
-                    width={120}
-                    height={120}
-                    className="mb-6"
-                  />
-                </div>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-primary">
-                  {t('hero.title')}
-                </h1>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                  {t('hero.description')}
-                </p>
-                <div className="flex flex-wrap gap-3 sm:gap-4">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 flex-1 sm:flex-none min-w-[140px]" asChild>
-                    <Link href={`/${locale}/checkout`}>
-                      {t('hero.cta.buyNow')} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-primary text-primary hover:bg-primary/10 flex-1 sm:flex-none min-w-[140px]"
-                    onClick={() => scrollToSection("nossa-fonte-de-agua")}
-                  >
-                    {t('hero.cta.learnMore')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-primary text-primary hover:bg-primary/10 w-full sm:w-auto"
-                    asChild
-                  >
-                    <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer">
-                      Site Institucional
-                    </Link>
-                  </Button>
-                </div>
+
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <div 
+              className="flex flex-col items-center cursor-pointer group animate-bounce"
+              onClick={() => scrollToSection("nossa-fonte-de-agua")}
+            >
+              <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                <span className="text-sm font-semibold">{t('navigationButtons.ourWaterSource')}</span>
               </div>
-              <div className="flex items-center justify-center">
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.39.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source,%20prominently%20displaying%20the%20HWT%20token%20branding.%20The%20structure%20is%20-axQPVyW3jf0Cf7UlwYOEii7HfaQbHx.webp"
-                  alt="HWT Futuristic Water Processing Facility"
-                  width={500}
-                  height={500}
-                  className="rounded-lg object-cover shadow-xl"
-                />
-              </div>
+              <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
             </div>
           </div>
         </section>
 
         {/* Water Source Section */}
-        <section className="py-16 md:py-24 bg-white" id="nossa-fonte-de-agua">
+        <section className="relative py-16 md:py-24 bg-logoBg" id="nossa-fonte-de-agua">
           <div className="container px-4">
             <div className="grid gap-8 md:grid-cols-2 items-center">
               <div>
@@ -265,10 +338,26 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               </div>
             </div>
           </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => scrollToSection("about")}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.features')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Features Section */}
-        <section className="container px-4 py-16 md:py-24 bg-logoBg" id="about">
+        <section className="relative py-16 md:py-24 bg-logoBg" id="about">
+          <div className="container px-4">
           <div className="grid gap-8 md:grid-cols-3">
             <Card className="relative overflow-hidden">
               <div className="absolute inset-0">
@@ -322,10 +411,26 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               </CardContent>
             </Card>
           </div>
+          </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => scrollToSection("benefits")}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.benefits')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Token Benefits Section */}
-        <section className="py-16 md:py-24 bg-muted/40" id="benefits">
+        <section className="relative py-16 md:py-24 bg-logoBg" id="benefits">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
               {t('benefits.title')}
@@ -407,10 +512,25 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               </Card>
             </div>
           </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => scrollToSection("tokenomics")}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.tokenomics')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Tokenomics Section */}
-        <section className="bg-white py-16 md:py-24" id="tokenomics">
+        <section className="relative bg-logoBg py-16 md:py-24" id="tokenomics">
           <div className="container px-4 pt-16">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
               Tokenomics
@@ -488,10 +608,26 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               </div>
             </div>
           </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => scrollToSection("roadmap")}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.roadmap')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Roadmap Section */}
-        <section className="container px-4 py-16 md:py-24" id="roadmap">
+        <section className="relative bg-logoBg py-16 md:py-24" id="roadmap">
+          <div className="container px-4">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
             {t('roadmap.title')}
           </h2>
@@ -564,10 +700,26 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               </ul>
             </TabsContent>
           </Tabs>
+          </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => scrollToSection("faq")}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.faq')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* FAQ Section */}
-        <section className="bg-[#f8f9fa] py-16 md:py-24" id="faq">
+        <section className="relative bg-logoBg py-16 md:py-24" id="faq">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-12 text-center text-primary">
               {t('faq.title')}
@@ -662,10 +814,26 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               )}
             </Accordion>
           </div>
+
+          {/* Scroll indicator para próxima seção */}
+          <div className="container px-4 mt-16">
+            <div className="flex justify-center">
+              <div 
+                className="flex flex-col items-center cursor-pointer group animate-bounce"
+                onClick={() => window.location.href = `/${locale}/checkout`}
+              >
+                <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
+                  <span className="text-sm font-semibold">{t('navigationButtons.buyHWT')}</span>
+                </div>
+                <ChevronRight className="h-6 w-6 text-primary rotate-90 group-hover:scale-110 transition-transform drop-shadow-lg" />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* CTA Section */}
-        <section className="container px-4 py-16 md:py-24">
+        <section className="bg-logoBg py-16 md:py-24">
+          <div className="container px-4">
           <div className="text-center space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">
               {t('cta.title')}
@@ -677,10 +845,11 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
               <Link href={`/${locale}/checkout`}>{t('cta.button')}</Link>
             </Button>
           </div>
+          </div>
         </section>
 
         {/* New Water Gallery Section */}
-        <section className="py-16 md:py-24 bg-white">
+        <section className="py-16 md:py-24 bg-logoBg">
           <div className="container px-4">
             <h2 className="text-3xl font-bold tracking-tighter text-primary text-center mb-12">
               {t('gallery.title')}
@@ -727,7 +896,7 @@ export default function LandingPage({ params }: { params: { locale: string } }) 
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Image
-                  src="/hwt-logo.png"
+                  src="/images/logos/hwt-logo.png"
                   alt="Logo do Hanuman Water Token"
                   width={40}
                   height={40}

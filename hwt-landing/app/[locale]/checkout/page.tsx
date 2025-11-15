@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -62,9 +62,9 @@ const USDT_ABI = [
 
 // Usando os endereços importados do arquivo de configuração
 
-export default function CheckoutPage({ params }: { params: { locale: string } }) {
+export default function CheckoutPage({ params }: { params: Promise<{ locale: string }> }) {
   const t = useTranslations('checkout');
-  const { locale } = params;
+  const { locale } = React.use(params);
   
   // Wagmi hooks para WalletConnect
   const { address, isConnected } = useAccount();
@@ -406,7 +406,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <Image
-              src="/hwt-logo.png"
+              src="/images/logos/hwt-logo.png"
               alt="Logo do Hanuman Water Token"
               width={40}
               height={40}
@@ -594,7 +594,9 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                       💳 {t('buyETHWithCard')}
                                     </Button>
                                     <p className="text-xs text-yellow-600 mt-2 italic">
-                                      💡 {t('recommendedMeld')}
+                                      💡 {t.rich('recommendedMeld', {
+                                        strong: (chunks) => <strong>{chunks}</strong>
+                                      })}
                                     </p>
                                   </div>
                                 )}
@@ -694,7 +696,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Image
-                src="/hwt-logo.png"
+                src="/images/logos/hwt-logo.png"
                 alt="Logo do Hanuman Water Token"
                 width={30}
                 height={30}

@@ -12,7 +12,10 @@
     "login": "Login",
     "logout": "Logout",
     "myAccount": "My Account",
-    "buyHWT": "Buy HWT"
+    "buyHWT": "Buy HWT",
+    "ourWaterSource": "Our Water Source",
+    "features": "Features",
+    "institutionalSite": "Institutional Site"
   },
   "hero": {
     "title": "Uniting Hydrogeology and Technology",
@@ -21,6 +24,16 @@
     "cta": {
       "buyNow": "Buy HWT",
       "learnMore": "Learn More"
+    },
+    "stats": {
+      "years": "Years",
+      "hyperthermal": "Hyperthermal", 
+      "natural": "Natural"
+    },
+    "trustIndicators": {
+      "auditedSecure": "Audited & Secure",
+      "realWaterTokenized": "Real Water Tokenized",
+      "activeCommunity": "Active Community"
     }
   },
   "stats": {
@@ -210,6 +223,15 @@
   },
   "gallery": {
     "title": "Hanuman Springs"
+  },
+  "navigationButtons": {
+    "ourWaterSource": "Our Water Source",
+    "features": "Features", 
+    "benefits": "Benefits",
+    "tokenomics": "Tokenomics",
+    "roadmap": "Roadmap",
+    "faq": "FAQ",
+    "buyHWT": "Buy HWT"
   },
   "footer": {
     "description": "Transforming water resource management",

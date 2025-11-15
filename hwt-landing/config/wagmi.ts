@@ -11,7 +11,7 @@ const metadata = {
   name: 'Hanuman Water Token',
   description: 'Hanuman Water Token - The First Token Backed by Millennial Hyperthermal Mineral Water',
   url: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com',
-  icons: ['https://hanumanwatertoken.com/hwt-logo.png']
+  icons: ['/images/logos/hwt-logo.png']
 }
 
 // Create wagmiConfig - usando apenas Mainnet para produção
