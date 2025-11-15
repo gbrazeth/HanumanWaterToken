@@ -10,6 +10,7 @@
     "security:check": "bash scripts/security-check.sh",
     "security:audit": "npm audit --audit-level=high",
     "security:fix": "npm audit fix",
+    "security:monitor": "bash scripts/vulnerability-monitor.sh",
     "deps:check": "npm outdated",
     "deps:update": "npm update --legacy-peer-deps"
   },
@@ -102,9 +103,19 @@
     "typescript": "^5.9.2"
   },
   "overrides": {
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "@walletconnect/logger": "^2.1.2",
+    "@walletconnect/core": "^2.21.1",
+    "@walletconnect/types": "^2.21.1",
+    "@walletconnect/utils": "^2.21.1",
+    "tmp": "^0.2.3"
   },
   "resolutions": {
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "@walletconnect/logger": "^2.1.2",
+    "@walletconnect/core": "^2.21.1",
+    "@walletconnect/types": "^2.21.1",
+    "@walletconnect/utils": "^2.21.1",
+    "tmp": "^0.2.3"
   }
 }
