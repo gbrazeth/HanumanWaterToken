@@ -206,7 +206,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                   </div>
 
                   {/* CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <Button 
                       size="lg" 
                       className="group bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-8 py-3 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20 relative overflow-hidden" 
@@ -286,11 +286,6 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                         className="rounded-2xl w-full h-auto object-cover"
                         priority
                       />
-                      
-                      {/* Badge flutuante */}
-                      <div className="absolute -top-4 -right-4 bg-primary text-white px-4 py-2 rounded-full shadow-lg">
-                        <span className="font-bold text-sm">Blockchain</span>
-                      </div>
                     </div>
                   </div>
                 </div>

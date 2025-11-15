@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://hanumanwatertoken.com/</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://hanumanwatertoken.com/pt-BR"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://hanumanwatertoken.com/en-US"/>
+  </url>
+  
+  <!-- Portuguese Version -->
+  <url>
+    <loc>https://hanumanwatertoken.com/pt-BR</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://hanumanwatertoken.com/pt-BR"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://hanumanwatertoken.com/en-US"/>
+  </url>
+  
+  <!-- English Version -->
+  <url>
+    <loc>https://hanumanwatertoken.com/en-US</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://hanumanwatertoken.com/pt-BR"/>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://hanumanwatertoken.com/en-US"/>
+  </url>
+  
+  <!-- Checkout Page -->
+  <url>
+    <loc>https://hanumanwatertoken.com/pt-BR/checkout</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://hanumanwatertoken.com/en-US/checkout</loc>
+    <lastmod>2025-11-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+</urlset>

@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "security:check": "bash scripts/security-check.sh",
+    "security:audit": "npm audit --audit-level=high",
+    "security:fix": "npm audit fix",
+    "deps:check": "npm outdated",
+    "deps:update": "npm update --legacy-peer-deps"
   },
   "dependencies": {
     "@chainlink/contracts": "^1.4.0",
-    "@hookform/resolvers": "^3.9.1",
     "@openzeppelin/contracts": "^5.0.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
@@ -65,8 +69,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.6",
     "viem": "^2.39.0",
-    "wagmi": "^2.19.3",
-    "zod": "^3.24.1"
+    "wagmi": "^2.19.3"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
@@ -97,5 +100,11 @@
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
     "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "js-yaml": "^4.1.1"
+  },
+  "resolutions": {
+    "js-yaml": "^4.1.1"
   }
 }
