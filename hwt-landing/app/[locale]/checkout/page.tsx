@@ -99,8 +99,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       // Limpar erro ao conectar
       setError(null)
       getBalances(address)
+      
+      // Se não há método de pagamento selecionado, definir como 'social' por padrão
+      if (!paymentMethod) {
+        setPaymentMethod('social')
+        console.log('🔄 Método de pagamento definido como social por padrão')
+      }
     }
-  }, [isConnected, address])
+  }, [isConnected, address, paymentMethod])
 
   // Função para verificar e trocar para a rede correta
   const checkAndSwitchNetwork = async () => {
@@ -234,6 +240,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
 
   // Função para comprar tokens com ETH
   const buyWithETH = async () => {
+    console.log('💰 buyWithETH iniciado:', {
+      tokenAmount,
+      hasEthereum: typeof window.ethereum !== "undefined",
+      address,
+      contractAddress: TOKEN_CONTRACT_ADDRESS
+    })
+    
     try {
       if (typeof window.ethereum !== "undefined") {
         setIsLoading(true)
@@ -376,6 +389,15 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
 
   // Função para processar o pagamento com base no método selecionado
   const processPayment = () => {
+    console.log('🔄 processPayment chamado:', {
+      paymentMethod,
+      tokenAmount,
+      isConnected,
+      address,
+      balanceData: balanceData?.formatted,
+      hasSelectedQuantity
+    })
+    
     setError(null)
 
     // Validação do valor mínimo
@@ -390,6 +412,14 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
         break
       case "usdt":
         buyWithUSDT()
+        break
+      case "social":
+        // Para pagamento social, usar ETH se houver saldo
+        if (balanceData && Number(balanceData.formatted) > 0) {
+          buyWithETH()
+        } else {
+          setError("Saldo insuficiente. Adicione ETH à sua carteira primeiro.")
+        }
         break
       case "pix":
         processPixPayment()
@@ -696,10 +726,20 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                 )}
                                 
                                 <div className="flex gap-2">
-                                  <Button onClick={processPayment} className="flex-1 bg-primary" disabled={isLoading}>
+                                  <Button 
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      e.stopPropagation()
+                                      console.log('🔘 Crypto Buy Tokens button clicked')
+                                      processPayment()
+                                    }} 
+                                    className="flex-1 bg-primary" 
+                                    disabled={isLoading}
+                                    type="button"
+                                  >
                                     {isLoading ? t('processing') : t('buyTokens')}
                                   </Button>
-                                  <Button onClick={() => disconnect()} variant="outline" className="px-4">
+                                  <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
                                     {t('disconnect')}
                                   </Button>
                                 </div>
@@ -774,10 +814,36 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                 </div>
                                 
                                 <div className="flex gap-2">
-                                  <Button onClick={() => open({ view: 'OnRampProviders' })} className="flex-1 bg-primary" disabled={isLoading}>
-                                    {isLoading ? t('processing') : `💳 ${t('payWithPixCard')}`}
-                                  </Button>
-                                  <Button onClick={() => disconnect()} variant="outline" className="px-4">
+                                  {balanceData && Number(balanceData.formatted) > 0 ? (
+                                    <Button 
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        console.log('🔘 Buy Tokens button clicked')
+                                        processPayment()
+                                      }} 
+                                      className="flex-1 bg-primary" 
+                                      disabled={isLoading}
+                                      type="button"
+                                    >
+                                      {isLoading ? t('processing') : t('buyTokens')}
+                                    </Button>
+                                  ) : (
+                                    <Button 
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        console.log('🔘 OnRamp button clicked')
+                                        open({ view: 'OnRampProviders' })
+                                      }} 
+                                      className="flex-1 bg-primary" 
+                                      disabled={isLoading}
+                                      type="button"
+                                    >
+                                      {isLoading ? t('processing') : `💳 ${t('payWithPixCard')}`}
+                                    </Button>
+                                  )}
+                                  <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
                                     {t('disconnect')}
                                   </Button>
                                 </div>
