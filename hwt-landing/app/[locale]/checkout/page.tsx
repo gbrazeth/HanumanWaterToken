@@ -277,21 +277,41 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
 
         if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
         
-        // Para mobile, verificar se consegue processar transação
+        const provider = new ethers.providers.Web3Provider(window.ethereum as any)
+        const signer = provider.getSigner()
+        
+        // Para mobile, implementar lógica específica para WalletConnect
         const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
         
         if (isMobile) {
-          console.log('📱 Mobile detectado, verificando capacidade de transação...')
+          console.log('📱 Mobile detectado, verificando tipo de conexão...')
           
-          // Tentar focar na janela atual para garantir que o provider está ativo
+          // Verificar se é WalletConnect (não tem MetaMask injetado diretamente)
+          const isWalletConnect = !window.ethereum?.isMetaMask && window.ethereum
+          
+          if (isWalletConnect) {
+            console.log('🔗 WalletConnect detectado no mobile, preparando transação...')
+            
+            // Para WalletConnect mobile, precisamos garantir que o provider está ativo
+            try {
+              // Tentar fazer uma chamada simples para "acordar" o provider
+              await provider.getNetwork()
+              console.log('✅ Provider WalletConnect ativo')
+            } catch (providerError) {
+              console.log('⚠️ Provider WalletConnect inativo, tentando reativar...')
+              
+              // Se o provider não responder, pode ser que a sessão WalletConnect tenha expirado
+              // Vamos tentar reconectar
+              throw new Error('Sessão WalletConnect expirada. Por favor, reconecte sua carteira.')
+            }
+          }
+          
+          // Tentar focar na janela atual
           window.focus()
           
-          // Aguardar um pouco para garantir que o provider está pronto
-          await new Promise(resolve => setTimeout(resolve, 300))
+          // Aguardar um pouco para garantir que tudo está pronto
+          await new Promise(resolve => setTimeout(resolve, 500))
         }
-        
-        const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-        const signer = provider.getSigner()
         
         // Verificar se ainda estamos conectados
         const accounts = await provider.listAccounts()
@@ -319,13 +339,48 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         
         console.log('🚀 Enviando transação:', txConfig)
 
-        // Executar transação
-        const tx = await presaleContract.buyWithETH(txConfig)
-        console.log('✅ Transação enviada:', tx.hash)
-
-        // Aguardar confirmação
-        const receipt = await tx.wait()
-        console.log('✅ Transação confirmada:', receipt)
+        // Para WalletConnect mobile, implementar estratégia específica
+        if (isMobile && !window.ethereum?.isMetaMask) {
+          console.log('🔄 WalletConnect mobile: implementando estratégia de transação...')
+          
+          // Tentar executar a transação e capturar se precisa abrir o app
+          try {
+            const tx = await presaleContract.buyWithETH(txConfig)
+            console.log('✅ Transação enviada via WalletConnect:', tx.hash)
+            
+            // Aguardar confirmação
+            const receipt = await tx.wait()
+            console.log('✅ Transação confirmada:', receipt)
+          } catch (wcError: any) {
+            console.log('⚠️ Erro WalletConnect mobile:', wcError)
+            
+            // Se o erro indica que precisa abrir o MetaMask
+            if (wcError.message?.includes('User rejected') || 
+                wcError.message?.includes('user rejected') ||
+                wcError.code === 4001) {
+              
+              // Tentar abrir MetaMask via deep link
+              const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+              console.log('🔗 Abrindo MetaMask via deep link:', metamaskDeepLink)
+              
+              // Abrir o link
+              window.open(metamaskDeepLink, '_blank')
+              
+              // Informar o usuário
+              throw new Error('Por favor, complete a transação no app MetaMask que foi aberto.')
+            } else {
+              throw wcError
+            }
+          }
+        } else {
+          // Executar transação normal (desktop ou MetaMask mobile browser)
+          const tx = await presaleContract.buyWithETH(txConfig)
+          console.log('✅ Transação enviada:', tx.hash)
+          
+          // Aguardar confirmação
+          const receipt = await tx.wait()
+          console.log('✅ Transação confirmada:', receipt)
+        }
 
         setSuccess(true);
         window.dispatchEvent(new Event('hwt-balance-updated'))
