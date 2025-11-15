@@ -190,7 +190,12 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     setPaymentMethod('eth')
     
     try {
-      await open({ view: 'Connect' })
+      // Verificar se precisa abrir MetaMask mobile
+      const needsDeepLink = openMetaMaskMobile()
+      
+      if (!needsDeepLink) {
+        await open({ view: 'Connect' })
+      }
     } catch (error) {
       console.error('Erro ao conectar carteira crypto:', error)
       setError('Erro ao conectar carteira crypto. Tente novamente.')
@@ -238,13 +243,42 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     return true
   }
 
+  // Função para detectar se está no MetaMask mobile browser
+  const isMetaMaskMobile = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    return /MetaMask/i.test(userAgent) || (window as any).ethereum?.isMetaMask && /Mobile|Android|iPhone|iPad/i.test(userAgent);
+  }
+
+  // Função para abrir MetaMask mobile via deep link se necessário
+  const openMetaMaskMobile = () => {
+    const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const hasMetaMask = (window as any).ethereum?.isMetaMask;
+    
+    if (isMobile && !hasMetaMask) {
+      // Se está no mobile mas não tem MetaMask injetado, tentar abrir o app
+      const currentUrl = window.location.href;
+      const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+      
+      console.log('🔗 Tentando abrir MetaMask mobile:', metamaskDeepLink);
+      
+      // Tentar abrir o deep link
+      window.location.href = metamaskDeepLink;
+      
+      return true;
+    }
+    
+    return false;
+  }
+
   // Função para comprar tokens com ETH
   const buyWithETH = async () => {
     console.log('💰 buyWithETH iniciado:', {
       tokenAmount,
       hasEthereum: typeof window.ethereum !== "undefined",
       address,
-      contractAddress: TOKEN_CONTRACT_ADDRESS
+      contractAddress: TOKEN_CONTRACT_ADDRESS,
+      isMetaMaskMobile: isMetaMaskMobile(),
+      userAgent: navigator.userAgent
     })
     
     try {
@@ -266,8 +300,45 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         }
 
         if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
+        
+        // Para MetaMask mobile, implementar lógica específica
+        if (isMetaMaskMobile()) {
+          console.log('🔄 MetaMask mobile detectado, preparando transação...')
+          
+          // Verificar se estamos no browser do MetaMask ou externo
+          const isInMetaMaskBrowser = (window as any).ethereum?.isMetaMask && /MetaMask/i.test(navigator.userAgent)
+          
+          if (!isInMetaMaskBrowser) {
+            // Se não estamos no browser do MetaMask, tentar abrir o app
+            console.log('🔗 Não está no browser MetaMask, tentando abrir app...')
+            const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+            window.open(metamaskDeepLink, '_blank')
+            
+            // Aguardar um pouco e tentar novamente
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            
+            // Verificar se agora temos acesso ao MetaMask
+            if (!window.ethereum?.isMetaMask) {
+              throw new Error('Por favor, abra este site no browser do MetaMask mobile.')
+            }
+          }
+          
+          // Tentar focar na janela atual
+          window.focus()
+          
+          // Aguardar um pouco para garantir que o MetaMask está pronto
+          await new Promise(resolve => setTimeout(resolve, 500))
+        }
+        
         const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
+        
+        // Verificar se ainda estamos conectados
+        const accounts = await provider.listAccounts()
+        if (accounts.length === 0) {
+          throw new Error('Carteira desconectada. Conecte novamente.')
+        }
+        
         const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
           ...PRESALE_ABI,
           "function getEthAmountForTokens(uint256 tokenAmount) public view returns (uint256)"
@@ -275,15 +346,26 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
 
         // Calcular o valor exato de ETH a partir do contrato
         const tokenAmount18 = ethers.utils.parseUnits(tokenAmount, 18)
+        console.log('💰 Calculando valor ETH para tokens:', tokenAmount18.toString())
+        
         const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
+        console.log('💰 Valor ETH calculado:', ethers.utils.formatEther(ethAmount))
+
+        // Para MetaMask mobile, adicionar configurações específicas
+        const txConfig = {
+          value: ethAmount,
+          gasLimit: ethers.utils.hexlify(300000), // Gas limit explícito
+        }
+        
+        console.log('🚀 Enviando transação:', txConfig)
 
         // Executar transação
-        const tx = await presaleContract.buyWithETH({
-          value: ethAmount,
-        })
+        const tx = await presaleContract.buyWithETH(txConfig)
+        console.log('✅ Transação enviada:', tx.hash)
 
         // Aguardar confirmação
-        await tx.wait()
+        const receipt = await tx.wait()
+        console.log('✅ Transação confirmada:', receipt)
 
         setSuccess(true);
         window.dispatchEvent(new Event('hwt-balance-updated'))
@@ -691,9 +773,23 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                         {paymentMethod === 'eth' && (
                           <div className="mt-4">
                             {!isConnected ? (
-                              <Button onClick={connectCryptoWallet} className="w-full" disabled={isLoading}>
-                                {isLoading ? t('connecting') : `🔗 ${t('connectCryptoWallet')}`}
-                              </Button>
+                              <div className="space-y-3">
+                                <Button onClick={connectCryptoWallet} className="w-full" disabled={isLoading}>
+                                  {isLoading ? t('connecting') : `🔗 ${t('connectCryptoWallet')}`}
+                                </Button>
+                                
+                                {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) && (
+                                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                    <p className="text-sm font-medium text-blue-800">📱 Para MetaMask Mobile:</p>
+                                    <p className="text-xs text-blue-600 mt-1">
+                                      1. Abra o app MetaMask<br/>
+                                      2. Toque no ícone do browser (🌐)<br/>
+                                      3. Digite: hanumanwatertoken.com.br<br/>
+                                      4. Conecte sua carteira aqui
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
                             ) : (
                               <div className="space-y-3">
                                 <div className="p-3 bg-green-50 border border-green-200 rounded-md">
