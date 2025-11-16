@@ -419,16 +419,39 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         
         console.log('🚀 Enviando transação:', txConfig)
 
-        // Para WalletConnect mobile, implementar estratégia proativa
+        // Para WalletConnect mobile, mostrar instruções claras em vez de tentar transação
         if (isMobile && !window.ethereum?.isMetaMask) {
-          console.log('🔄 WalletConnect mobile detectado: abrindo MetaMask proativamente...')
+          console.log('🔄 WalletConnect mobile detectado: orientando usuário...')
           
-          // Usar função robusta para abrir MetaMask
-          const primaryUrl = openMetaMaskApp()
+          // Em vez de tentar a transação, orientar o usuário
+          const metamaskUrl = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
           
-          // Informar o usuário com opção manual
-          const manualLink = `<a href="${primaryUrl}" target="_blank" style="color: #0066cc; text-decoration: underline;">Clique aqui se o MetaMask não abriu automaticamente</a>`
-          setError(`🚀 MetaMask está sendo aberto... ${manualLink}`)
+          setError(`
+            📱 Para completar a compra no mobile:
+            
+            1️⃣ Abra o app MetaMask
+            2️⃣ Toque no ícone do browser (🌐)
+            3️⃣ Acesse: hanumanwatertoken.com.br
+            4️⃣ Vá para checkout e conecte sua carteira
+            5️⃣ Clique em "Buy Tokens"
+            
+            Ou clique no botão abaixo para abrir diretamente:
+          `)
+          
+          // Criar um botão especial na interface
+          setTimeout(() => {
+            const errorDiv = document.querySelector('.error-message')
+            if (errorDiv) {
+              const button = document.createElement('button')
+              button.innerHTML = '🚀 Abrir no MetaMask App'
+              button.className = 'mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium'
+              button.onclick = () => {
+                window.open(metamaskUrl, '_blank')
+              }
+              errorDiv.appendChild(button)
+            }
+          }, 100)
+          
           setIsLoading(false)
           return
           
@@ -920,24 +943,30 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                 )}
                                 
                                 {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) && (
-                                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
-                                    <p className="text-sm font-medium text-blue-800">📱 Para MetaMask Mobile:</p>
-                                    <p className="text-xs text-blue-600 mt-1">
-                                      1. Abra o app MetaMask<br/>
-                                      2. Toque no ícone do browser (🌐)<br/>
-                                      3. Digite: hanumanwatertoken.com.br<br/>
-                                      4. Conecte sua carteira aqui
+                                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                                    <p className="text-sm font-bold text-amber-800">⚠️ Importante para Mobile:</p>
+                                    <p className="text-xs text-amber-700 mt-2 leading-relaxed">
+                                      Para comprar tokens no mobile, você precisa usar o <strong>browser do MetaMask</strong>, não o browser normal.
                                     </p>
+                                    <div className="mt-3 p-3 bg-white rounded border border-amber-200">
+                                      <p className="text-xs font-medium text-amber-800 mb-2">📱 Como fazer:</p>
+                                      <p className="text-xs text-amber-700 leading-relaxed">
+                                        1. Abra o <strong>app MetaMask</strong><br/>
+                                        2. Toque no ícone do <strong>browser (🌐)</strong><br/>
+                                        3. Digite: <strong>hanumanwatertoken.com.br</strong><br/>
+                                        4. Vá para checkout e conecte sua carteira<br/>
+                                        5. Clique em "Buy Tokens" (funcionará perfeitamente)
+                                      </p>
+                                    </div>
                                     <Button 
                                       onClick={() => {
                                         const url = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
                                         window.open(url, '_blank')
                                       }}
-                                      variant="outline" 
-                                      size="sm" 
-                                      className="mt-2 w-full text-xs"
+                                      className="mt-3 w-full text-xs bg-amber-600 hover:bg-amber-700"
+                                      size="sm"
                                     >
-                                      🔗 Abrir no MetaMask App
+                                      🚀 Abrir no Browser MetaMask
                                     </Button>
                                   </div>
                                 )}
@@ -973,24 +1002,47 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   </div>
                                 )}
                                 
-                                <div className="flex gap-2">
-                                  <Button 
-                                    onClick={(e) => {
-                                      e.preventDefault()
-                                      e.stopPropagation()
-                                      console.log('🔘 Crypto Buy Tokens button clicked')
-                                      processPayment()
-                                    }} 
-                                    className="flex-1 bg-primary" 
-                                    disabled={isLoading}
-                                    type="button"
-                                  >
-                                    {isLoading ? t('processing') : t('buyTokens')}
-                                  </Button>
-                                  <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
-                                    {t('disconnect')}
-                                  </Button>
-                                </div>
+                                {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) && !window.ethereum?.isMetaMask ? (
+                                  <div className="space-y-3">
+                                    <div className="p-3 bg-orange-50 border border-orange-200 rounded-md">
+                                      <p className="text-sm font-medium text-orange-800">📱 Conectado via WalletConnect</p>
+                                      <p className="text-xs text-orange-600 mt-1">
+                                        Para comprar tokens no mobile, use o browser do MetaMask diretamente.
+                                      </p>
+                                    </div>
+                                    <Button 
+                                      onClick={() => {
+                                        const url = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+                                        window.open(url, '_blank')
+                                      }}
+                                      className="w-full bg-orange-600 hover:bg-orange-700"
+                                    >
+                                      🚀 Continuar no MetaMask App
+                                    </Button>
+                                    <Button onClick={() => disconnect()} variant="outline" className="w-full">
+                                      {t('disconnect')}
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <div className="flex gap-2">
+                                    <Button 
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        e.stopPropagation()
+                                        console.log('🔘 Crypto Buy Tokens button clicked')
+                                        processPayment()
+                                      }} 
+                                      className="flex-1 bg-primary" 
+                                      disabled={isLoading}
+                                      type="button"
+                                    >
+                                      {isLoading ? t('processing') : t('buyTokens')}
+                                    </Button>
+                                    <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
+                                      {t('disconnect')}
+                                    </Button>
+                                  </div>
+                                )}
                               </div>
                             )}
                           </div>
