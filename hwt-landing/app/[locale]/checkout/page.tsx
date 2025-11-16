@@ -93,25 +93,44 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   const [cardExpiry, setCardExpiry] = useState<string>("")
   const [cardCVC, setCardCVC] = useState<string>("")
 
-  // Efeito para detectar se estamos no browser MetaMask e reconectar automaticamente
+  // Efeito para detectar se estamos no browser MetaMask e conectar diretamente
   useEffect(() => {
     const isMetaMaskBrowser = /MetaMask/i.test(navigator.userAgent) && window.ethereum?.isMetaMask
     const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
     
-    if (isMetaMaskBrowser && isMobile && !isConnected) {
-      console.log('🔄 Detectado browser MetaMask mobile, tentando reconectar automaticamente...')
+    if (isMetaMaskBrowser && isMobile) {
+      console.log('🔄 Detectado browser MetaMask mobile, conectando diretamente...')
       
-      // Aguardar um pouco para o MetaMask carregar completamente
+      // Definir método de pagamento como ETH imediatamente
+      setPaymentMethod('eth')
+      
+      // Tentar conectar diretamente com o MetaMask
       setTimeout(async () => {
         try {
-          // Tentar conectar automaticamente no MetaMask browser
-          setPaymentMethod('eth')
-          await open({ view: 'Connect' })
-          console.log('✅ Reconexão automática iniciada no MetaMask browser')
+          if (window.ethereum && !isConnected) {
+            console.log('🔗 Solicitando conexão direta com MetaMask...')
+            
+            // Conectar diretamente via ethereum.request
+            const accounts = await window.ethereum.request({ 
+              method: 'eth_requestAccounts' 
+            })
+            
+            if (accounts && accounts.length > 0) {
+              console.log('✅ Conectado diretamente com MetaMask:', accounts[0])
+              // Forçar atualização do estado
+              window.location.reload()
+            }
+          }
         } catch (error) {
-          console.log('⚠️ Erro na reconexão automática:', error)
+          console.log('⚠️ Erro na conexão direta:', error)
+          // Fallback para WalletConnect
+          try {
+            await open({ view: 'Connect' })
+          } catch (fallbackError) {
+            console.log('⚠️ Erro no fallback WalletConnect:', fallbackError)
+          }
         }
-      }, 2000)
+      }, 1000)
     }
   }, [isConnected, open])
 
@@ -855,22 +874,44 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                             {!isConnected ? (
                               <div className="space-y-3">
                                 {/MetaMask/i.test(navigator.userAgent) && window.ethereum?.isMetaMask && /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) ? (
-                                  <div className="p-3 bg-green-50 border border-green-200 rounded-md">
-                                    <div className="flex items-center space-x-2">
-                                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
-                                      <p className="text-sm font-medium text-green-800">🎉 Você está no MetaMask!</p>
+                                  <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg">
+                                    <div className="flex items-center space-x-2 mb-3">
+                                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-green-600"></div>
+                                      <p className="text-sm font-bold text-green-800">🎉 MetaMask Detectado!</p>
                                     </div>
-                                    <p className="text-xs text-green-600 mt-1">
-                                      Conectando automaticamente sua carteira...
+                                    <p className="text-xs text-green-700 mb-3">
+                                      Conectando diretamente com sua carteira MetaMask...
                                     </p>
-                                    <Button 
-                                      onClick={connectCryptoWallet} 
-                                      variant="outline" 
-                                      size="sm" 
-                                      className="mt-2 w-full text-xs"
-                                    >
-                                      🔗 Conectar Manualmente
-                                    </Button>
+                                    <div className="space-y-2">
+                                      <Button 
+                                        onClick={async () => {
+                                          try {
+                                            if (window.ethereum) {
+                                              const accounts = await window.ethereum.request({ 
+                                                method: 'eth_requestAccounts' 
+                                              })
+                                              if (accounts?.length > 0) {
+                                                window.location.reload()
+                                              }
+                                            }
+                                          } catch (error) {
+                                            console.error('Erro ao conectar:', error)
+                                          }
+                                        }}
+                                        className="w-full text-xs bg-green-600 hover:bg-green-700"
+                                        size="sm"
+                                      >
+                                        🚀 Conectar Agora
+                                      </Button>
+                                      <Button 
+                                        onClick={connectCryptoWallet} 
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="w-full text-xs"
+                                      >
+                                        🔗 Usar WalletConnect
+                                      </Button>
+                                    </div>
                                   </div>
                                 ) : (
                                   <Button onClick={connectCryptoWallet} className="w-full" disabled={isLoading}>
