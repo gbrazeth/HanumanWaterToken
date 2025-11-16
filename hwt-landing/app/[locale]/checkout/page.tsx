@@ -424,7 +424,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
           console.log('🔄 WalletConnect mobile detectado: orientando usuário...')
           
           // Em vez de tentar a transação, orientar o usuário
-          const metamaskUrl = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+          const metamaskUrl = `https://metamask.app.link/dapp/${window.location.host}`
           
           setError(`
             📱 Para completar a compra no mobile:
@@ -960,7 +960,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                     </div>
                                     <Button 
                                       onClick={() => {
-                                        const url = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+                                        const url = `https://metamask.app.link/dapp/${window.location.host}`
                                         window.open(url, '_blank')
                                       }}
                                       className="mt-3 w-full text-xs bg-amber-600 hover:bg-amber-700"
@@ -1012,7 +1012,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                     </div>
                                     <Button 
                                       onClick={() => {
-                                        const url = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+                                        const url = `https://metamask.app.link/dapp/${window.location.host}`
                                         window.open(url, '_blank')
                                       }}
                                       className="w-full bg-orange-600 hover:bg-orange-700"
