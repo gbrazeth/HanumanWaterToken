@@ -54,7 +54,14 @@ export function Web3Provider({
         'failed to fetch',
         'network error',
         'fetch error',
-        'walletconnect'
+        'walletconnect',
+        'auth.magic.link',
+        'github.com',
+        'cors',
+        'cross-origin',
+        'mixed content',
+        'content security policy',
+        'csp'
       ]
       
       // Se for erro não crítico, apenas log silencioso
@@ -75,7 +82,15 @@ export function Web3Provider({
         'secure.walletconnect.org',
         'failed to fetch',
         'network error',
-        'fetch error'
+        'fetch error',
+        'walletconnect',
+        'auth.magic.link',
+        'github.com',
+        'cors',
+        'cross-origin',
+        'mixed content',
+        'content security policy',
+        'csp'
       ]
       
       if (nonCriticalErrors.some(err => message.includes(err))) {
@@ -94,7 +109,15 @@ export function Web3Provider({
         'network error',
         'fetch error',
         'walletconnect',
-        'origins don\'t match'
+        'origins don\'t match',
+        'secure.walletconnect.org',
+        'auth.magic.link',
+        'github.com',
+        'cors',
+        'cross-origin',
+        'mixed content',
+        'content security policy',
+        'csp'
       ]
       
       if (nonCriticalErrors.some(err => reason.includes(err))) {
