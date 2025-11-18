@@ -39,10 +39,16 @@ export const metadata: Metadata = {
     siteName: 'Hanuman Water Token',
     images: [
       {
-        url: '/images/logos/hwt-logo.png',
+        url: 'https://hanumanwatertoken.com/images/logos/hwt-logo.png',
         width: 1200,
         height: 630,
         alt: 'Hanuman Water Token Logo',
+      },
+      {
+        url: 'https://hanumanwatertoken.com/favicon.ico?v=5',
+        width: 32,
+        height: 32,
+        alt: 'HWT Favicon',
       },
     ],
     locale: 'pt_BR',
@@ -68,15 +74,18 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.svg?v=4', type: 'image/svg+xml' },
-      { url: '/favicon-32x32.png?v=4', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png?v=4', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon.ico?v=4', sizes: '48x48', type: 'image/x-icon' }
+      { url: '/favicon.ico?v=5', sizes: 'any' },
+      { url: '/favicon.svg?v=5', type: 'image/svg+xml' },
+      { url: '/favicon-32x32.png?v=5', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png?v=5', sizes: '16x16', type: 'image/png' }
     ],
-    shortcut: '/favicon.ico?v=4',
+    shortcut: '/favicon.ico?v=5',
     apple: [
-      { url: '/apple-touch-icon.png?v=4', sizes: '180x180', type: 'image/png' }
+      { url: '/apple-touch-icon.png?v=5', sizes: '180x180', type: 'image/png' }
     ],
+    other: [
+      { rel: 'mask-icon', url: '/favicon.svg?v=5', color: '#4a6a7d' }
+    ]
   },
   manifest: '/manifest.json',
 };
@@ -104,11 +113,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml" />
-        <link rel="icon" href="/favicon-32x32.png?v=4" sizes="32x32" type="image/png" />
-        <link rel="icon" href="/favicon-16x16.png?v=4" sizes="16x16" type="image/png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.ico?v=4" />
+        <link rel="icon" href="/favicon.ico?v=5" sizes="any" />
+        <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml" />
+        <link rel="icon" href="/favicon-32x32.png?v=5" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/favicon-16x16.png?v=5" sizes="16x16" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5" sizes="180x180" />
+        <link rel="shortcut icon" href="/favicon.ico?v=5" />
+        <link rel="mask-icon" href="/favicon.svg?v=5" color="#4a6a7d" />
         <StructuredData />
       </head>
       <body suppressHydrationWarning>
