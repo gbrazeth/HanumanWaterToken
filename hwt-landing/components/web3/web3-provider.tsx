@@ -27,7 +27,18 @@ export function Web3Provider({
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    // Detectar MetaMask browser e aguardar mais tempo se necessário
+    const isMetaMaskBrowser = typeof window !== 'undefined' && 
+      /MetaMask/i.test(navigator.userAgent) && 
+      window.ethereum?.isMetaMask
+
+    if (isMetaMaskBrowser) {
+      console.log('[Web3Provider] MetaMask browser detected, delayed mounting...')
+      // Aguardar mais tempo para MetaMask browser
+      setTimeout(() => setMounted(true), 1000)
+    } else {
+      setMounted(true)
+    }
   }, [])
 
   useEffect(() => {
