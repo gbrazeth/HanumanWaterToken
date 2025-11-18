@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
 import { ClientOnly } from '@/components/client-only';
+import { CheckoutStructuredData } from '@/components/seo/checkout-structured-data'
 // Usando endereços da Mainnet para produção
 
 // Config Mainnet para uso no switchEthereumChain
@@ -638,6 +639,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
 
   return (
     <div className="min-h-screen flex flex-col bg-logoBg">
+      <CheckoutStructuredData />
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-logoBg/95 backdrop-blur supports-[backdrop-filter]:bg-logoBg/60">
         <div className="container flex h-16 items-center justify-between">

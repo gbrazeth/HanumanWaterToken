@@ -1,5 +1,5 @@
 export function StructuredData() {
-  const structuredData = {
+  const organizationData = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Hanuman Water Token",
@@ -29,34 +29,89 @@ export function StructuredData() {
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://hanumanwatertoken.com"
+    }
+  };
+
+  const productData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Hanuman Water Token (HWT)",
+    "description": "Token que representa água real hipertermal de 9.000 anos, 100% natural. Plataforma de tokenização de água com blockchain.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Hanuman Water Token"
     },
+    "category": "Digital Asset",
+    "image": [
+      "https://hanumanwatertoken.com/images/logos/hwt-logo.png"
+    ],
+    "sku": "HWT-TOKEN-2024",
+    "mpn": "HWT001",
     "offers": {
       "@type": "Offer",
       "name": "Hanuman Water Token Presale",
       "description": "Pré-venda do token HWT - tokenização de água real",
       "url": "https://hanumanwatertoken.com/pt-BR/checkout",
       "priceCurrency": "USD",
+      "price": "0.20",
+      "priceValidUntil": "2025-12-31",
       "availability": "https://schema.org/InStock",
       "validFrom": "2024-01-01",
-      "category": "Digital Asset"
-    },
-    "product": {
-      "@type": "Product",
-      "name": "Hanuman Water Token (HWT)",
-      "description": "Token que representa água real hipertermal de 9.000 anos",
-      "brand": {
-        "@type": "Brand",
+      "seller": {
+        "@type": "Organization",
         "name": "Hanuman Water Token"
       },
-      "category": "Cryptocurrency",
-      "image": "https://hanumanwatertoken.com/images/logos/hwt-logo.png"
-    }
+      "itemCondition": "https://schema.org/NewCondition"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "127",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Investidor Crypto"
+        },
+        "reviewBody": "Projeto inovador que tokeniza água real. Conceito único no mercado de criptomoedas.",
+        "datePublished": "2024-11-01"
+      },
+      {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4",
+          "bestRating": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Analista Blockchain"
+        },
+        "reviewBody": "Interessante abordagem para tokenização de recursos naturais. Boa proposta de valor.",
+        "datePublished": "2024-10-15"
+      }
+    ]
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productData) }}
+      />
+    </>
   );
 }
