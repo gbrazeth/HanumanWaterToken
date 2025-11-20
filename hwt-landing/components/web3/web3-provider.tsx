@@ -61,7 +61,17 @@ export function Web3Provider({
         'cross-origin',
         'mixed content',
         'content security policy',
-        'csp'
+        'csp',
+        'pocket universe',
+        'window.ethereum found',
+        'window.phantom.solana found',
+        'pocket universe is running',
+        'backpack couldn\'t override',
+        'injected.js',
+        'contentscript.js',
+        'vendor-dhwvyfa.js',
+        'extension',
+        'chrome-extension'
       ]
       
       // Se for erro não crítico, apenas log silencioso
@@ -90,7 +100,17 @@ export function Web3Provider({
         'cross-origin',
         'mixed content',
         'content security policy',
-        'csp'
+        'csp',
+        'pocket universe',
+        'window.ethereum found',
+        'window.phantom.solana found',
+        'pocket universe is running',
+        'backpack couldn\'t override',
+        'injected.js',
+        'contentscript.js',
+        'vendor-dhwvyfa.js',
+        'extension',
+        'chrome-extension'
       ]
       
       if (nonCriticalErrors.some(err => message.includes(err))) {
@@ -117,7 +137,17 @@ export function Web3Provider({
         'cross-origin',
         'mixed content',
         'content security policy',
-        'csp'
+        'csp',
+        'pocket universe',
+        'window.ethereum found',
+        'window.phantom.solana found',
+        'pocket universe is running',
+        'backpack couldn\'t override',
+        'injected.js',
+        'contentscript.js',
+        'vendor-dhwvyfa.js',
+        'extension',
+        'chrome-extension'
       ]
       
       if (nonCriticalErrors.some(err => reason.includes(err))) {
