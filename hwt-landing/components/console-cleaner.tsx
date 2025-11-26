@@ -6,6 +6,9 @@ export function ConsoleCleaner() {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
+    // Interceptar imediatamente, antes de outros scripts
+    const interceptConsole = () => {
+
     // Lista de mensagens para filtrar APENAS VISUALMENTE
     const visualFilters = [
       // Pocket Universe e extensões
@@ -74,16 +77,22 @@ export function ConsoleCleaner() {
       originalWarn.apply(console, args)
     }
 
-    // Log de ativação (apenas em desenvolvimento)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[ConsoleCleaner] Limpeza visual de console ativada - funcionalidade preservada')
-    }
+    // Log de ativação para confirmar que está funcionando
+    console.log('[ConsoleCleaner] Limpeza visual de console ativada - funcionalidade preservada')
+    
+    // Teste imediato para verificar se está funcionando
+    console.error('origins don\'t match test - should be filtered')
+    console.warn('pocket universe test - should be filtered')
 
     // Cleanup
     return () => {
       console.error = originalError
       console.warn = originalWarn
     }
+    }
+
+    // Executar interceptação imediatamente
+    interceptConsole()
   }, [])
 
   return null

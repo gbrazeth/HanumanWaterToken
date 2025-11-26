@@ -122,6 +122,28 @@ export default async function LocaleLayout({
         <link rel="shortcut icon" href="/favicon.ico?v=5" />
         <link rel="mask-icon" href="/favicon.svg?v=5" color="#4a6a7d" />
         <StructuredData />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Interceptação imediata de console para filtrar erros visuais
+            (function() {
+              var filters = ['origins don\\'t match', 'pocket universe', 'backpack couldn\\'t override', 'injected.js', 'contentscript.js', 'secure.walletconnect.org'];
+              var originalError = console.error;
+              var originalWarn = console.warn;
+              
+              console.error = function() {
+                var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
+                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) return;
+                return originalError.apply(console, arguments);
+              };
+              
+              console.warn = function() {
+                var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
+                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) return;
+                return originalWarn.apply(console, arguments);
+              };
+            })();
+          `
+        }} />
       </head>
       <body suppressHydrationWarning>
         <ConsoleCleaner />
