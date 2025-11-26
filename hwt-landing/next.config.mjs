@@ -125,6 +125,14 @@ const nextConfig = {
             key: 'Cross-Origin-Embedder-Policy',
             value: 'unsafe-none',
           },
+          {
+            key: 'Permissions-Policy',
+            value: 'clipboard-read=(self), clipboard-write=(self)'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; object-src 'none'; base-uri 'self';"
+          }
         ],
       },
     ]

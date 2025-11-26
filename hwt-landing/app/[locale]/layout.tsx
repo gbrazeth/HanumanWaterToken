@@ -126,7 +126,18 @@ export default async function LocaleLayout({
           __html: `
             // Interceptação AGRESSIVA e CONTÍNUA de console
             (function() {
-              var filters = ['origins don\\'t match', 'pocket universe', 'backpack couldn\\'t override', 'injected.js', 'contentscript.js', 'secure.walletconnect.org', 'uncaught error: minified react error'];
+              var filters = [
+                // Erros de extensões Chrome
+                'origins don\\'t match', 'pocket universe', 'backpack couldn\\'t override', 'injected.js', 'contentscript.js', 'secure.walletconnect.org', 'uncaught error: minified react error',
+                // Erros de Permissions Policy (até headers serem aplicados)
+                'permissions policy violation', 'clipboard-read is not allowed', 'clipboard-write is not allowed',
+                // Erros de recursos bloqueados pelo Brave
+                'err_blocked_by_client', 'beacon.min.js',
+                // Erros de preload
+                'was preloaded using link preload but not used',
+                // Web3Modal informativos
+                'web3modal', 'initialized successfully', 'initialization attempt'
+              ];
               var originalError = console.error;
               var originalWarn = console.warn;
               var originalLog = console.log;
