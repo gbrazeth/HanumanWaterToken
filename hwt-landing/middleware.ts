@@ -65,23 +65,11 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  // Lógica especial para mobile: se prefere português e não está em pt-br
-  if (isMobile && prefersBrazilian && !pathname.startsWith('/pt-br') && pathname !== '/') {
-    // Se está em en-us, redirecionar para pt-br
-    if (pathname.startsWith('/en-us')) {
-      const url = request.nextUrl.clone();
-      url.pathname = pathname.replace('/en-us', '/pt-br');
-      return Response.redirect(url, 302);
-    }
-  }
+  // REMOVIDO: Lógica de redirecionamento automático para mobile
+  // Permitir que usuários escolham o idioma livremente, independente do dispositivo
 
   // Processar com next-intl middleware
-  const response = intlMiddleware(request);
-  
-  // REMOVIDO: Não interceptar redirecionamentos para en-us
-  // Permitir troca livre de idioma em todos os domínios
-
-  return response;
+  return intlMiddleware(request);
 };
 
 export const config = {
