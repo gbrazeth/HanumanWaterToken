@@ -20,7 +20,11 @@ export function LanguageSwitcher() {
     // Remove the current locale from the pathname
     const pathWithoutLocale = pathname.replace(`/${locale}`, '');
     // Navigate to the new locale
-    router.push(`/${newLocale}${pathWithoutLocale}`);
+    const newPath = `/${newLocale}${pathWithoutLocale}`;
+    
+    // Force navigation and refresh to ensure middleware processes correctly
+    router.push(newPath);
+    router.refresh();
   };
 
   return (

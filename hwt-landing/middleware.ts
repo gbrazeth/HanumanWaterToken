@@ -7,7 +7,7 @@ const intlMiddleware = createMiddleware({
   locales: locales,
 
   // Used when no locale matches
-  defaultLocale: 'pt-br',
+  defaultLocale: 'en-us',
 
   // Always use locale prefix
   localePrefix: 'always'
@@ -54,12 +54,8 @@ export default function middleware(request: NextRequest) {
       return Response.redirect(url, 302);
     }
 
-    // Se está tentando acessar en-us em domínio .com.br, redirecionar para pt-br
-    if (pathname.startsWith('/en-us')) {
-      const url = request.nextUrl.clone();
-      url.pathname = pathname.replace('/en-us', '/pt-br');
-      return Response.redirect(url, 302);
-    }
+    // REMOVIDO: Não bloquear acesso a en-us em domínio .com.br
+    // Permitir que usuários troquem de idioma livremente
 
     // Se não tem locale no path, adicionar pt-br
     if (!pathname.startsWith('/pt-br') && !pathname.startsWith('/en-us') && pathname !== '/') {
@@ -79,17 +75,11 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  // Interceptar resposta do next-intl para domínios .com.br
+  // Processar com next-intl middleware
   const response = intlMiddleware(request);
   
-  // Se o next-intl redirecionou para en-us em domínio .com.br, corrigir
-  if (isBrazilianDomain && response instanceof Response && response.status >= 300 && response.status < 400) {
-    const location = response.headers.get('location');
-    if (location && location.includes('/en-us')) {
-      const correctedLocation = location.replace('/en-us', '/pt-br');
-      return Response.redirect(correctedLocation, 302);
-    }
-  }
+  // REMOVIDO: Não interceptar redirecionamentos para en-us
+  // Permitir troca livre de idioma em todos os domínios
 
   return response;
 };
