@@ -9,6 +9,7 @@ import { StructuredData } from '@/components/seo/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { LocaleRedirect } from '@/components/locale-redirect';
 import { MetaMaskBrowserFix } from '@/components/web3/metamask-browser-fix';
+import { ConsoleCleaner } from '@/components/console-cleaner';
 import '@/lib/polyfills';
 import '../globals.css';
 
@@ -123,6 +124,7 @@ export default async function LocaleLayout({
         <StructuredData />
       </head>
       <body suppressHydrationWarning>
+        <ConsoleCleaner />
         <ErrorBoundary>
           <Web3ProviderDynamic>
             <NextIntlClientProvider messages={messages}>
