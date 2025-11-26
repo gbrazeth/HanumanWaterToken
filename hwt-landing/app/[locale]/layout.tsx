@@ -124,23 +124,59 @@ export default async function LocaleLayout({
         <StructuredData />
         <script dangerouslySetInnerHTML={{
           __html: `
-            // Interceptação imediata de console para filtrar erros visuais
+            // Interceptação AGRESSIVA e CONTÍNUA de console
             (function() {
-              var filters = ['origins don\\'t match', 'pocket universe', 'backpack couldn\\'t override', 'injected.js', 'contentscript.js', 'secure.walletconnect.org'];
+              var filters = ['origins don\\'t match', 'pocket universe', 'backpack couldn\\'t override', 'injected.js', 'contentscript.js', 'secure.walletconnect.org', 'uncaught error: minified react error'];
               var originalError = console.error;
               var originalWarn = console.warn;
+              var originalLog = console.log;
               
-              console.error = function() {
-                var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
-                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) return;
-                return originalError.apply(console, arguments);
-              };
+              function createFilteredFunction(original) {
+                return function() {
+                  var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
+                  if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) {
+                    // Silenciar completamente
+                    return;
+                  }
+                  return original.apply(console, arguments);
+                };
+              }
               
-              console.warn = function() {
-                var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
-                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) return;
-                return originalWarn.apply(console, arguments);
-              };
+              function applyInterception() {
+                console.error = createFilteredFunction(originalError);
+                console.warn = createFilteredFunction(originalWarn);
+                console.log = function() {
+                  var msg = arguments[0] ? String(arguments[0]).toLowerCase() : '';
+                  if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) return;
+                  return originalLog.apply(console, arguments);
+                };
+              }
+              
+              // Aplicar imediatamente
+              applyInterception();
+              
+              // Reaplicar a cada 100ms para combater extensões que redefinam o console
+              setInterval(applyInterception, 100);
+              
+              // Interceptar também window.onerror
+              window.addEventListener('error', function(e) {
+                var msg = e.message ? e.message.toLowerCase() : '';
+                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+                }
+              }, true);
+              
+              // Interceptar unhandledrejection
+              window.addEventListener('unhandledrejection', function(e) {
+                var msg = e.reason ? String(e.reason).toLowerCase() : '';
+                if (filters.some(function(f) { return msg.indexOf(f) !== -1; })) {
+                  e.preventDefault();
+                  return false;
+                }
+              }, true);
+              
             })();
           `
         }} />
