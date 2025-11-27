@@ -7,7 +7,6 @@ import { Web3ProviderDynamic } from '@/components/web3/web3-provider-dynamic';
 import { Web3Provider } from '@/components/web3/web3-provider';
 import { StructuredData } from '@/components/seo/structured-data';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { LocaleRedirect } from '@/components/locale-redirect';
 import { MetaMaskBrowserFix } from '@/components/web3/metamask-browser-fix';
 import { ConsoleCleaner } from '@/components/console-cleaner';
 import '@/lib/polyfills';
@@ -198,7 +197,6 @@ export default async function LocaleLayout({
           <Web3ProviderDynamic>
             <NextIntlClientProvider messages={messages}>
               <MetaMaskBrowserFix />
-              <LocaleRedirect />
               {children}
             </NextIntlClientProvider>
           </Web3ProviderDynamic>
