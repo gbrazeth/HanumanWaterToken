@@ -1,5 +1,5 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
-import { cookieStorage, createStorage, noopStorage } from 'wagmi'
+import { cookieStorage, createStorage, noopStorage, http } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
 // Get projectId from https://cloud.walletconnect.com
@@ -34,6 +34,9 @@ function createWagmiConfig() {
     metadata,
     ssr: true,
     storage,
+    transports: {
+      [mainnet.id]: http() // Fallback para RPC público se WC falhar
+    }
   })
 }
 
