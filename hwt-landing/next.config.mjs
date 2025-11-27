@@ -17,6 +17,7 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Headers unificados para resolver problemas de segurança, CORS e Login Social
   async headers() {
     return [
       {
@@ -45,6 +46,22 @@ const nextConfig = {
           {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization'
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'clipboard-read=(self), clipboard-write=(self), camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss:; frame-src 'self' https:; object-src 'none'; base-uri 'self';"
           }
         ]
       }
@@ -110,32 +127,6 @@ const nextConfig = {
     ];
     
     return config;
-  },
-  // Headers para resolver problemas de CORS e COOP com WalletConnect
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
-          },
-          {
-            key: 'Cross-Origin-Embedder-Policy',
-            value: 'unsafe-none',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'clipboard-read=(self), clipboard-write=(self)'
-          },
-          {
-            key: 'Content-Security-Policy',
-            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; object-src 'none'; base-uri 'self';"
-          }
-        ],
-      },
-    ]
   },
   // Disable static generation for legal pages during development
   ...(process.env.NODE_ENV === 'development' && {
