@@ -72,21 +72,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: [
-      { url: '/favicon.ico?v=6', sizes: 'any' },
-      { url: '/favicon.svg?v=6', type: 'image/svg+xml' },
-      { url: '/favicon-32x32.png?v=6', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png?v=6', sizes: '16x16', type: 'image/png' }
-    ],
-    shortcut: '/favicon.ico?v=6',
-    apple: [
-      { url: '/apple-touch-icon.png?v=6', sizes: '180x180', type: 'image/png' }
-    ],
-    other: [
-      { rel: 'mask-icon', url: '/favicon.svg?v=6', color: '#4a6a7d' }
-    ]
-  },
   manifest: '/manifest.json',
 };
 
