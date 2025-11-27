@@ -10,12 +10,8 @@ if (!projectId) throw new Error('Project ID is not defined')
 const metadata = {
   name: 'Hanuman Water Token',
   description: 'Hanuman Water Token - The First Token Backed by Millennial Hyperthermal Mineral Water',
-  url: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com',
-  icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png'],
-  verifyUrl: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com',
-  redirect: {
-    universal: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com'
-  }
+  url: 'https://hanumanwatertoken.com',
+  icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png']
 }
 
 // Create wagmiConfig - usando apenas Mainnet para produção
