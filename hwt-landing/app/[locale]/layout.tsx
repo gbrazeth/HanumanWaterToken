@@ -37,20 +37,6 @@ export const metadata: Metadata = {
     description: 'Plataforma de tokenização de água real com blockchain. Água hipertermal de 9.000 anos, 100% natural.',
     url: 'https://hanumanwatertoken.com',
     siteName: 'Hanuman Water Token',
-    images: [
-      {
-        url: 'https://hanumanwatertoken.com/images/logos/hwt-logo.png',
-        width: 1200,
-        height: 630,
-        alt: 'Hanuman Water Token Logo',
-      },
-      {
-        url: 'https://hanumanwatertoken.com/favicon.ico?v=5',
-        width: 32,
-        height: 32,
-        alt: 'HWT Favicon',
-      },
-    ],
     locale: 'pt_BR',
     type: 'website',
   },
@@ -58,7 +44,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hanuman Water Token (HWT)',
     description: 'Tokenização de água real com blockchain. Água hipertermal de 9.000 anos.',
-    images: ['/images/logos/hwt-logo.png'],
     creator: '@HanumanWaterToken',
   },
   robots: {
