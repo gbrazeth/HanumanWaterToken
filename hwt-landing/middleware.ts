@@ -47,20 +47,22 @@ export default function middleware(request: NextRequest) {
 
   // Lógica de redirecionamento para .com.br (prioridade máxima)
   if (isBrazilianDomain) {
-    // Se está na raiz, redirecionar para pt-br
+    // Se está na raiz, redirecionar para pt-br preservando query params
     if (pathname === '/') {
       const url = request.nextUrl.clone();
       url.pathname = '/pt-br';
+      url.search = search; // Garantir que query params sejam mantidos
       return Response.redirect(url, 302);
     }
 
     // REMOVIDO: Não bloquear acesso a en-us em domínio .com.br
     // Permitir que usuários troquem de idioma livremente
 
-    // Se não tem locale no path, adicionar pt-br
+    // Se não tem locale no path, adicionar pt-br preservando query params
     if (!pathname.startsWith('/pt-br') && !pathname.startsWith('/en-us') && pathname !== '/') {
       const url = request.nextUrl.clone();
       url.pathname = `/pt-br${pathname}`;
+      url.search = search; // Garantir que query params sejam mantidos
       return Response.redirect(url, 302);
     }
   }
