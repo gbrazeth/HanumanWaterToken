@@ -18,10 +18,7 @@ function createWagmiConfig() {
     name: 'Hanuman Water Token',
     description: 'Hanuman Water Token - The First Token Backed by Millennial Hyperthermal Mineral Water',
     url: origin,
-    icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png'],
-    redirect: {
-      universal: origin
-    }
+    icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png']
   }
 
   // SSR-safe storage configuration
