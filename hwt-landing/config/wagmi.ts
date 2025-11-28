@@ -11,10 +11,7 @@ const metadata = {
   name: 'Hanuman Water Token',
   description: 'Hanuman Water Token - The First Token Backed by Millennial Hyperthermal Mineral Water',
   url: 'https://hanumanwatertoken.com',
-  icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png'],
-  redirect: {
-    universal: 'https://hanumanwatertoken.com'
-  }
+  icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png']
 }
 
 // Create wagmiConfig - usando apenas Mainnet para produção
@@ -23,12 +20,9 @@ const chains = [mainnet] as const
 // Função para criar config de forma lazy
 function createWagmiConfig() {
   // SSR-safe storage configuration
-  // Usando localStorage em vez de cookieStorage para evitar problemas com ITP/Cookies de terceiros no Mobile
-  // Isso garante que a sessão persista durante o redirecionamento OAuth
   const storage = typeof window !== 'undefined' 
     ? createStorage({
-        key: 'wagmi', // Prefixo explícito
-        storage: window.localStorage 
+        storage: cookieStorage
       })
     : createStorage({
         storage: noopStorage
@@ -37,11 +31,16 @@ function createWagmiConfig() {
   return defaultWagmiConfig({
     chains,
     projectId,
-    metadata,
+    metadata: {
+      ...metadata,
+      redirect: {
+        universal: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com'
+      }
+    } as any,
     ssr: true,
     storage,
     transports: {
-      [mainnet.id]: http() // Fallback para RPC público se WC falhar
+      [mainnet.id]: http('https://eth.llamarpc.com') // RPC público robusto e gratuito
     }
   })
 }
