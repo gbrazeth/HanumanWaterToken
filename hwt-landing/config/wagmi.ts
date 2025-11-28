@@ -12,16 +12,19 @@ const chains = [mainnet] as const
 
 // Função para criar config de forma lazy
 function createWagmiConfig() {
-  // Definir metadata dinâmico dentro da função para acessar window
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com'
+
   const metadata = {
     name: 'Hanuman Water Token',
     description: 'Hanuman Water Token - The First Token Backed by Millennial Hyperthermal Mineral Water',
-    url: typeof window !== 'undefined' ? window.location.origin : 'https://hanumanwatertoken.com',
-    icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png']
+    url: origin,
+    icons: ['https://hanumanwatertoken.com/images/logos/hwt-logo.png'],
+    redirect: {
+      universal: origin
+    }
   }
 
   // SSR-safe storage configuration
-  // Usando localStorage para garantir persistência no Mobile Safari
   const storage = typeof window !== 'undefined' 
     ? createStorage({
         key: 'wagmi',
@@ -38,7 +41,7 @@ function createWagmiConfig() {
     ssr: true,
     storage,
     transports: {
-      [mainnet.id]: http('https://eth.llamarpc.com') // RPC público robusto
+      [mainnet.id]: http('https://eth.llamarpc.com')
     }
   })
 }
