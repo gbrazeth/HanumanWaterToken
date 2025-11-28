@@ -20,9 +20,12 @@ const chains = [mainnet] as const
 // Função para criar config de forma lazy
 function createWagmiConfig() {
   // SSR-safe storage configuration
+  // MUDANÇA CRÍTICA: Usando localStorage para Mobile Safari
+  // Cookies são bloqueados em fluxos OAuth cross-site no iOS, causando a "tela cinza"
   const storage = typeof window !== 'undefined' 
     ? createStorage({
-        storage: cookieStorage
+        key: 'wagmi',
+        storage: window.localStorage 
       })
     : createStorage({
         storage: noopStorage
@@ -40,7 +43,7 @@ function createWagmiConfig() {
     ssr: true,
     storage,
     transports: {
-      [mainnet.id]: http('https://eth.llamarpc.com') // RPC público robusto e gratuito
+      [mainnet.id]: http('https://eth.llamarpc.com') // RPC público robusto
     }
   })
 }
