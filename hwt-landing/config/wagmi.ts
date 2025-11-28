@@ -20,9 +20,12 @@ const chains = [mainnet] as const
 // Função para criar config de forma lazy
 function createWagmiConfig() {
   // SSR-safe storage configuration
+  // Usando localStorage em vez de cookieStorage para evitar problemas com ITP/Cookies de terceiros no Mobile
+  // Isso garante que a sessão persista durante o redirecionamento OAuth
   const storage = typeof window !== 'undefined' 
     ? createStorage({
-        storage: cookieStorage
+        key: 'wagmi', // Prefixo explícito
+        storage: window.localStorage 
       })
     : createStorage({
         storage: noopStorage
