@@ -157,59 +157,59 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
 </header>
 
       <main className="flex-1">
-        {/* Hero Section - Centralizado e Limpo */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Hero Section - Otimizado para telas 13/14 polegadas */}
+        <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden">
           {/* Background uniforme */}
           <div className="absolute inset-0 bg-logoBg"></div>
 
           {/* Conteúdo centralizado */}
-          <div className="relative z-10 container mx-auto px-4 py-8">
-            <div className="min-h-[85vh] flex items-center">
-              <div className="grid lg:grid-cols-12 gap-12 items-center w-full">
+          <div className="relative z-10 container mx-auto px-4 py-4 lg:py-0">
+            <div className="flex items-center w-full h-full">
+              <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
                 
                 {/* Coluna esquerda - Conteúdo */}
-                <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
+                <div className="lg:col-span-7 space-y-6 lg:space-y-8 text-center lg:text-left pt-4 lg:pt-0">
                   
                   {/* Título principal */}
-                  <div className="space-y-6">
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight text-primary">
+                  <div className="space-y-4 lg:space-y-6">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-primary">
                       {t('hero.title')}
                     </h1>
                     
                     {/* Linha decorativa */}
                     <div className="flex items-center gap-4 justify-center lg:justify-start">
-                      <div className="h-1 w-20 bg-gradient-to-r from-primary to-primary/60 rounded-full"></div>
-                      <Droplet className="h-6 w-6 text-primary" />
-                      <div className="h-1 w-20 bg-gradient-to-r from-primary/60 to-primary rounded-full"></div>
+                      <div className="h-1 w-16 lg:w-20 bg-gradient-to-r from-primary to-primary/60 rounded-full"></div>
+                      <Droplet className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
+                      <div className="h-1 w-16 lg:w-20 bg-gradient-to-r from-primary/60 to-primary rounded-full"></div>
                     </div>
                   </div>
 
                   {/* Descrição */}
-                  <p className="text-xl md:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                  <p className="text-lg lg:text-xl xl:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                     {t('hero.description')}
                   </p>
                   
-                  {/* Stats em cards */}
-                  <div className="grid grid-cols-3 gap-4 py-6">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
-                      <div className="text-2xl font-bold text-primary">9.000</div>
-                      <div className="text-sm text-gray-600">{t('hero.stats.years')}</div>
+                  {/* Stats em cards - Compacto em telas menores */}
+                  <div className="grid grid-cols-3 gap-3 lg:gap-4 py-2 lg:py-6">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 lg:p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-xl lg:text-2xl font-bold text-primary">9.000</div>
+                      <div className="text-xs lg:text-sm text-gray-600">{t('hero.stats.years')}</div>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
-                      <div className="text-2xl font-bold text-primary">42°C</div>
-                      <div className="text-sm text-gray-600">{t('hero.stats.hyperthermal')}</div>
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 lg:p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-xl lg:text-2xl font-bold text-primary">42°C</div>
+                      <div className="text-xs lg:text-sm text-gray-600">{t('hero.stats.hyperthermal')}</div>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-primary/10">
-                      <div className="text-2xl font-bold text-primary">100%</div>
-                      <div className="text-sm text-gray-600">{t('hero.stats.natural')}</div>
+                    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 lg:p-4 text-center shadow-lg border border-primary/10">
+                      <div className="text-xl lg:text-2xl font-bold text-primary">100%</div>
+                      <div className="text-xs lg:text-sm text-gray-600">{t('hero.stats.natural')}</div>
                     </div>
                   </div>
 
                   {/* CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center items-center">
                     <Button 
                       size="lg" 
-                      className="group bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-8 py-3 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20 relative overflow-hidden" 
+                      className="group bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-white font-bold px-6 lg:px-8 py-2 lg:py-3 text-base lg:text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-105 rounded-full border border-primary/20 relative overflow-hidden" 
                       asChild
                     >
                       <Link href={`/${locale}/checkout`} className="flex items-center gap-2 relative z-10">
@@ -222,7 +222,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                     <Button
                       variant="outline"
                       size="lg"
-                      className="border-2 border-primary/60 text-primary hover:bg-primary hover:text-white font-semibold px-6 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-white/80 backdrop-blur-sm hover:border-primary"
+                      className="border-2 border-primary/60 text-primary hover:bg-primary hover:text-white font-semibold px-5 lg:px-6 py-2 lg:py-3 text-base lg:text-lg shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-white/80 backdrop-blur-sm hover:border-primary"
                       onClick={() => scrollToSection("nossa-fonte-de-agua")}
                     >
                       {t('hero.cta.learnMore')}
@@ -230,8 +230,23 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
 
                     <Button
                       variant="ghost"
+                      size="sm"
+                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-4 py-2 text-sm transition-all duration-300 rounded-full border border-transparent hover:border-primary/30 lg:hidden"
+                      asChild
+                    >
+                      <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        {t('navigation.institutionalSite')}
+                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </Link>
+                    </Button>
+                    
+                    {/* Botão institucional visível apenas em telas maiores para economizar espaço vertical */}
+                    <Button
+                      variant="ghost"
                       size="lg"
-                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-4 py-2 text-sm transition-all duration-300 rounded-full border border-transparent hover:border-primary/30"
+                      className="text-primary/80 hover:text-primary hover:bg-primary/10 font-medium px-4 py-2 text-sm transition-all duration-300 rounded-full border border-transparent hover:border-primary/30 hidden lg:inline-flex"
                       asChild
                     >
                       <Link href="https://hanumanwater.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
@@ -244,29 +259,29 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                   </div>
 
                   {/* Trust indicators - Ultra compacto */}
-                  <div className="pt-2 mb-8">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-primary/10">
+                  <div className="pt-2 lg:mb-8">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow-lg border border-primary/10">
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-green-50 border border-green-200 hover:shadow-md transition-all duration-300">
-                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mb-1">
-                            <Shield className="h-4 w-4 text-green-600" />
+                        <div className="flex flex-col items-center text-center p-1.5 lg:p-2 rounded-md bg-green-50 border border-green-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-6 h-6 lg:w-8 lg:h-8 bg-green-100 rounded-full flex items-center justify-center mb-1">
+                            <Shield className="h-3 w-3 lg:h-4 lg:w-4 text-green-600" />
                           </div>
-                          <span className="font-semibold text-xs text-green-800">{t('hero.trustIndicators.auditedSecure')}</span>
-                          <span className="text-xs text-green-600 opacity-80">{t('hero.trustIndicators.verified')}</span>
+                          <span className="font-semibold text-[10px] lg:text-xs text-green-800">{t('hero.trustIndicators.auditedSecure')}</span>
+                          <span className="text-[10px] lg:text-xs text-green-600 opacity-80">{t('hero.trustIndicators.verified')}</span>
                         </div>
-                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-blue-50 border border-blue-200 hover:shadow-md transition-all duration-300">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mb-1">
-                            <Droplet className="h-4 w-4 text-blue-600" />
+                        <div className="flex flex-col items-center text-center p-1.5 lg:p-2 rounded-md bg-blue-50 border border-blue-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-6 h-6 lg:w-8 lg:h-8 bg-blue-100 rounded-full flex items-center justify-center mb-1">
+                            <Droplet className="h-3 w-3 lg:h-4 lg:w-4 text-blue-600" />
                           </div>
-                          <span className="font-semibold text-xs text-blue-800">{t('hero.trustIndicators.realWaterTokenized')}</span>
-                          <span className="text-xs text-blue-600 opacity-80">{t('hero.trustIndicators.tangible')}</span>
+                          <span className="font-semibold text-[10px] lg:text-xs text-blue-800">{t('hero.trustIndicators.realWaterTokenized')}</span>
+                          <span className="text-[10px] lg:text-xs text-blue-600 opacity-80">{t('hero.trustIndicators.tangible')}</span>
                         </div>
-                        <div className="flex flex-col items-center text-center p-2 rounded-md bg-purple-50 border border-purple-200 hover:shadow-md transition-all duration-300">
-                          <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mb-1">
-                            <Users className="h-4 w-4 text-purple-600" />
+                        <div className="flex flex-col items-center text-center p-1.5 lg:p-2 rounded-md bg-purple-50 border border-purple-200 hover:shadow-md transition-all duration-300">
+                          <div className="w-6 h-6 lg:w-8 lg:h-8 bg-purple-100 rounded-full flex items-center justify-center mb-1">
+                            <Users className="h-3 w-3 lg:h-4 lg:w-4 text-purple-600" />
                           </div>
-                          <span className="font-semibold text-xs text-purple-800">{t('hero.trustIndicators.activeCommunity')}</span>
-                          <span className="text-xs text-purple-600 opacity-80">{t('hero.trustIndicators.active')}</span>
+                          <span className="font-semibold text-[10px] lg:text-xs text-purple-800">{t('hero.trustIndicators.activeCommunity')}</span>
+                          <span className="text-[10px] lg:text-xs text-purple-600 opacity-80">{t('hero.trustIndicators.active')}</span>
                         </div>
                       </div>
                     </div>
@@ -274,10 +289,10 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                 </div>
 
                 {/* Coluna direita - Imagem */}
-                <div className="lg:col-span-5 flex justify-center items-center">
-                  <div className="relative">
+                <div className="lg:col-span-5 flex justify-center items-center mt-4 lg:mt-0">
+                  <div className="relative w-full max-w-[500px] lg:max-w-none">
                     {/* Container da imagem */}
-                    <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-primary/10">
+                    <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-4 lg:p-6 shadow-2xl border border-primary/10">
                       <Image
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/DALL%C2%B7E%202025-02-11%2019.39.57%20-%20A%20futuristic%20water%20reservoir%20representing%20the%20Hanuman%20Water%20Token%20(HWT)%20water%20source,%20prominently%20displaying%20the%20HWT%20token%20branding.%20The%20structure%20is%20-axQPVyW3jf0Cf7UlwYOEii7HfaQbHx.webp"
                         alt="HWT Futuristic Water Processing Facility"
@@ -294,7 +309,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
           </div>
 
           {/* Scroll indicator - Centralizado abaixo da imagem */}
-          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 lg:left-3/4 lg:-translate-x-1/2 z-20 hidden lg:block">
+          <div className="absolute bottom-4 lg:bottom-8 left-1/2 transform -translate-x-1/2 lg:left-3/4 lg:-translate-x-1/2 z-20 hidden lg:block">
             <div 
               className="flex flex-col items-center cursor-pointer group animate-bounce"
               onClick={() => scrollToSection("nossa-fonte-de-agua")}
