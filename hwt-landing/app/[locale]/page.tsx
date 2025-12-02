@@ -845,7 +845,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             <div className="flex justify-center">
               <div 
                 className="flex flex-col items-center cursor-pointer group animate-bounce"
-                onClick={() => window.location.href = `/${locale}/checkout`}
+                onClick={() => scrollToSection("cta")}
               >
                 <div className="bg-white/95 backdrop-blur-sm rounded-full px-6 py-3 shadow-xl mb-2 group-hover:bg-primary group-hover:text-white transition-all duration-300 border-2 border-primary/30">
                   <span className="text-sm font-semibold">{t('navigationButtons.buyHWT')}</span>
@@ -857,7 +857,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
         </section>
 
         {/* CTA Section */}
-        <section className="bg-logoBg py-16 md:py-24">
+        <section className="bg-logoBg py-16 md:py-24" id="cta">
           <div className="container px-4">
           <div className="text-center space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-primary">
