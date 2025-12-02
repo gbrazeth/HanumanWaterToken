@@ -9,8 +9,8 @@ const intlMiddleware = createMiddleware({
   // Used when no locale matches
   defaultLocale: 'en-us',
 
-  // Use locale prefix only as needed (suppress for default locale)
-  localePrefix: 'as-needed'
+  // Always use locale prefix
+  localePrefix: 'always'
 });
 
 export default function middleware(request: NextRequest) {
