@@ -1,6 +1,5 @@
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAppKit } from '@reown/appkit/react';
 import { useEffect, useState } from 'react';
-import { initWeb3Modal, isWeb3ModalInitialized } from '@/lib/web3modal-singleton';
 
 export function useWeb3ModalSafe() {
   const [isReady, setIsReady] = useState(false);
@@ -13,18 +12,15 @@ export function useWeb3ModalSafe() {
   useEffect(() => {
     if (!mounted) return;
     
-    // Initialize if not already done
+    // Give AppKit time to initialize
     const timer = setTimeout(() => {
-      if (!isWeb3ModalInitialized()) {
-        initWeb3Modal();
-      }
       setIsReady(true);
     }, 100);
 
     return () => clearTimeout(timer);
   }, [mounted]);
 
-  // Only call useWeb3Modal after initialization and mounting
+  // Only call useAppKit after mounting
   try {
     if (!mounted || !isReady) {
       return {
@@ -34,10 +30,10 @@ export function useWeb3ModalSafe() {
       };
     }
 
-    const modal = useWeb3Modal();
+    const modal = useAppKit();
     return { ...modal, isReady };
   } catch (error) {
-    // If Web3Modal is not initialized yet, return dummy functions
+    // If AppKit is not initialized yet, return dummy functions
     return {
       open: async () => {},
       close: () => {},

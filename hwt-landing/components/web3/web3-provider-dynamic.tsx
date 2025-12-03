@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import { ReactNode } from 'react'
-import { State } from 'wagmi'
 import { ClientOnly } from '@/components/client-only'
 
 // Dynamic import para evitar SSR do Web3Provider
@@ -16,13 +15,13 @@ const Web3ProviderComponent = dynamic(
 
 interface Web3ProviderDynamicProps {
   children: ReactNode
-  initialState?: State
+  cookies?: string | null
 }
 
-export function Web3ProviderDynamic({ children, initialState }: Web3ProviderDynamicProps) {
+export function Web3ProviderDynamic({ children, cookies }: Web3ProviderDynamicProps) {
   return (
     <ClientOnly fallback={<div suppressHydrationWarning>{children}</div>}>
-      <Web3ProviderComponent initialState={initialState}>
+      <Web3ProviderComponent cookies={cookies}>
         {children}
       </Web3ProviderComponent>
     </ClientOnly>
