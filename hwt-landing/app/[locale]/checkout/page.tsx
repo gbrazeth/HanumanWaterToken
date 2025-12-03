@@ -361,39 +361,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         const provider = new ethers.providers.Web3Provider(window.ethereum as any)
         const signer = provider.getSigner()
         
-        // Para mobile, implementar lógica específica para WalletConnect
-        const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
-        
-        if (isMobile) {
-          console.log('📱 Mobile detectado, verificando tipo de conexão...')
-          
-          // Verificar se é WalletConnect (não tem MetaMask injetado diretamente)
-          const isWalletConnect = !window.ethereum?.isMetaMask && window.ethereum
-          
-          if (isWalletConnect) {
-            console.log('🔗 WalletConnect detectado no mobile, preparando transação...')
-            
-            // Para WalletConnect mobile, precisamos garantir que o provider está ativo
-            try {
-              // Tentar fazer uma chamada simples para "acordar" o provider
-              await provider.getNetwork()
-              console.log('✅ Provider WalletConnect ativo')
-            } catch (providerError) {
-              console.log('⚠️ Provider WalletConnect inativo, tentando reativar...')
-              
-              // Se o provider não responder, pode ser que a sessão WalletConnect tenha expirado
-              // Vamos tentar reconectar
-              throw new Error('Sessão WalletConnect expirada. Por favor, reconecte sua carteira.')
-            }
-          }
-          
-          // Tentar focar na janela atual
-          window.focus()
-          
-          // Aguardar um pouco para garantir que tudo está pronto
-          await new Promise(resolve => setTimeout(resolve, 500))
-        }
-        
         // Verificar se ainda estamos conectados
         const accounts = await provider.listAccounts()
         if (accounts.length === 0) {
@@ -420,79 +387,25 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         
         console.log('🚀 Enviando transação:', txConfig)
 
-        // Para WalletConnect mobile, mostrar instruções claras em vez de tentar transação
-        if (isMobile && !window.ethereum?.isMetaMask) {
-          console.log('🔄 WalletConnect mobile detectado: orientando usuário...')
-          
-          // Em vez de tentar a transação, orientar o usuário
-          const metamaskUrl = `https://metamask.app.link/dapp/${window.location.host}`
-          
-          setError(`
-            📱 Para completar a compra no mobile:
-            
-            1️⃣ Abra o app MetaMask
-            2️⃣ Toque no ícone do browser (🌐)
-            3️⃣ Acesse: hanumanwatertoken.com.br
-            4️⃣ Vá para checkout e conecte sua carteira
-            5️⃣ Clique em "Buy Tokens"
-            
-            Ou clique no botão abaixo para abrir diretamente:
-          `)
-          
-          // Criar um botão especial na interface
-          setTimeout(() => {
-            const errorDiv = document.querySelector('.error-message')
-            if (errorDiv) {
-              const button = document.createElement('button')
-              button.innerHTML = '🚀 Abrir no MetaMask App'
-              button.className = 'mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium'
-              button.onclick = () => {
-                window.open(metamaskUrl, '_blank')
-              }
-              errorDiv.appendChild(button)
-            }
-          }, 100)
-          
-          setIsLoading(false)
-          return
-          
-        } else {
-          // Executar transação normal (desktop ou MetaMask mobile browser)
-          const tx = await presaleContract.buyWithETH(txConfig)
-          console.log('✅ Transação enviada:', tx.hash)
-          
-          // Aguardar confirmação
-          const receipt = await tx.wait()
-          console.log('✅ Transação confirmada:', receipt)
-        }
+        // Executar transação - WalletConnect abrirá automaticamente o app da carteira
+        const tx = await presaleContract.buyWithETH(txConfig)
+        console.log('✅ Transação enviada:', tx.hash)
+        
+        // Aguardar confirmação
+        const receipt = await tx.wait()
+        console.log('✅ Transação confirmada:', receipt)
 
         setSuccess(true);
         window.dispatchEvent(new Event('hwt-balance-updated'))
       }
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
+      const errorMessage = (error as any)?.message || ''
       
-      // Se é mobile e o erro pode ser relacionado ao MetaMask não estar acessível
-      const isMobile = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
-      const errorMessage = (error as any)?.message?.toLowerCase() || ''
-      
-      if (isMobile && (
-        errorMessage.includes('user rejected') || 
-        errorMessage.includes('user denied') ||
-        errorMessage.includes('metamask') ||
-        !window.ethereum?.isMetaMask
-      )) {
-        console.log('🔗 Erro de acesso MetaMask mobile, tentando deep link...')
-        
-        // Tentar abrir MetaMask via deep link
-        const metamaskDeepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
-        
-        setError(`Para completar a transação, abra este link no MetaMask: ${metamaskDeepLink}`)
-        
-        // Tentar abrir automaticamente
-        setTimeout(() => {
-          window.open(metamaskDeepLink, '_blank')
-        }, 1000)
+      if (errorMessage.includes('user rejected') || errorMessage.includes('user denied')) {
+        setError("Transação cancelada pelo usuário.")
+      } else if (errorMessage.includes('insufficient funds')) {
+        setError("Saldo insuficiente para completar a transação.")
       } else {
         setError("Erro ao processar a compra. Por favor, tente novamente.")
       }
@@ -944,34 +857,6 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   </Button>
                                 )}
                                 
-                                {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) && (
-                                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                                    <p className="text-sm font-bold text-amber-800">⚠️ Importante para Mobile:</p>
-                                    <p className="text-xs text-amber-700 mt-2 leading-relaxed">
-                                      Para comprar tokens no mobile, você precisa usar o <strong>browser do MetaMask</strong>, não o browser normal.
-                                    </p>
-                                    <div className="mt-3 p-3 bg-white rounded border border-amber-200">
-                                      <p className="text-xs font-medium text-amber-800 mb-2">📱 Como fazer:</p>
-                                      <p className="text-xs text-amber-700 leading-relaxed">
-                                        1. Abra o <strong>app MetaMask</strong><br/>
-                                        2. Toque no ícone do <strong>browser (🌐)</strong><br/>
-                                        3. Digite: <strong>hanumanwatertoken.com.br</strong><br/>
-                                        4. Vá para checkout e conecte sua carteira<br/>
-                                        5. Clique em "Buy Tokens" (funcionará perfeitamente)
-                                      </p>
-                                    </div>
-                                    <Button 
-                                      onClick={() => {
-                                        const url = `https://metamask.app.link/dapp/${window.location.host}`
-                                        window.open(url, '_blank')
-                                      }}
-                                      className="mt-3 w-full text-xs bg-amber-600 hover:bg-amber-700"
-                                      size="sm"
-                                    >
-                                      🚀 Abrir no Browser MetaMask
-                                    </Button>
-                                  </div>
-                                )}
                               </div>
                             ) : (
                               <div className="space-y-3">
@@ -1004,47 +889,24 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   </div>
                                 )}
                                 
-                                {/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) && !window.ethereum?.isMetaMask ? (
-                                  <div className="space-y-3">
-                                    <div className="p-3 bg-orange-50 border border-orange-200 rounded-md">
-                                      <p className="text-sm font-medium text-orange-800">📱 Conectado via WalletConnect</p>
-                                      <p className="text-xs text-orange-600 mt-1">
-                                        Para comprar tokens no mobile, use o browser do MetaMask diretamente.
-                                      </p>
-                                    </div>
-                                    <Button 
-                                      onClick={() => {
-                                        const url = `https://metamask.app.link/dapp/${window.location.host}`
-                                        window.open(url, '_blank')
-                                      }}
-                                      className="w-full bg-orange-600 hover:bg-orange-700"
-                                    >
-                                      🚀 Continuar no MetaMask App
-                                    </Button>
-                                    <Button onClick={() => disconnect()} variant="outline" className="w-full">
-                                      {t('disconnect')}
-                                    </Button>
-                                  </div>
-                                ) : (
-                                  <div className="flex gap-2">
-                                    <Button 
-                                      onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        console.log('🔘 Crypto Buy Tokens button clicked')
-                                        processPayment()
-                                      }} 
-                                      className="flex-1 bg-primary" 
-                                      disabled={isLoading}
-                                      type="button"
-                                    >
-                                      {isLoading ? t('processing') : t('buyTokens')}
-                                    </Button>
-                                    <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
-                                      {t('disconnect')}
-                                    </Button>
-                                  </div>
-                                )}
+                                <div className="flex gap-2">
+                                  <Button 
+                                    onClick={(e) => {
+                                      e.preventDefault()
+                                      e.stopPropagation()
+                                      console.log('🔘 Crypto Buy Tokens button clicked')
+                                      processPayment()
+                                    }} 
+                                    className="flex-1 bg-primary" 
+                                    disabled={isLoading}
+                                    type="button"
+                                  >
+                                    {isLoading ? t('processing') : t('buyTokens')}
+                                  </Button>
+                                  <Button onClick={() => disconnect()} variant="outline" className="px-4" type="button">
+                                    {t('disconnect')}
+                                  </Button>
+                                </div>
                               </div>
                             )}
                           </div>
