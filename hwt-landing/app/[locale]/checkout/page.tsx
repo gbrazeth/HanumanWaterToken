@@ -13,6 +13,7 @@ import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/
 import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
+import { getEthersSigner } from '@/lib/ethers-adapter';
 import { ClientOnly } from '@/components/client-only';
 import { CheckoutStructuredData } from '@/components/seo/checkout-structured-data'
 // Usando endereços da Mainnet para produção
@@ -331,73 +332,60 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   const buyWithETH = async () => {
     console.log('💰 buyWithETH iniciado:', {
       tokenAmount,
-      hasEthereum: typeof window.ethereum !== "undefined",
       address,
       contractAddress: TOKEN_CONTRACT_ADDRESS,
-      isMetaMaskMobile: isMetaMaskMobile(),
-      userAgent: navigator.userAgent
+      isConnected
     })
     
     try {
-      if (typeof window.ethereum !== "undefined") {
-        setIsLoading(true)
-        setError(null)
-
-        // Verificar se os contratos estão configurados
-        if (!checkContractAddresses()) {
-          setIsLoading(false)
-          return
-        }
-
-        // Verificar e trocar para a rede correta
-        const networkOk = await checkAndSwitchNetwork()
-        if (!networkOk) {
-          setIsLoading(false)
-          return
-        }
-
-        if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
-        
-        const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-        const signer = provider.getSigner()
-        
-        // Verificar se ainda estamos conectados
-        const accounts = await provider.listAccounts()
-        if (accounts.length === 0) {
-          throw new Error('Carteira desconectada. Conecte novamente.')
-        }
-        
-        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
-          ...PRESALE_ABI,
-          "function getEthAmountForTokens(uint256 tokenAmount) public view returns (uint256)"
-        ], signer)
-
-        // Calcular o valor exato de ETH a partir do contrato
-        const tokenAmount18 = ethers.utils.parseUnits(tokenAmount, 18)
-        console.log('💰 Calculando valor ETH para tokens:', tokenAmount18.toString())
-        
-        const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
-        console.log('💰 Valor ETH calculado:', ethers.utils.formatEther(ethAmount))
-
-        // Para MetaMask mobile, adicionar configurações específicas
-        const txConfig = {
-          value: ethAmount,
-          gasLimit: ethers.utils.hexlify(300000), // Gas limit explícito
-        }
-        
-        console.log('🚀 Enviando transação:', txConfig)
-
-        // Executar transação - WalletConnect abrirá automaticamente o app da carteira
-        const tx = await presaleContract.buyWithETH(txConfig)
-        console.log('✅ Transação enviada:', tx.hash)
-        
-        // Aguardar confirmação
-        const receipt = await tx.wait()
-        console.log('✅ Transação confirmada:', receipt)
-
-        setSuccess(true);
-        window.dispatchEvent(new Event('hwt-balance-updated'))
+      if (!isConnected || !address) {
+        setError('Carteira não conectada. Por favor, conecte sua carteira.')
+        return
       }
+
+      setIsLoading(true)
+      setError(null)
+
+      // Verificar se os contratos estão configurados
+      if (!checkContractAddresses()) {
+        setIsLoading(false)
+        return
+      }
+
+      // Obter signer do Wagmi/AppKit (funciona com WalletConnect e MetaMask)
+      console.log('🔗 Obtendo signer do Wagmi...')
+      const signer = await getEthersSigner({ chainId: 1 }) // Mainnet
+      console.log('✅ Signer obtido:', await signer.getAddress())
+      
+      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
+        ...PRESALE_ABI,
+        "function getEthAmountForTokens(uint256 tokenAmount) public view returns (uint256)"
+      ], signer)
+
+      // Calcular o valor exato de ETH a partir do contrato
+      const tokenAmount18 = ethers.utils.parseUnits(tokenAmount, 18)
+      console.log('💰 Calculando valor ETH para tokens:', tokenAmount18.toString())
+      
+      const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
+      console.log('💰 Valor ETH calculado:', ethers.utils.formatEther(ethAmount))
+
+      const txConfig = {
+        value: ethAmount,
+        gasLimit: ethers.utils.hexlify(300000),
+      }
+      
+      console.log('🚀 Enviando transação:', txConfig)
+
+      // Executar transação - WalletConnect abrirá automaticamente o app da carteira
+      const tx = await presaleContract.buyWithETH(txConfig)
+      console.log('✅ Transação enviada:', tx.hash)
+      
+      // Aguardar confirmação
+      const receipt = await tx.wait()
+      console.log('✅ Transação confirmada:', receipt)
+
+      setSuccess(true);
+      window.dispatchEvent(new Event('hwt-balance-updated'))
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
       const errorMessage = (error as any)?.message || ''
@@ -406,6 +394,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         setError("Transação cancelada pelo usuário.")
       } else if (errorMessage.includes('insufficient funds')) {
         setError("Saldo insuficiente para completar a transação.")
+      } else if (errorMessage.includes('Connector not connected')) {
+        setError("Carteira desconectada. Por favor, reconecte.")
       } else {
         setError("Erro ao processar a compra. Por favor, tente novamente.")
       }
@@ -417,54 +407,60 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   // Função para comprar tokens com USDT
   const buyWithUSDT = async () => {
     try {
-      if (typeof window.ethereum !== "undefined") {
-        setIsLoading(true)
-        setError(null)
-
-        // Verificar se os contratos estão configurados
-        if (!checkContractAddresses()) {
-          setIsLoading(false)
-          return
-        }
-
-        // Verificar e trocar para a rede correta
-        const networkOk = await checkAndSwitchNetwork()
-        if (!networkOk) {
-          setIsLoading(false)
-          return
-        }
-
-        if (!window.ethereum) throw new Error(t('metaMaskNotFound'))
-      const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-        const signer = provider.getSigner()
-
-        // Calcular valor em USDT (1:1 com USD)
-        const usdtValue = Number.parseFloat(usdAmount)
-
-        // Criar contratos
-        const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
-        const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
-
-        // Verificar allowance
-        const allowance = await usdtContract.allowance(address, PRESALE_ADDRESS)
-        const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
-
-        // Se necessário, aprovar o contrato para gastar USDT
-        if (allowance.lt(usdtAmount)) {
-          const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
-          await approveTx.wait()
-        }
-
-        // Executar a compra
-        const tx = await presaleContract.buyWithUSDT(usdtAmount)
-        await tx.wait()
-
-        setSuccess(true);
-window.dispatchEvent(new Event('hwt-balance-updated'))
+      if (!isConnected || !address) {
+        setError('Carteira não conectada. Por favor, conecte sua carteira.')
+        return
       }
+
+      setIsLoading(true)
+      setError(null)
+
+      // Verificar se os contratos estão configurados
+      if (!checkContractAddresses()) {
+        setIsLoading(false)
+        return
+      }
+
+      // Obter signer do Wagmi/AppKit
+      console.log('🔗 Obtendo signer do Wagmi para USDT...')
+      const signer = await getEthersSigner({ chainId: 1 })
+
+      // Calcular valor em USDT (1:1 com USD)
+      const usdtValue = Number.parseFloat(usdAmount)
+
+      // Criar contratos
+      const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer)
+      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, PRESALE_ABI, signer)
+
+      // Verificar allowance
+      const allowance = await usdtContract.allowance(address, PRESALE_ADDRESS)
+      const usdtAmount = ethers.utils.parseUnits(usdtValue.toString(), 6) // USDT tem 6 casas decimais
+
+      // Se necessário, aprovar o contrato para gastar USDT
+      if (allowance.lt(usdtAmount)) {
+        console.log('🔐 Aprovando USDT...')
+        const approveTx = await usdtContract.approve(PRESALE_ADDRESS, usdtAmount)
+        await approveTx.wait()
+        console.log('✅ USDT aprovado')
+      }
+
+      // Executar a compra
+      console.log('🚀 Comprando com USDT...')
+      const tx = await presaleContract.buyWithUSDT(usdtAmount)
+      await tx.wait()
+      console.log('✅ Compra com USDT confirmada')
+
+      setSuccess(true);
+      window.dispatchEvent(new Event('hwt-balance-updated'))
     } catch (error) {
       console.error("Erro ao comprar tokens com USDT:", error)
-      setError("Erro ao processar a compra. Por favor, tente novamente.")
+      const errorMessage = (error as any)?.message || ''
+      
+      if (errorMessage.includes('user rejected') || errorMessage.includes('user denied')) {
+        setError("Transação cancelada pelo usuário.")
+      } else {
+        setError("Erro ao processar a compra. Por favor, tente novamente.")
+      }
     } finally {
       setIsLoading(false)
     }
