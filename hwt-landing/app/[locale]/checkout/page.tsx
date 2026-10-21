@@ -11,7 +11,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ethers } from "ethers"
 import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/contract";
 import { useTranslations } from 'next-intl';
-import { useAccount, useBalance, useDisconnect } from 'wagmi';
+import { useAccount, useBalance, useDisconnect, useGasPrice, useReadContract } from 'wagmi';
+import { formatEther, parseAbi, parseEther, parseUnits } from 'viem';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
 import { getEthersSigner } from '@/lib/ethers-adapter';
 import { useSocialConnect } from '@/hooks/use-social-connect';
@@ -39,6 +40,26 @@ const HWT_ABI = [
 ]
 
 const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWithUSDT(uint256 usdtAmount) external"]
+
+const PRESALE_PRICE_ABI = parseAbi(["function getEthAmountForTokens(uint256 tokenAmount) view returns (uint256)"])
+
+// Gas limit usado na compra com ETH (mesmo valor enviado na transação)
+const BUY_GAS_LIMIT = 300000
+
+// Formata um valor em wei para exibição com poucas casas decimais
+const formatEthShort = (wei: bigint) => Number(formatEther(wei)).toFixed(5)
+
+// Extrai a mensagem mais útil de um erro de transação (ethers/viem/WalletConnect)
+const getTxErrorDetail = (error: any): string => {
+  const raw = error?.reason || error?.shortMessage || error?.error?.message || error?.data?.message || error?.message || ''
+  return String(raw).split('\n')[0].slice(0, 200)
+}
+
+const isInsufficientFundsError = (error: any) =>
+  error?.code === 'INSUFFICIENT_FUNDS' || /insufficient funds/i.test(getTxErrorDetail(error))
+
+const isUserRejectedError = (error: any) =>
+  error?.code === 4001 || error?.code === 'ACTION_REJECTED' || /user (rejected|denied)/i.test(getTxErrorDetail(error))
 
 const USDT_ABI = [
   {
@@ -103,6 +124,40 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
   const [cardName, setCardName] = useState<string>("")
   const [cardExpiry, setCardExpiry] = useState<string>("")
   const [cardCVC, setCardCVC] = useState<string>("")
+  const [addressCopied, setAddressCopied] = useState<boolean>(false)
+
+  // Preço on-chain da quantidade selecionada + custo estimado de gás
+  const tokenAmountWei = (() => {
+    try {
+      return Number(tokenAmount) > 0 ? parseUnits(tokenAmount, 18) : undefined
+    } catch {
+      return undefined
+    }
+  })()
+  const { data: requiredEthWei } = useReadContract({
+    address: PRESALE_ADDRESS as `0x${string}`,
+    abi: PRESALE_PRICE_ABI,
+    functionName: 'getEthAmountForTokens',
+    args: tokenAmountWei ? [tokenAmountWei] : undefined,
+    chainId: 1,
+    query: { enabled: !!tokenAmountWei },
+  })
+  const { data: gasPrice } = useGasPrice({ chainId: 1 })
+  const estimatedGasCostWei = gasPrice !== undefined ? gasPrice * BigInt(BUY_GAS_LIMIT) : undefined
+  const totalRequiredWei =
+    requiredEthWei !== undefined && estimatedGasCostWei !== undefined ? requiredEthWei + estimatedGasCostWei : undefined
+
+  // Só afirmamos que falta saldo quando temos saldo e preço carregados
+  const isBalanceCheckReady = balanceData !== undefined && totalRequiredWei !== undefined
+  const hasEnoughBalance = isBalanceCheckReady && balanceData.value >= totalRequiredWei
+  const showInsufficientBalance = isBalanceCheckReady && !hasEnoughBalance
+  const canBuyWithBalance = hasEnoughBalance || (!isBalanceCheckReady && !!balanceData && balanceData.value > BigInt(0))
+
+  // Máximo de HWT que o saldo atual permite comprar (preço é linear na quantidade)
+  const maxAffordableTokens =
+    balanceData && requiredEthWei && tokenAmountWei && estimatedGasCostWei !== undefined && balanceData.value > estimatedGasCostWei
+      ? Number(((balanceData.value - estimatedGasCostWei) * tokenAmountWei) / requiredEthWei / parseEther('1'))
+      : 0
 
   // Efeito para detectar se estamos no browser MetaMask e conectar diretamente
   useEffect(() => {
@@ -378,9 +433,27 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
       console.log('💰 Valor ETH calculado:', ethers.utils.formatEther(ethAmount))
 
+      // Conferir saldo (valor + gás) antes de enviar, para dar uma mensagem clara ao usuário
+      const [walletBalance, currentGasPrice] = await Promise.all([signer.getBalance(), signer.getGasPrice()])
+      const gasCost = currentGasPrice.mul(BUY_GAS_LIMIT)
+      const totalNeeded = ethAmount.add(gasCost)
+      if (walletBalance.lt(totalNeeded)) {
+        const maxTokens = walletBalance.gt(gasCost)
+          ? walletBalance.sub(gasCost).mul(tokenAmount18).div(ethAmount).div(ethers.constants.WeiPerEther).toNumber()
+          : 0
+        setError(
+          t('notEnoughEth', {
+            balance: formatEthShort(walletBalance.toBigInt()),
+            amount: tokenAmount,
+            required: formatEthShort(totalNeeded.toBigInt()),
+          }) + ' ' + (maxTokens > 0 ? t('maxAffordable', { max: maxTokens }) : t('addEthOrReduce'))
+        )
+        return
+      }
+
       const txConfig = {
         value: ethAmount,
-        gasLimit: ethers.utils.hexlify(300000),
+        gasLimit: ethers.utils.hexlify(BUY_GAS_LIMIT),
       }
       
       console.log('🚀 Enviando transação:', txConfig)
@@ -397,16 +470,16 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       window.dispatchEvent(new Event('hwt-balance-updated'))
     } catch (error) {
       console.error("Erro ao comprar tokens com ETH:", error)
-      const errorMessage = (error as any)?.message || ''
-      
-      if (errorMessage.includes('user rejected') || errorMessage.includes('user denied')) {
+      const errorDetail = getTxErrorDetail(error)
+
+      if (isUserRejectedError(error)) {
         setError("Transação cancelada pelo usuário.")
-      } else if (errorMessage.includes('insufficient funds')) {
+      } else if (isInsufficientFundsError(error)) {
         setError("Saldo insuficiente para completar a transação.")
-      } else if (errorMessage.includes('Connector not connected')) {
+      } else if (errorDetail.includes('Connector not connected')) {
         setError("Carteira desconectada. Por favor, reconecte.")
       } else {
-        setError("Erro ao processar a compra. Por favor, tente novamente.")
+        setError(t('purchaseErrorWithDetail', { detail: errorDetail || '-' }))
       }
     } finally {
       setIsLoading(false)
@@ -463,12 +536,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       window.dispatchEvent(new Event('hwt-balance-updated'))
     } catch (error) {
       console.error("Erro ao comprar tokens com USDT:", error)
-      const errorMessage = (error as any)?.message || ''
-      
-      if (errorMessage.includes('user rejected') || errorMessage.includes('user denied')) {
+
+      if (isUserRejectedError(error)) {
         setError("Transação cancelada pelo usuário.")
       } else {
-        setError("Erro ao processar a compra. Por favor, tente novamente.")
+        setError(t('purchaseErrorWithDetail', { detail: getTxErrorDetail(error) || '-' }))
       }
     } finally {
       setIsLoading(false)
@@ -537,8 +609,8 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
         buyWithUSDT()
         break
       case "social":
-        // Para pagamento social, usar ETH se houver saldo
-        if (balanceData && Number(balanceData.formatted) > 0) {
+        // Para pagamento social, a compra é feita com o ETH da carteira (buyWithETH confere valor + gás)
+        if (balanceData && balanceData.value > BigInt(0)) {
           buyWithETH()
         } else {
           setError("Saldo insuficiente. Adicione ETH à sua carteira primeiro.")
@@ -554,6 +626,77 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
         setError("Método de pagamento inválido.")
     }
   }
+
+  // Aviso de saldo insuficiente (mostrado só quando o saldo não cobre valor + gás)
+  const renderInsufficientBalance = (showOnRampButton: boolean) => (
+    <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+      <p className="text-sm font-medium text-yellow-800">⚠️ {t('insufficientBalance')}</p>
+      {balanceData && totalRequiredWei !== undefined && (
+        <p className="text-xs text-yellow-700 mt-1">
+          {t('notEnoughEth', {
+            balance: formatEthShort(balanceData.value),
+            amount: tokenAmount,
+            required: formatEthShort(totalRequiredWei),
+          })}{' '}
+          {maxAffordableTokens > 0 ? t('maxAffordable', { max: maxAffordableTokens }) : t('addEthOrReduce')}
+        </p>
+      )}
+      {showOnRampButton && (
+        <Button
+          onClick={() => open({ view: 'OnRampProviders' })}
+          variant="outline"
+          size="sm"
+          className="mt-2 w-full"
+          type="button"
+        >
+          💳 Comprar <strong>ETH</strong> com PIX ou Cartão
+        </Button>
+      )}
+      <p className="text-xs text-yellow-600 mt-2 italic">
+        💡 {t.rich('recommendedMeld', {
+          strong: (chunks) => <strong>{chunks}</strong>
+        })}
+      </p>
+    </div>
+  )
+
+  // Endereço da carteira conectada (para o usuário saber onde ficam o ETH e os HWT)
+  const renderWalletAddress = () => address && (
+    <div className="mt-2">
+      <p className="text-xs text-green-700">{t('yourWallet')}:</p>
+      <div className="flex items-center gap-2 mt-1">
+        <code className="text-xs text-green-800 font-mono break-all">{address}</code>
+        <button
+          type="button"
+          className="text-xs text-green-700 underline shrink-0"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(address)
+              setAddressCopied(true)
+              setTimeout(() => setAddressCopied(false), 2000)
+            } catch {
+              // Clipboard indisponível; o endereço continua visível para cópia manual
+            }
+          }}
+        >
+          {addressCopied ? t('copied') : t('copyAddress')}
+        </button>
+      </div>
+      {balanceData && (
+        <p className="text-xs text-green-700 mt-1">
+          {t('balance')}: {formatEthShort(balanceData.value)} ETH ·{' '}
+          <a
+            href={`https://etherscan.io/address/${address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            {t('viewOnEtherscan')}
+          </a>
+        </p>
+      )}
+    </div>
+  )
 
   return (
     <div className="min-h-screen flex flex-col bg-logoBg">
@@ -872,27 +1015,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   </p>
                                 </div>
                                 
-                                {balanceData && Number(balanceData.formatted) === 0 && (
-                                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                                    <p className="text-sm font-medium text-yellow-800">⚠️ {t('insufficientBalance')}</p>
-                                    <p className="text-xs text-yellow-600 mt-1">
-                                      Você precisa adicionar <strong>ETH</strong> à sua carteira para comprar tokens.
-                                    </p>
-                                    <Button 
-                                      onClick={() => open({ view: 'OnRampProviders' })} 
-                                      variant="outline" 
-                                      size="sm"
-                                      className="mt-2 w-full"
-                                    >
-                                      💳 Comprar <strong>ETH</strong> com PIX ou Cartão
-                                    </Button>
-                                    <p className="text-xs text-yellow-600 mt-2 italic">
-                                      💡 {t.rich('recommendedMeld', {
-                                        strong: (chunks) => <strong>{chunks}</strong>
-                                      })}
-                                    </p>
-                                  </div>
-                                )}
+                                {showInsufficientBalance && renderInsufficientBalance(true)}
                                 
                                 <div className="flex gap-2">
                                   <Button 
@@ -1027,28 +1150,13 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   <p className="text-xs text-green-600 mt-1">
                                     {t('connectedDescription')}
                                   </p>
+                                  {renderWalletAddress()}
                                 </div>
 
-                                {/* Aviso de saldo insuficiente */}
-                                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                                  <p className="text-sm font-medium text-yellow-800 flex items-center gap-2">
-                                    ⚠️ {t('insufficientBalance')}
-                                  </p>
-                                  <p className="text-xs text-yellow-700 mt-1">
-                                    Você precisa adicionar <strong>ETH</strong> à sua carteira para comprar tokens.
-                                  </p>
-                                  <div className="mt-2">
-                                    <p className="text-xs font-medium text-yellow-800">
-                                      💳 Comprar <strong>ETH</strong> com PIX ou Cartão
-                                    </p>
-                                    <p className="text-xs text-yellow-700 mt-1">
-                                      💡 Recomendado: Use <strong>Meld.io</strong> (Coinbase temporariamente indisponível)
-                                    </p>
-                                  </div>
-                                </div>
-                                
+                                {showInsufficientBalance && renderInsufficientBalance(false)}
+
                                 <div className="flex gap-2">
-                                  {balanceData && Number(balanceData.formatted) > 0 ? (
+                                  {canBuyWithBalance ? (
                                     <Button 
                                       onClick={(e) => {
                                         e.preventDefault()
