@@ -168,7 +168,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
                 
                 {/* Coluna esquerda - Conteúdo */}
-                <div className="lg:col-span-7 space-y-6 lg:space-y-8 text-center lg:text-left pt-4 lg:pt-0">
+                <div className="lg:col-span-7 space-y-6 lg:space-y-8 text-center pt-4 lg:pt-0">
                   
                   {/* Título principal */}
                   <div className="space-y-4 lg:space-y-6">
@@ -177,7 +177,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                     </h1>
                     
                     {/* Linha decorativa */}
-                    <div className="flex items-center gap-4 justify-center lg:justify-start">
+                    <div className="flex items-center gap-4 justify-center">
                       <div className="h-1 w-16 lg:w-20 bg-gradient-to-r from-primary to-primary/60 rounded-full"></div>
                       <Droplet className="h-5 w-5 lg:h-6 lg:w-6 text-primary" />
                       <div className="h-1 w-16 lg:w-20 bg-gradient-to-r from-primary/60 to-primary rounded-full"></div>
@@ -185,7 +185,7 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
                   </div>
 
                   {/* Descrição */}
-                  <p className="text-lg lg:text-xl xl:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                  <p className="text-lg lg:text-xl xl:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto">
                     {t('hero.description')}
                   </p>
                   
@@ -308,8 +308,8 @@ export default function LandingPage({ params }: { params: Promise<{ locale: stri
             </div>
           </div>
 
-          {/* Scroll indicator - Centralizado abaixo da imagem */}
-          <div className="absolute bottom-4 lg:bottom-8 left-1/2 transform -translate-x-1/2 lg:left-3/4 lg:-translate-x-1/2 z-20 hidden lg:block">
+          {/* Scroll indicator - Centralizado */}
+          <div className="absolute bottom-4 lg:bottom-8 left-1/2 transform -translate-x-1/2 z-20 hidden lg:block">
             <div 
               className="flex flex-col items-center cursor-pointer group animate-bounce"
               onClick={() => scrollToSection("nossa-fonte-de-agua")}
