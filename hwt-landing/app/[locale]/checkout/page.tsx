@@ -13,6 +13,9 @@ import { TOKEN_CONTRACT_ADDRESS, PRESALE_ADDRESS, USDT_ADDRESS } from "@/config/
 import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect, useGasPrice, useReadContract } from 'wagmi';
 import { formatEther, parseAbi, parseEther, parseUnits } from 'viem';
+import { mainnet } from 'viem/chains';
+import { getAccount, getBalance, getGasPrice, readContract, switchChain, waitForTransactionReceipt, writeContract } from '@wagmi/core';
+import { config as wagmiConfig } from '@/config/wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
 import { getEthersSigner } from '@/lib/ethers-adapter';
 import { useSocialConnect } from '@/hooks/use-social-connect';
@@ -42,6 +45,7 @@ const HWT_ABI = [
 const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWithUSDT(uint256 usdtAmount) external"]
 
 const PRESALE_PRICE_ABI = parseAbi(["function getEthAmountForTokens(uint256 tokenAmount) view returns (uint256)"])
+const PRESALE_BUY_ABI = parseAbi(["function buyWithETH() payable"])
 
 // Gas limit usado na compra com ETH (mesmo valor enviado na transação)
 const BUY_GAS_LIMIT = 300000
@@ -56,10 +60,10 @@ const getTxErrorDetail = (error: any): string => {
 }
 
 const isInsufficientFundsError = (error: any) =>
-  error?.code === 'INSUFFICIENT_FUNDS' || /insufficient funds/i.test(getTxErrorDetail(error))
+  error?.code === 'INSUFFICIENT_FUNDS' || error?.name === 'InsufficientFundsError' || /insufficient funds/i.test(getTxErrorDetail(error))
 
 const isUserRejectedError = (error: any) =>
-  error?.code === 4001 || error?.code === 'ACTION_REJECTED' || /user (rejected|denied)/i.test(getTxErrorDetail(error))
+  error?.code === 4001 || error?.code === 'ACTION_REJECTED' || error?.name === 'UserRejectedRequestError' || /user (rejected|denied)/i.test(getTxErrorDetail(error))
 
 const USDT_ABI = [
   {
@@ -416,55 +420,67 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         return
       }
 
-      // Obter signer do Wagmi/AppKit (funciona com WalletConnect e MetaMask)
-      console.log('🔗 Obtendo signer do Wagmi...')
-      const signer = await getEthersSigner({ chainId: 1 }) // Mainnet
-      console.log('✅ Signer obtido:', await signer.getAddress())
-      
-      const presaleContract = new ethers.Contract(PRESALE_ADDRESS, [
-        ...PRESALE_ABI,
-        "function getEthAmountForTokens(uint256 tokenAmount) public view returns (uint256)"
-      ], signer)
+      // Leituras e envio via wagmi/viem: as leituras usam o RPC público da config e o envio usa o
+      // cliente do conector. O ethers v5 sobre o transporte da carteira falhava em carteiras
+      // sociais (Google/Email) com "could not detect network".
+      if (getAccount(wagmiConfig).chainId !== mainnet.id) {
+        console.log('🔄 Trocando carteira para Ethereum Mainnet...')
+        await switchChain(wagmiConfig, { chainId: mainnet.id })
+      }
 
       // Calcular o valor exato de ETH a partir do contrato
-      const tokenAmount18 = ethers.utils.parseUnits(tokenAmount, 18)
+      const tokenAmount18 = parseUnits(tokenAmount, 18)
       console.log('💰 Calculando valor ETH para tokens:', tokenAmount18.toString())
-      
-      const ethAmount = await presaleContract.getEthAmountForTokens(tokenAmount18)
-      console.log('💰 Valor ETH calculado:', ethers.utils.formatEther(ethAmount))
+
+      const ethAmount = await readContract(wagmiConfig, {
+        address: PRESALE_ADDRESS as `0x${string}`,
+        abi: PRESALE_PRICE_ABI,
+        functionName: 'getEthAmountForTokens',
+        args: [tokenAmount18],
+        chainId: mainnet.id,
+      })
+      console.log('💰 Valor ETH calculado:', formatEther(ethAmount))
 
       // Conferir saldo (valor + gás) antes de enviar, para dar uma mensagem clara ao usuário
-      const [walletBalance, currentGasPrice] = await Promise.all([signer.getBalance(), signer.getGasPrice()])
-      const gasCost = currentGasPrice.mul(BUY_GAS_LIMIT)
-      const totalNeeded = ethAmount.add(gasCost)
-      if (walletBalance.lt(totalNeeded)) {
-        const maxTokens = walletBalance.gt(gasCost)
-          ? walletBalance.sub(gasCost).mul(tokenAmount18).div(ethAmount).div(ethers.constants.WeiPerEther).toNumber()
+      const [walletBalance, currentGasPrice] = await Promise.all([
+        getBalance(wagmiConfig, { address, chainId: mainnet.id }),
+        getGasPrice(wagmiConfig, { chainId: mainnet.id }),
+      ])
+      const gasCost = currentGasPrice * BigInt(BUY_GAS_LIMIT)
+      const totalNeeded = ethAmount + gasCost
+      if (walletBalance.value < totalNeeded) {
+        const maxTokens = walletBalance.value > gasCost
+          ? Number(((walletBalance.value - gasCost) * tokenAmount18) / ethAmount / parseEther('1'))
           : 0
         setError(
           t('notEnoughEth', {
-            balance: formatEthShort(walletBalance.toBigInt()),
+            balance: formatEthShort(walletBalance.value),
             amount: tokenAmount,
-            required: formatEthShort(totalNeeded.toBigInt()),
+            required: formatEthShort(totalNeeded),
           }) + ' ' + (maxTokens > 0 ? t('maxAffordable', { max: maxTokens }) : t('addEthOrReduce'))
         )
         return
       }
 
-      const txConfig = {
-        value: ethAmount,
-        gasLimit: ethers.utils.hexlify(BUY_GAS_LIMIT),
-      }
-      
-      console.log('🚀 Enviando transação:', txConfig)
+      console.log('🚀 Enviando transação:', { value: formatEther(ethAmount), gas: BUY_GAS_LIMIT })
 
-      // Executar transação - WalletConnect abrirá automaticamente o app da carteira
-      const tx = await presaleContract.buyWithETH(txConfig)
-      console.log('✅ Transação enviada:', tx.hash)
-      
+      // Executar transação - WalletConnect/carteira social abrirá a confirmação automaticamente
+      const txHash = await writeContract(wagmiConfig, {
+        address: PRESALE_ADDRESS as `0x${string}`,
+        abi: PRESALE_BUY_ABI,
+        functionName: 'buyWithETH',
+        value: ethAmount,
+        gas: BigInt(BUY_GAS_LIMIT),
+        chainId: mainnet.id,
+      })
+      console.log('✅ Transação enviada:', txHash)
+
       // Aguardar confirmação
-      const receipt = await tx.wait()
+      const receipt = await waitForTransactionReceipt(wagmiConfig, { hash: txHash, chainId: mainnet.id })
       console.log('✅ Transação confirmada:', receipt)
+      if (receipt.status !== 'success') {
+        throw new Error(`Transação revertida (${txHash})`)
+      }
 
       setSuccess(true);
       window.dispatchEvent(new Event('hwt-balance-updated'))
