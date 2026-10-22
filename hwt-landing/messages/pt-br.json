@@ -409,6 +409,8 @@
     "copyAddress": "Copiar",
     "copied": "Copiado!",
     "viewOnEtherscan": "Ver no Etherscan",
+    "presaleEndedTitle": "Pré-venda encerrada",
+    "presaleEnded": "A pré-venda do HWT foi encerrada em {date}. Novas compras estão temporariamente indisponíveis — não compre ETH para isso agora.",
     "acceptNetworkSwitch": "Você precisa aceitar a troca de rede para Ethereum Mainnet no MetaMask",
     "connectToMainnet": "Por favor, conecte-se à rede Ethereum Mainnet",
     "selectQuantity": "Selecionar Quantidade",

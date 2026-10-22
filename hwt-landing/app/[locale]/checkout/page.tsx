@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl';
 import { useAccount, useBalance, useDisconnect, useGasPrice, useReadContract } from 'wagmi';
 import { formatEther, parseAbi, parseEther, parseUnits } from 'viem';
 import { mainnet } from 'viem/chains';
-import { getAccount, getBalance, getGasPrice, readContract, switchChain, waitForTransactionReceipt, writeContract } from '@wagmi/core';
+import { getAccount, getBalance, getGasPrice, readContract, simulateContract, switchChain, waitForTransactionReceipt, writeContract } from '@wagmi/core';
 import { config as wagmiConfig } from '@/config/wagmi';
 import { useWeb3ModalSafe } from '@/hooks/use-web3modal-safe';
 import { getEthersSigner } from '@/lib/ethers-adapter';
@@ -46,6 +46,10 @@ const PRESALE_ABI = ["function buyWithETH() external payable", "function buyWith
 
 const PRESALE_PRICE_ABI = parseAbi(["function getEthAmountForTokens(uint256 tokenAmount) view returns (uint256)"])
 const PRESALE_BUY_ABI = parseAbi(["function buyWithETH() payable"])
+// Presale e token têm cada um seu próprio prazo; a compra exige que os dois estejam abertos
+const PRESALE_END_ABI = parseAbi(["function presaleEndTime() view returns (uint256)"])
+const PRESALE_ENDED_REASON = 'Presale period has ended'
+
 
 // Gas limit usado na compra com ETH (mesmo valor enviado na transação)
 const BUY_GAS_LIMIT = 300000
@@ -55,6 +59,9 @@ const formatEthShort = (wei: bigint) => Number(formatEther(wei)).toFixed(5)
 
 // Extrai a mensagem mais útil de um erro de transação (ethers/viem/WalletConnect)
 const getTxErrorDetail = (error: any): string => {
+  // Erros do viem guardam o motivo do revert em uma causa interna
+  const revertReason = typeof error?.walk === 'function' ? error.walk((e: any) => typeof e?.reason === 'string')?.reason : undefined
+  if (revertReason) return String(revertReason)
   const raw = error?.reason || error?.shortMessage || error?.error?.message || error?.data?.message || error?.message || ''
   return String(raw).split('\n')[0].slice(0, 200)
 }
@@ -147,6 +154,28 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
     query: { enabled: !!tokenAmountWei },
   })
   const { data: gasPrice } = useGasPrice({ chainId: 1 })
+
+  // Prazo da pré-venda (o menor entre o contrato de presale e o do token)
+  const { data: presaleEndTime } = useReadContract({
+    address: PRESALE_ADDRESS as `0x${string}`,
+    abi: PRESALE_END_ABI,
+    functionName: 'presaleEndTime',
+    chainId: 1,
+  })
+  const { data: tokenPresaleEndTime } = useReadContract({
+    address: TOKEN_CONTRACT_ADDRESS as `0x${string}`,
+    abi: PRESALE_END_ABI,
+    functionName: 'presaleEndTime',
+    chainId: 1,
+  })
+  const effectivePresaleEnd =
+    presaleEndTime !== undefined && tokenPresaleEndTime !== undefined
+      ? (presaleEndTime < tokenPresaleEndTime ? presaleEndTime : tokenPresaleEndTime)
+      : undefined
+  const isPresaleEnded = effectivePresaleEnd !== undefined && BigInt(Math.floor(Date.now() / 1000)) > effectivePresaleEnd
+  const presaleEndDate = effectivePresaleEnd !== undefined
+    ? new Date(Number(effectivePresaleEnd) * 1000).toLocaleDateString(locale)
+    : ''
   const estimatedGasCostWei = gasPrice !== undefined ? gasPrice * BigInt(BUY_GAS_LIMIT) : undefined
   const totalRequiredWei =
     requiredEthWei !== undefined && estimatedGasCostWei !== undefined ? requiredEthWei + estimatedGasCostWei : undefined
@@ -465,7 +494,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
       console.log('🚀 Enviando transação:', { value: formatEther(ethAmount), gas: BUY_GAS_LIMIT })
 
       // Executar transação - WalletConnect/carteira social abrirá a confirmação automaticamente
-      const txHash = await writeContract(wagmiConfig, {
+      // Simular antes de enviar: se o contrato for recusar, mostramos o motivo sem abrir a carteira
+      const { request } = await simulateContract(wagmiConfig, {
+        account: address,
         address: PRESALE_ADDRESS as `0x${string}`,
         abi: PRESALE_BUY_ABI,
         functionName: 'buyWithETH',
@@ -473,6 +504,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         gas: BigInt(BUY_GAS_LIMIT),
         chainId: mainnet.id,
       })
+      const txHash = await writeContract(wagmiConfig, request)
       console.log('✅ Transação enviada:', txHash)
 
       // Aguardar confirmação
@@ -492,6 +524,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ locale: str
         setError("Transação cancelada pelo usuário.")
       } else if (isInsufficientFundsError(error)) {
         setError("Saldo insuficiente para completar a transação.")
+      } else if (errorDetail.includes(PRESALE_ENDED_REASON)) {
+        setError(t('presaleEnded', { date: presaleEndDate || '-' }))
       } else if (errorDetail.includes('Connector not connected')) {
         setError("Carteira desconectada. Por favor, reconecte.")
       } else {
@@ -610,6 +644,11 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
     })
     
     setError(null)
+
+    if (isPresaleEnded) {
+      setError(t('presaleEnded', { date: presaleEndDate }))
+      return
+    }
 
     // Validação do valor mínimo
     if (Number(tokenAmount) < MIN_TOKENS) {
@@ -946,6 +985,14 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                   </CardHeader>
                   <CardContent>
                     <div className="w-full space-y-6">
+                      {isPresaleEnded && (
+                        <Alert>
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertTitle>{t('presaleEndedTitle')}</AlertTitle>
+                          <AlertDescription>{t('presaleEnded', { date: presaleEndDate })}</AlertDescription>
+                        </Alert>
+                      )}
+
                       {/* Seção 1: Carteiras Crypto */}
                       <div className="border rounded-lg p-4">
                         <div className="mb-4">
@@ -1031,7 +1078,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   </p>
                                 </div>
                                 
-                                {showInsufficientBalance && renderInsufficientBalance(true)}
+                                {!isPresaleEnded && showInsufficientBalance && renderInsufficientBalance(true)}
                                 
                                 <div className="flex gap-2">
                                   <Button 
@@ -1042,7 +1089,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                       processPayment()
                                     }} 
                                     className="flex-1 bg-primary" 
-                                    disabled={isLoading}
+                                    disabled={isLoading || isPresaleEnded}
                                     type="button"
                                   >
                                     {isLoading ? t('processing') : t('buyTokens')}
@@ -1169,10 +1216,10 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                   {renderWalletAddress()}
                                 </div>
 
-                                {showInsufficientBalance && renderInsufficientBalance(false)}
+                                {!isPresaleEnded && showInsufficientBalance && renderInsufficientBalance(false)}
 
                                 <div className="flex gap-2">
-                                  {canBuyWithBalance ? (
+                                  {canBuyWithBalance || isPresaleEnded ? (
                                     <Button 
                                       onClick={(e) => {
                                         e.preventDefault()
@@ -1181,7 +1228,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                         processPayment()
                                       }} 
                                       className="flex-1 bg-primary" 
-                                      disabled={isLoading}
+                                      disabled={isLoading || isPresaleEnded}
                                       type="button"
                                     >
                                       {isLoading ? t('processing') : t('buyTokens')}
@@ -1195,7 +1242,7 @@ window.dispatchEvent(new Event('hwt-balance-updated'))
                                         open({ view: 'OnRampProviders' })
                                       }} 
                                       className="flex-1 bg-primary" 
-                                      disabled={isLoading}
+                                      disabled={isLoading || isPresaleEnded}
                                       type="button"
                                     >
                                       {isLoading ? t('processing') : `💳 ${t('payWithPixCard')}`}
