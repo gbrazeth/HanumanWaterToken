@@ -408,6 +408,8 @@
     "copyAddress": "Copy",
     "copied": "Copied!",
     "viewOnEtherscan": "View on Etherscan",
+    "presaleEndedTitle": "Presale ended",
+    "presaleEnded": "The HWT presale ended on {date}. New purchases are temporarily unavailable — please don't buy ETH for this right now.",
     "metaMaskNotFound": "MetaMask not found",
     "acceptNetworkSwitch": "You need to accept the network switch to Ethereum Mainnet in MetaMask",
     "connectToMainnet": "Please connect to Ethereum Mainnet network",
